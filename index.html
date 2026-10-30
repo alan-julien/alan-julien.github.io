@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c2a54">
+<title>Les bonnes adresses — Paris shopping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --paper:#f7f5ee; --indigo:#2c2a54; --chataigne:#8a5137;
+    --ink:#2c2723; --text-2:#6b6258; --text-3:#9a9084;
+    --border:#e2dccf; --fill:#efece2; --surface:#fbfaf5;
+    --on-indigo:#eef0f7; --on-indigo-muted:#a9abc4;
+    --gm:#4f6fd6; --luxe:#bd8420; --passages:#d1734f; --createurs:#1f9aa8; --chine:#8a5137;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:'Sora',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  body{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+
+  header{background:var(--indigo);color:var(--on-indigo);padding:12px 16px 10px;flex:none}
+  .kicker{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--on-indigo-muted)}
+  h1{font-family:'Cormorant',Georgia,serif;font-weight:600;font-size:30px;line-height:1.1;margin:2px 0 0}
+  h1 em{font-style:italic;font-weight:500}
+
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex:none;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 14px;font:500 14px 'Sora',sans-serif;cursor:pointer;min-height:40px}
+  .chip .dot{width:12px;height:12px;border-radius:50%;background:var(--c)}
+  .chip[aria-pressed="false"]{opacity:.45}
+  .chip[aria-pressed="false"] .dot{background:transparent;border:2px solid var(--c)}
+
+  #map{flex:1;min-height:0;background:var(--fill)}
+  .leaflet-container{font-family:'Sora',sans-serif}
+
+  .pin{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 4px rgba(44,39,35,.35);display:flex;align-items:center;justify-content:center;color:#fff;font:700 15px 'Sora',sans-serif;background:var(--c)}
+  .pin.active{transform:scale(1.25);box-shadow:0 0 0 4px rgba(44,42,84,.35)}
+  .me{width:18px;height:18px;border-radius:50%;background:var(--indigo);border:3px solid #fff;box-shadow:0 0 0 6px rgba(44,42,84,.2)}
+
+  .fab{position:absolute;right:12px;z-index:500;width:48px;height:48px;border-radius:50%;border:none;background:var(--surface);color:var(--indigo);box-shadow:0 2px 8px rgba(44,39,35,.25);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #btn-loc{bottom:calc(84px + var(--safe-b))}
+  #btn-list{bottom:calc(24px + var(--safe-b))}
+  #btn-info{bottom:calc(144px + var(--safe-b))}
+
+  /* Encadré (bottom sheet) */
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:1000;background:var(--surface);border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(44,39,35,.25);max-height:72dvh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--safe-b)}
+  .sheet.open{transform:none}
+  .grip{width:40px;height:4px;border-radius:2px;background:var(--border);margin:8px auto 0;flex:none}
+  .sheet-head{display:flex;align-items:flex-start;gap:12px;padding:8px 16px 0;flex:none}
+  .sheet-head .close{margin-left:auto;border:none;background:var(--fill);width:36px;height:36px;border-radius:50%;font-size:20px;color:var(--text-2);cursor:pointer;flex:none}
+  .sheet-body{overflow-y:auto;padding:4px 16px 20px;-webkit-overflow-scrolling:touch}
+  .tag{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:#fff;background:var(--c);display:inline-block;margin-top:6px}
+  .photo{margin:10px 0 4px;border-radius:10px;overflow:hidden;background:var(--fill);aspect-ratio:16/10}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .credit{font-size:11px;color:var(--text-3)}
+  .credit a{color:inherit}
+  .sheet h2{font-family:'Cormorant',Georgia,serif;font-weight:600;font-size:30px;line-height:1.1;margin:8px 0 2px}
+  .meta{font-size:13px;color:var(--text-2);font-weight:500}
+  .prix{display:inline-block;color:var(--chataigne);font-weight:700;letter-spacing:.05em}
+  .block{margin-top:12px}
+  .block p{margin:0 0 8px}
+  .today{background:var(--fill);border-left:3px solid var(--indigo);padding:10px 12px;border-radius:0 8px 8px 0;font-size:14px;margin-top:14px}
+  .today b{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:2px}
+  .actions{display:flex;gap:8px;margin-top:16px}
+  .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border-radius:8px;font:600 15px 'Sora',sans-serif;text-decoration:none;border:1px solid var(--indigo);cursor:pointer}
+  .btn.primary{background:var(--indigo);color:var(--on-indigo)}
+  .btn.ghost{background:transparent;color:var(--indigo)}
+
+  /* Liste */
+  .item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+  .item:last-child{border-bottom:none}
+  .item .th{width:52px;height:52px;border-radius:8px;object-fit:cover;flex:none;background:var(--fill)}
+  .item .t{font-weight:600;font-size:15px;line-height:1.3}
+  .item .s{font-size:12px;color:var(--text-2)}
+  .item .s .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:5px}
+  .item .d{margin-left:auto;font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .intro p{margin:0 0 10px;font-size:15px}
+  .intro .cat{display:flex;gap:10px;align-items:flex-start;margin:10px 0}
+  .intro .cat .dot{width:12px;height:12px;border-radius:50%;background:var(--c);margin-top:6px;flex:none}
+  .muted{color:var(--text-3);font-size:12px}
+
+  @media (min-width:900px){
+    .sheet{left:auto;right:16px;bottom:16px;width:420px;border-radius:16px;max-height:calc(100dvh - 140px)}
+    .sheet:not(.open){transform:translateX(120%)}
+    .fab{right:auto;left:12px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Paris · shopping</div>
+  <h1>Les bonnes <em>adresses</em></h1>
+</header>
+
+<nav class="chips" id="chips" aria-label="Filtrer par type"></nav>
+
+<div id="map"></div>
+
+<button class="fab" id="btn-info" aria-label="À propos">ⓘ</button>
+<button class="fab" id="btn-loc" aria-label="Me localiser">◎</button>
+<button class="fab" id="btn-list" aria-label="Liste des adresses">☰</button>
+
+<section class="sheet" id="sheet" aria-live="polite">
+  <div class="grip"></div>
+  <div class="sheet-head"><div id="sheet-title"></div><button class="close" id="sheet-close" aria-label="Fermer">×</button></div>
+  <div class="sheet-body" id="sheet-body"></div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const CATS = {
+  gm:        {nom:"Grands magasins", ico:"★", c:"var(--gm)",
+              resume:"Les cathédrales du commerce nées au XIXe siècle : tout sous un même toit, des coupoles Belle Époque en prime."},
+  luxe:      {nom:"Luxe & haute couture", ico:"◆", c:"var(--luxe)",
+              resume:"Le Triangle d'or, le Faubourg et Vendôme : maisons de couture, joailliers et vitrines spectaculaires."},
+  passages:  {nom:"Passages couverts", ico:"❖", c:"var(--passages)",
+              resume:"Les galeries vitrées du XIXe siècle : boutiques anciennes, libraires, jouets, cannes et cartes postales."},
+  createurs: {nom:"Créateurs & quartiers", ico:"●", c:"var(--createurs)",
+              resume:"Rues de boutiques indépendantes, concept stores et jeunes marques, à arpenter sans but précis."},
+  chine:     {nom:"Chine & curiosités", ico:"✦", c:"var(--chine)",
+              resume:"Puces, tissus au mètre, cabinets de curiosités et librairies mythiques : pour dénicher l'objet unique."}
+};
+
+const F = (f) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=960`;
+const P = (f) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f.replace(/ /g,'_'))}`;
+
+const PLACES = [
+  // ---- Grands magasins ----
+  {id:"lafayette", cat:"gm", titre:"Galeries Lafayette Haussmann", adresse:"40 bd Haussmann, 9e", ll:[48.8735,2.3320], prix:"€€ – €€€€",
+   img:"Galerie Lafayette Haussmann Dome.jpg",
+   texte:["Le plus célèbre des grands magasins parisiens, ouvert en 1894 et coiffé depuis 1912 d'une coupole néo-byzantine de 43 mètres. Mode, beauté, maroquinerie : presque toutes les grandes marques y ont leur stand.",
+          "Ne pas rater la passerelle de verre suspendue sous la coupole, et la terrasse sur le toit (gratuite) avec vue sur l'Opéra Garnier et la tour Eiffel. La Galerie Gourmet, dans le bâtiment Maison, est un régal."],
+   tip:"Venez en semaine à l'ouverture : l'après-midi et le samedi, la foule est dense. Les touristes hors UE peuvent récupérer la TVA (détaxe) à partir de 100 €."},
+  {id:"printemps", cat:"gm", titre:"Printemps Haussmann", adresse:"64 bd Haussmann, 9e", ll:[48.8740,2.3277], prix:"€€ – €€€€",
+   img:"Printemps Haussmann.jpg",
+   texte:["Voisin et rival historique des Galeries Lafayette, le Printemps (1865) s'étend sur trois bâtiments : Femme, Homme et Maison. Façades Second Empire, coupole Art nouveau en vitrail au 6e étage du magasin Femme.",
+          "Le Printemps de l'Homme est l'un des plus beaux espaces de mode masculine de Paris ; le rayon beauté, très complet, est un passage obligé."],
+   tip:"Le toit-terrasse du magasin Beauté-Maison offre l'une des plus belles vues gratuites sur Paris."},
+  {id:"bonmarche", cat:"gm", titre:"Le Bon Marché Rive Gauche", adresse:"24 rue de Sèvres, 7e", ll:[48.8509,2.3245], prix:"€€€ – €€€€",
+   img:"Interior of Le Bon Marché, July 2022.jpg",
+   texte:["Le premier grand magasin du monde (1852), qui a inspiré à Zola Au Bonheur des Dames. Plus calme et plus pointu que ses cousins de la rive droite, avec une sélection de créateurs très soignée et des escalators croisés signés Andrée Putman.",
+          "Juste à côté, la Grande Épicerie de Paris est un temple de la gastronomie : idéal pour rapporter des cadeaux gourmands."],
+   tip:"Les expositions temporaires du rez-de-chaussée (en début d'année) valent souvent le détour à elles seules."},
+  {id:"samaritaine", cat:"gm", titre:"La Samaritaine", adresse:"9 rue de la Monnaie, 1er", ll:[48.8591,2.3423], prix:"€€€ – €€€€",
+   img:"Paris 1er La Samaritaine 768.jpg",
+   texte:["Fermée seize ans pour travaux, la Samaritaine a rouvert en 2021 : façade Art nouveau côté Seine, verrière et grand escalier restaurés, et nouvelle façade ondulante en verre côté rue de Rivoli (agence SANAA).",
+          "Rachetée par LVMH, elle mise sur le luxe, la beauté (l'un des plus grands espaces beauté d'Europe) et une sélection de créateurs."],
+   tip:"Même sans rien acheter, montez voir la fresque aux paons sous la verrière : c'est l'un des plus beaux intérieurs de Paris."},
+
+  // ---- Luxe ----
+  {id:"montaigne", cat:"luxe", titre:"Avenue Montaigne", adresse:"Avenue Montaigne, 8e", ll:[48.8662,2.3050], prix:"€€€€",
+   img:"CF1710 Paris 8e avenue Montaigne rwk.jpg",
+   texte:["Le cœur du « Triangle d'or » : Dior (au n° 30, son adresse historique depuis 1946, avec La Galerie Dior), Chanel, Valentino, Prada, Louis Vuitton… sur quelques centaines de mètres bordés de marronniers.",
+          "Même en simple lèche-vitrine, l'avenue est un spectacle, surtout en fin d'année quand les façades s'illuminent."],
+   tip:"Pour souffler, la terrasse du Plaza Athénée (n° 25) et sa cour fleurie de géraniums rouges."},
+  {id:"faubourg", cat:"luxe", titre:"Rue du Faubourg-Saint-Honoré", adresse:"Rue du Faubourg-Saint-Honoré, 8e", ll:[48.8697,2.3205], prix:"€€€€",
+   img:"Rue du Faubourg-Saint-Honoré, Paris 8e.jpg",
+   texte:["Entre la rue Royale et l'Élysée, c'est l'adresse historique des grandes maisons : Hermès (au n° 24 depuis 1880), Lanvin, Chanel, Saint Laurent, Goyard, Christian Louboutin…",
+          "Les vitrines d'Hermès, renouvelées chaque saison par des artistes, sont une institution."],
+   tip:"La rue devient « rue Saint-Honoré » après la rue Royale : continuez vers l'est pour des marques plus accessibles."},
+  {id:"vendome", cat:"luxe", titre:"Place Vendôme", adresse:"Place Vendôme, 1er", ll:[48.8675,2.3294], prix:"€€€€€",
+   img:"Place Vendôme vue aérienne.png",
+   texte:["La capitale mondiale de la haute joaillerie : Boucheron (le premier installé, en 1893), Cartier, Van Cleef & Arpels, Chaumet, Bulgari… autour de la colonne faite du bronze des canons d'Austerlitz.",
+          "Le Ritz y a ses quartiers ; la place, signée Hardouin-Mansart, est l'une des plus harmonieuses de Paris."],
+   tip:"Le petit musée gratuit de Chaumet (n° 12) présente l'histoire de la maison, joaillier de Joséphine."},
+  {id:"champs", cat:"luxe", titre:"Champs-Élysées", adresse:"Avenue des Champs-Élysées, 8e", ll:[48.8700,2.3065], prix:"€ – €€€€",
+   img:"Avenue des Champs-Élysées, Paris 3 October 2010.jpg",
+   texte:["La « plus belle avenue du monde » mêle vaisseaux amiraux de luxe (Louis Vuitton, Dior, Cartier), grandes enseignes de mode et flagships de marques (Apple, Nike, Sephora).",
+          "Plus touristique que pointue, elle reste spectaculaire, surtout pour ses vitrines de Noël et ses illuminations."],
+   tip:"Ouverte le dimanche (zone touristique internationale). Le bas de l'avenue, vers le Grand Palais, est plus agréable à pied."},
+
+  // ---- Passages couverts ----
+  {id:"vivienne", cat:"passages", titre:"Galerie Vivienne", adresse:"4 rue des Petits-Champs, 2e", ll:[48.8665,2.3398], prix:"€€ – €€€",
+   img:"GalerieVivienne1.jpg",
+   texte:["Le plus élégant des passages couverts (1823) : mosaïques au sol, verrière, rotonde. On y trouve la librairie ancienne Jousseaume, des créateurs de mode, des caves à vin et des boutiques de décoration.",
+          "C'est aussi l'un des décors préférés des photographes de mode."],
+   tip:"Enchaînez avec la galerie Colbert, juste à côté, puis les jardins du Palais-Royal à deux pas."},
+  {id:"panoramas", cat:"passages", titre:"Passage des Panoramas", adresse:"11 bd Montmartre, 2e", ll:[48.8712,2.3418], prix:"€ – €€",
+   img:"P1020609 Paris II Passage des Panoramas rwk.JPG",
+   texte:["Le plus ancien passage couvert de Paris (1799), royaume des philatélistes, des marchands de cartes postales anciennes et des graveurs (le graveur Stern y a laissé ses boiseries).",
+          "Aujourd'hui, ses petites tables en font aussi une adresse gourmande."],
+   tip:"Traversez le boulevard : le passage Jouffroy puis le passage Verdeau prolongent la promenade."},
+  {id:"jouffroy", cat:"passages", titre:"Passage Jouffroy", adresse:"10 bd Montmartre, 9e", ll:[48.8731,2.3423], prix:"€ – €€",
+   img:"Passage Jouffroy 1.jpg",
+   texte:["Premier passage chauffé et entièrement vitré de Paris (1847). Boutique de cannes et parapluies Segas, maisons de poupées, librairies anciennes (Paul Vulin) et l'hôtel Chopin au fond.",
+          "Le musée Grévin y a son entrée historique."],
+   tip:"Idéal pour un cadeau original : jouets anciens chez Pain d'épices, maquettes, affiches."},
+  {id:"palaisroyal", cat:"passages", titre:"Galeries du Palais-Royal", adresse:"Jardin du Palais-Royal, 1er", ll:[48.8650,2.3375], prix:"€€€ – €€€€",
+   img:"Jardins du Palais Royal.JPG",
+   texte:["Sous les arcades qui entourent le jardin, des boutiques rares : Serge Lutens et ses parfums, les gants de Maison Fabre, les décorations militaires anciennes, des créateurs de mode et des galeries d'art.",
+          "Un écrin très calme au cœur de la ville, à deux pas du Louvre."],
+   tip:"Le jardin est parfait pour faire une pause, sur les célèbres chaises vertes."},
+
+  // ---- Créateurs & quartiers ----
+  {id:"marais", cat:"createurs", titre:"Le Marais", adresse:"Rue des Francs-Bourgeois, 3e / 4e", ll:[48.8578,2.3610], prix:"€ – €€€",
+   img:"Paris rue des francs-bourgeois.jpg",
+   texte:["Le quartier shopping le plus vivant de Paris. Rue des Francs-Bourgeois, rue Vieille-du-Temple et rue de Turenne : marques françaises (Sézane, Maje, A.P.C.), créateurs, parfumeurs de niche, vintage et concept stores.",
+          "Le Haut-Marais, autour de la rue Charlot et de la rue de Bretagne, est plus pointu et plus créateur."],
+   tip:"La plupart des boutiques sont ouvertes le dimanche, ce qui fait du Marais LE plan du week-end. Pause au marché des Enfants-Rouges."},
+  {id:"saintgermain", cat:"createurs", titre:"Saint-Germain-des-Prés", adresse:"Bd Saint-Germain et rue de Rennes, 6e", ll:[48.8540,2.3333], prix:"€€ – €€€€",
+   img:"Abbaye de Saint-Germain-des-Prés 140131 1.jpg",
+   texte:["Ancien quartier des existentialistes devenu chic : boutiques de mode autour de la rue du Four et de la rue de Grenelle, chocolatiers (Pierre Hermé, Patrick Roger), papeteries et librairies d'art.",
+          "Les antiquaires du « Carré Rive Gauche » (rues du Bac, de Beaune, des Saints-Pères) complètent l'offre."],
+   tip:"Café de Flore ou Deux Magots pour la pause, même si les prix sont à la hauteur de la légende."},
+  {id:"canal", cat:"createurs", titre:"Canal Saint-Martin", adresse:"Quai de Valmy et rue Beaurepaire, 10e", ll:[48.8712,2.3627], prix:"€ – €€",
+   img:"2022-04-14-Passerelle de la Grange-aux-Belles-8583.jpg",
+   texte:["L'esprit bobo parisien : jeunes marques, friperies, librairies indépendantes et magasins de déco le long du canal et de ses passerelles.",
+          "Rue Beaurepaire et rue de Marseille, on trouve des créateurs et des boutiques de mode éthique."],
+   tip:"Le dimanche, les quais sont piétons : la balade est encore plus agréable."},
+  {id:"halles", cat:"createurs", titre:"Forum des Halles", adresse:"101 Porte Berger, 1er", ll:[48.8622,2.3465], prix:"€ – €€",
+   img:"Canopée des Halles, Paris June 2013.jpg",
+   texte:["Le plus grand centre commercial de Paris, sous sa Canopée de verre : toutes les grandes enseignes de mode, de sport et de technologie, au carrefour des RER.",
+          "Pratique plutôt que charmant, mais imbattable pour faire beaucoup de choses en peu de temps."],
+   tip:"Ressortez côté rue Montorgueil ou rue Étienne-Marcel pour des boutiques plus pointues."},
+  {id:"charonne", cat:"createurs", titre:"Rue de Charonne", adresse:"Rue de Charonne, 11e", ll:[48.8540,2.3780], prix:"€ – €€",
+   img:"P1000852 Paris XI Rue de Charonne reductwk.JPG",
+   texte:["Près de Bastille, une rue de créateurs, de friperies et de petites marques françaises, moins touristique que le Marais.",
+          "Non loin, le célèbre concept store Merci (111 bd Beaumarchais) mêle mode, déco et librairie-café."],
+   tip:"Poussez jusqu'au marché d'Aligre, ses brocanteurs du matin et sa halle Beauvau."},
+
+  // ---- Chine & curiosités ----
+  {id:"puces", cat:"chine", titre:"Marché aux puces de Saint-Ouen", adresse:"Rue des Rosiers, Saint-Ouen", ll:[48.9015,2.3432], prix:"€ – €€€€",
+   img:"Enseignes Puces Saint-Ouen.jpg",
+   texte:["Le plus grand marché d'antiquités du monde : plus de 1 500 marchands répartis en une douzaine de marchés (Vernaison, Paul-Bert, Serpette, Dauphine…).",
+          "Meubles vintage, luminaires, vaisselle, vêtements anciens, affiches : on peut y passer la journée."],
+   tip:"Ouvert du vendredi au lundi ; le samedi matin est le meilleur moment. Évitez les stands de contrefaçon sous le périphérique et gardez un œil sur vos affaires."},
+  {id:"stpierre", cat:"chine", titre:"Marché Saint-Pierre", adresse:"2 rue Charles-Nodier, 18e", ll:[48.8848,2.3445], prix:"€",
+   img:"Marché Saint-Pierre DSC 0076.JPG",
+   texte:["Au pied du Sacré-Cœur, cinq étages de tissus au mètre, à prix imbattables : soieries, wax, lainages, velours, rideaux. Le quartier tout entier vit du textile.",
+          "Couturiers, costumiers et amateurs de DIY y viennent de toute la France."],
+   tip:"Profitez-en pour monter à Montmartre : rue des Abbesses et rue des Martyrs ont de jolies boutiques."},
+  {id:"deyrolle", cat:"chine", titre:"Deyrolle", adresse:"46 rue du Bac, 7e", ll:[48.8559,2.3256], prix:"€€ – €€€€",
+   img:"Deyrolle, 46 Rue du Bac, 75007 Paris 2013.jpg",
+   texte:["Un cabinet de curiosités ouvert depuis 1831 : animaux naturalisés, papillons, coquillages, minéraux et célèbres planches pédagogiques, dans un décor d'hôtel particulier.",
+          "On y entre comme dans un musée ; la boutique du rez-de-chaussée propose jardinage et affiches à prix plus doux."],
+   tip:"Ravit les enfants. Le Bon Marché est à cinq minutes à pied."},
+  {id:"shakespeare", cat:"chine", titre:"Shakespeare and Company", adresse:"37 rue de la Bûcherie, 5e", ll:[48.8526,2.3471], prix:"€",
+   img:"Shakespeare and Company, Paris.jpg",
+   texte:["La librairie anglophone la plus célèbre du monde, face à Notre-Dame : étagères jusqu'au plafond, recoins, chat résident et lits où dorment encore de jeunes écrivains de passage.",
+          "Un livre acheté ici est tamponné au logo de la maison : le souvenir parisien parfait."],
+   tip:"La file d'attente peut être longue en été : venez tôt le matin. Le café voisin a une belle terrasse."},
+  {id:"bercy", cat:"chine", titre:"Bercy Village", adresse:"Cour Saint-Émilion, 12e", ll:[48.8333,2.3860], prix:"€ – €€",
+   img:"Bercy Village - vue générale.JPG",
+   texte:["Les anciens chais à vin de Bercy, rue pavée et rails d'origine, transformés en rue commerçante : déco, cuisine, cosmétiques, jouets et restaurants.",
+          "Une ambiance de village, en bordure du parc de Bercy."],
+   tip:"Ouvert le dimanche. Le musée des Arts forains (sur réservation) est juste à côté."}
+];
+
+// ---------- Carte ----------
+const map = L.map('map', {zoomControl:false, tap:true}).setView([48.863,2.340], 13);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom:19, attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · photos Wikimedia Commons'
+}).addTo(map);
+
+const active = new Set(Object.keys(CATS));
+const markers = {};
+let current = null, meMarker = null, meLL = null;
+
+function pinHTML(p, cls=''){
+  return `<div class="pin ${cls}" style="--c:${CATS[p.cat].c}">${CATS[p.cat].ico}</div>`;
+}
+function icon(p, isActive){
+  return L.divIcon({className:'', html:pinHTML(p, isActive?'active':''), iconSize:[34,34], iconAnchor:[17,17]});
+}
+
+PLACES.forEach(p => {
+  const m = L.marker(p.ll, {icon:icon(p,false), title:p.titre, riseOnHover:true});
+  m.on('click', () => openPlace(p.id));
+  markers[p.id] = m;
+});
+
+function refresh(){
+  PLACES.forEach(p => {
+    if (active.has(p.cat)) markers[p.id].addTo(map); else map.removeLayer(markers[p.id]);
+  });
+}
+
+// ---------- Filtres ----------
+const chips = document.getElementById('chips');
+Object.entries(CATS).forEach(([k, ca]) => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.style.setProperty('--c', ca.c); b.setAttribute('aria-pressed','true');
+  b.innerHTML = `<span class="dot"></span>${ca.nom}`;
+  b.onclick = () => {
+    if (active.has(k)) active.delete(k); else active.add(k);
+    b.setAttribute('aria-pressed', active.has(k));
+    refresh();
+  };
+  chips.appendChild(b);
+});
+
+// ---------- Encadré ----------
+const sheet = document.getElementById('sheet');
+const sTitle = document.getElementById('sheet-title');
+const sBody = document.getElementById('sheet-body');
+const wide = () => window.matchMedia('(min-width:900px)').matches;
+
+function openSheet(){ sheet.classList.add('open'); sBody.scrollTop = 0; }
+function closeSheet(){
+  sheet.classList.remove('open');
+  if (current){ markers[current].setIcon(icon(PLACES.find(x=>x.id===current), false)); current = null; }
+}
+document.getElementById('sheet-close').onclick = closeSheet;
+map.on('click', closeSheet);
+
+function dist(ll){
+  if (!meLL) return '';
+  const d = map.distance(meLL, ll);
+  return d < 1000 ? `${Math.round(d/10)*10} m` : `${(d/1000).toFixed(1).replace('.',',')} km`;
+}
+
+function openPlace(id){
+  const p = PLACES.find(x => x.id === id);
+  if (current && current !== id) markers[current].setIcon(icon(PLACES.find(x=>x.id===current), false));
+  current = id;
+  markers[id].setIcon(icon(p, true));
+  const ca = CATS[p.cat];
+  sTitle.innerHTML = `<span class="tag" style="--c:${ca.c}">${ca.nom}</span>`;
+  const nav = `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${p.ll[0]},${p.ll[1]}`;
+  const d = dist(p.ll);
+  sBody.innerHTML = `
+    <div class="photo"><img src="${F(p.img)}" alt="${p.titre}" loading="lazy"></div>
+    <div class="credit">Photo : <a href="${P(p.img)}" target="_blank" rel="noopener">Wikimedia Commons</a></div>
+    <h2>${p.titre}</h2>
+    <div class="meta"><span class="prix">${p.prix}</span> · ${p.adresse}${d ? ' · à '+d : ''}</div>
+    <div class="block">${p.texte.map(t=>`<p>${t}</p>`).join('')}</div>
+    <div class="today"><b>Le bon tuyau</b>${p.tip}</div>
+    <div class="actions">
+      <a class="btn primary" href="${nav}" target="_blank" rel="noopener">Y aller à pied</a>
+      <button class="btn ghost" id="btn-next">Adresse suivante →</button>
+    </div>`;
+  document.getElementById('btn-next').onclick = () => {
+    const vis = PLACES.filter(x => active.has(x.cat));
+    const i = vis.findIndex(x => x.id === id);
+    const n = vis[(i + 1) % vis.length];
+    map.flyTo(n.ll, Math.max(map.getZoom(), 15), {duration:.6});
+    openPlace(n.id);
+  };
+  openSheet();
+  if (wide()) { map.panTo(p.ll, {animate:true}); return; }
+  // centre le lieu dans la partie visible au-dessus de l'encadré
+  const r = map.getContainer().getBoundingClientRect();
+  const visible = Math.max(80, window.innerHeight - sheet.offsetHeight - r.top);
+  const pt = map.project(p.ll, map.getZoom());
+  map.panTo(map.unproject(pt.add([0, r.height/2 - visible/2]), map.getZoom()), {animate:true});
+}
+
+function openList(){
+  closeSheet();
+  sTitle.innerHTML = `<div class="kicker" style="color:var(--text-3)">${meLL ? 'Du plus proche au plus loin' : 'Toutes les adresses'}</div>`;
+  let list = PLACES.filter(x => active.has(x.cat));
+  if (meLL) list = [...list].sort((a,b) => map.distance(meLL,a.ll) - map.distance(meLL,b.ll));
+  sBody.innerHTML = `<h2>Les adresses</h2>` + list.map(p => `
+    <div class="item" data-id="${p.id}">
+      <img class="th" src="${F(p.img).replace('width=960','width=120')}" alt="" loading="lazy">
+      <div><div class="t">${p.titre}</div><div class="s" style="--c:${CATS[p.cat].c}"><span class="dot"></span>${CATS[p.cat].nom} · ${p.prix}</div></div>
+      <div class="d">${dist(p.ll)}</div>
+    </div>`).join('');
+  sBody.querySelectorAll('.item').forEach(el => el.onclick = () => {
+    const p = PLACES.find(x => x.id === el.dataset.id);
+    map.setView(p.ll, 16);
+    openPlace(p.id);
+  });
+  openSheet();
+}
+
+function openInfo(){
+  closeSheet();
+  sTitle.innerHTML = `<div class="kicker" style="color:var(--text-3)">Mode d'emploi</div>`;
+  sBody.innerHTML = `<div class="intro">
+    <h2>Le meilleur du <em>shopping parisien</em></h2>
+    <p>Touchez un point pour voir la photo, la description et un bon tuyau. Les pastilles du haut filtrent par type. ◎ vous situe sur la carte, ☰ liste les adresses (triées par distance une fois localisé).</p>
+    ${Object.values(CATS).map(ca=>`<div class="cat" style="--c:${ca.c}"><span class="dot"></span><div><b>${ca.nom}</b><br><span style="font-size:14px">${ca.resume}</span></div></div>`).join('')}
+    <p style="margin-top:14px"><b>Balade conseillée (une journée) :</b> Galeries Lafayette → Printemps → passages des Panoramas et Jouffroy → Galerie Vivienne → Palais-Royal → place Vendôme → rue du Faubourg-Saint-Honoré. Le lendemain : Marais le matin, Saint-Germain et Bon Marché l'après-midi.</p>
+    <p class="muted">Prix : € abordable → €€€€€ très haut de gamme. Vérifiez les horaires avant d'y aller, surtout le dimanche.</p>
+  </div>`;
+  openSheet();
+}
+document.getElementById('btn-list').onclick = openList;
+document.getElementById('btn-info').onclick = openInfo;
+
+// ---------- Géolocalisation ----------
+document.getElementById('btn-loc').onclick = () => {
+  if (!navigator.geolocation) return alert("Géolocalisation indisponible sur cet appareil.");
+  navigator.geolocation.watchPosition(pos => {
+    const first = !meLL;
+    meLL = [pos.coords.latitude, pos.coords.longitude];
+    if (!meMarker) meMarker = L.marker(meLL, {icon:L.divIcon({className:'', html:'<div class="me"></div>', iconSize:[18,18], iconAnchor:[9,9]}), interactive:false, zIndexOffset:1000}).addTo(map);
+    else meMarker.setLatLng(meLL);
+    if (first) map.setView(meLL, 15);
+  }, () => alert("Impossible de vous localiser (autorisez la position dans le navigateur)."), {enableHighAccuracy:true});
+  if (meLL) map.setView(meLL, 15);
+};
+
+refresh();
+if (!localStorage.getItem('shop-vu')) { openInfo(); localStorage.setItem('shop-vu','1'); }
+</script>
+</body>
+</html>
