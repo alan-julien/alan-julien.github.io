@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c2a54">
+<title>Dans leurs pas — Paris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --paper:#f7f5ee; --indigo:#2c2a54; --chataigne:#8a5137;
+    --ink:#2c2723; --text-2:#6b6258; --text-3:#9a9084;
+    --border:#e2dccf; --fill:#efece2; --surface:#fbfaf5;
+    --on-indigo:#eef0f7; --on-indigo-muted:#a9abc4;
+    --petrarque:#4f6fd6; --voltaire:#d1734f; --lamartine:#1f9aa8; --albert:#bd8420;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:'Sora',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  body{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+
+  header{background:var(--indigo);color:var(--on-indigo);padding:12px 16px 10px;flex:none}
+  .kicker{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--on-indigo-muted)}
+  h1{font-family:'Cormorant',Georgia,serif;font-weight:600;font-size:30px;line-height:1.1;margin:2px 0 0}
+  h1 em{font-style:italic;font-weight:500}
+
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex:none;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 14px;font:500 14px 'Sora',sans-serif;cursor:pointer;min-height:40px}
+  .chip .dot{width:12px;height:12px;border-radius:50%;background:var(--c)}
+  .chip[aria-pressed="false"]{opacity:.45}
+  .chip[aria-pressed="false"] .dot{background:transparent;border:2px solid var(--c)}
+
+  #map{flex:1;min-height:0;background:var(--fill)}
+  .leaflet-container{font-family:'Sora',sans-serif}
+
+  .pin{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 4px rgba(44,39,35,.35);display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px 'Sora',sans-serif}
+  .pin.active{transform:scale(1.25);box-shadow:0 0 0 4px rgba(44,42,84,.35)}
+  .me{width:18px;height:18px;border-radius:50%;background:var(--indigo);border:3px solid #fff;box-shadow:0 0 0 6px rgba(44,42,84,.2)}
+
+  .fab{position:absolute;right:12px;z-index:500;width:48px;height:48px;border-radius:50%;border:none;background:var(--surface);color:var(--indigo);box-shadow:0 2px 8px rgba(44,39,35,.25);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #btn-loc{bottom:calc(84px + var(--safe-b))}
+  #btn-list{bottom:calc(24px + var(--safe-b))}
+  #btn-info{bottom:calc(144px + var(--safe-b))}
+
+  /* Encadré (bottom sheet) */
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:1000;background:var(--surface);border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(44,39,35,.25);max-height:72dvh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--safe-b)}
+  .sheet.open{transform:none}
+  .grip{width:40px;height:4px;border-radius:2px;background:var(--border);margin:8px auto 0;flex:none}
+  .sheet-head{display:flex;align-items:flex-start;gap:12px;padding:8px 16px 0;flex:none}
+  .sheet-head .close{margin-left:auto;border:none;background:var(--fill);width:36px;height:36px;border-radius:50%;font-size:20px;color:var(--text-2);cursor:pointer;flex:none}
+  .sheet-body{overflow-y:auto;padding:4px 16px 20px;-webkit-overflow-scrolling:touch}
+  .who{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .tag{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:#fff;background:var(--c)}
+  .sheet h2{font-family:'Cormorant',Georgia,serif;font-weight:600;font-size:30px;line-height:1.1;margin:4px 0 2px}
+  .meta{font-size:13px;color:var(--text-2);font-weight:500}
+  .date{display:inline-block;font-variant-numeric:tabular-nums;color:var(--chataigne);font-weight:600}
+  .block{margin-top:14px}
+  .block h3{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c,var(--indigo));margin:0 0 4px}
+  .block p{margin:0 0 8px}
+  .today{background:var(--fill);border-left:3px solid var(--indigo);padding:10px 12px;border-radius:0 8px 8px 0;font-size:14px;margin-top:14px}
+  .today b{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:2px}
+  .actions{display:flex;gap:8px;margin-top:16px}
+  .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border-radius:8px;font:600 15px 'Sora',sans-serif;text-decoration:none;border:1px solid var(--indigo);cursor:pointer}
+  .btn.primary{background:var(--indigo);color:var(--on-indigo)}
+  .btn.ghost{background:transparent;color:var(--indigo)}
+
+  /* Liste */
+  .item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+  .item:last-child{border-bottom:none}
+  .item .pin{width:30px;height:30px;flex:none;font-size:11px}
+  .item .t{font-weight:600;font-size:15px;line-height:1.3}
+  .item .s{font-size:12px;color:var(--text-2)}
+  .item .d{margin-left:auto;font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .intro p{margin:0 0 10px;font-size:15px}
+  .intro .person{display:flex;gap:10px;align-items:flex-start;margin:10px 0}
+  .intro .person .dot{width:12px;height:12px;border-radius:50%;background:var(--c);margin-top:6px;flex:none}
+  .muted{color:var(--text-3);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Paris · balade littéraire</div>
+  <h1>Dans leurs <em>pas</em></h1>
+</header>
+
+<nav class="chips" id="chips" aria-label="Filtrer par personnage"></nav>
+
+<div id="map"></div>
+
+<button class="fab" id="btn-info" aria-label="À propos">ⓘ</button>
+<button class="fab" id="btn-loc" aria-label="Me localiser">◎</button>
+<button class="fab" id="btn-list" aria-label="Liste des lieux">☰</button>
+
+<section class="sheet" id="sheet" aria-live="polite">
+  <div class="grip"></div>
+  <div class="sheet-head"><div id="sheet-title"></div><button class="close" id="sheet-close" aria-label="Fermer">×</button></div>
+  <div class="sheet-body" id="sheet-body"></div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const PEOPLE = {
+  albert:    {nom:"Albert le Grand", court:"Albert", ini:"A", dates:"v. 1200 – 1280", c:"var(--albert)",
+              resume:"Dominicain allemand, philosophe et naturaliste, docteur de l'Église. Il enseigne à Paris vers 1245-1248 et y forme Thomas d'Aquin."},
+  petrarque: {nom:"Pétrarque", court:"Pétrarque", ini:"P", dates:"1304 – 1374", c:"var(--petrarque)",
+              resume:"Poète toscan, père de l'humanisme. Il vit surtout à Avignon et en Italie, mais passe par Paris en 1333 et y revient comme ambassadeur en 1361."},
+  voltaire:  {nom:"Voltaire", court:"Voltaire", ini:"V", dates:"1694 – 1778", c:"var(--voltaire)",
+              resume:"Né à Paris, enfant du Quartier latin, embastillé deux fois, exilé, puis revenu mourir en triomphe dans sa ville natale."},
+  lamartine: {nom:"Lamartine", court:"Lamartine", ini:"L", dates:"1790 – 1869", c:"var(--lamartine)",
+              resume:"Poète des Méditations devenu député, il proclame la IIe République en 1848 et dirige un temps la diplomatie française."}
+};
+
+const PLACES = [
+  // ---- Albert le Grand ----
+  {id:"saint-jacques", who:["albert"], titre:"Couvent Saint-Jacques", adresse:"Angle rue Saint-Jacques / rue Soufflot, 5e",
+   ll:[48.8467,2.3420], date:"v. 1245 – 1248",
+   texte:["Les dominicains, qu'on appelle à Paris les « Jacobins » à cause de ce couvent, s'installent ici dès 1218. Albert y obtient sa maîtrise en théologie et y enseigne sur la chaire réservée aux étrangers.",
+          "Parmi ses élèves : un jeune Italien massif et silencieux, Thomas d'Aquin, que ses camarades surnomment « le bœuf muet ». Albert aurait répondu que ses mugissements retentiraient dans le monde entier. En 1248, le maître et l'élève partent ensemble fonder le studium de Cologne."],
+   auj:"Le couvent a entièrement disparu (rasé au XIXe siècle lors du percement de la rue Soufflot). On marche sur son emplacement, entre la rue Saint-Jacques et le Panthéon."},
+  {id:"maubert", who:["albert"], titre:"Place Maubert", adresse:"Place Maubert, 5e", ll:[48.8502,2.3483], date:"XIIIe siècle",
+   texte:["Selon une tradition tenace, « Maubert » serait une contraction de « Maître Albert » : ses cours attiraient tant d'étudiants qu'il aurait dû enseigner en plein air, sur cette place.",
+          "Les historiens en doutent (le nom viendrait plutôt d'un abbé de Sainte-Geneviève nommé Aubert), mais la légende dit bien la célébrité d'Albert dans le Paris universitaire du XIIIe siècle."],
+   auj:"Une place de quartier animée, avec marché les mardis, jeudis et samedis matin."},
+  {id:"maitre-albert", who:["albert"], titre:"Rue Maître-Albert", adresse:"Rue Maître-Albert, 5e", ll:[48.8510,2.3497], date:"Nommée au XIXe siècle",
+   texte:["Cette ruelle tortueuse qui descend vers la Seine porte son nom en hommage à la légende de la place Maubert voisine.",
+          "Son tracé médiéval donne une bonne idée des rues où se pressaient les étudiants de l'Université, venus de toute l'Europe et parlant latin entre eux (d'où le nom de « Quartier latin »)."],
+   auj:"L'une des rues les plus anciennes d'aspect du quartier, avec vue sur Notre-Dame au débouché sur le quai."},
+
+  // ---- Pétrarque ----
+  {id:"notre-dame", who:["petrarque"], titre:"Notre-Dame et l'île de la Cité", adresse:"Parvis Notre-Dame, 4e", ll:[48.8530,2.3499], date:"1333",
+   texte:["À 29 ans, Pétrarque fait un grand voyage dans le nord de l'Europe et s'arrête à Paris. Dans une lettre à son protecteur, le cardinal Colonna (Familiares I, 4), il raconte avoir arpenté la ville pour vérifier par lui-même ce qu'on en disait, en séparant le vrai de la légende.",
+          "Il découvre une cathédrale presque achevée et une capitale qui est alors la plus peuplée d'Europe et le grand centre intellectuel de la chrétienté. L'humaniste, très attaché à Rome, en retient surtout l'agitation et la vanité des disputes savantes."],
+   auj:"La cathédrale, rouverte en décembre 2024 après l'incendie, est celle (à peu de chose près) que Pétrarque a vue."},
+  {id:"augustins", who:["petrarque"], titre:"Couvent des Grands-Augustins", adresse:"Quai et rue des Grands-Augustins, 6e", ll:[48.8547,2.3410], date:"Années 1330",
+   texte:["Les augustins de Paris forment des théologiens de toute l'Europe. L'un d'eux, Dionigi da Borgo San Sepolcro, maître en théologie à l'Université, devient le confesseur et l'ami de Pétrarque.",
+          "C'est lui qui offre au poète un petit exemplaire des Confessions de saint Augustin. Pétrarque l'ouvre au sommet du mont Ventoux en 1336 et y lit la phrase qui le bouleverse : les hommes vont admirer les montagnes et s'oublient eux-mêmes. Un des textes fondateurs de l'humanisme."],
+   auj:"Le couvent, détruit après la Révolution, n'a laissé que son nom au quai et à la rue."},
+  {id:"sorbonne", who:["petrarque"], titre:"La Sorbonne et l'Université", adresse:"Place de la Sorbonne, 5e", ll:[48.8487,2.3431], date:"1er septembre 1340",
+   texte:["Le même jour, Pétrarque reçoit deux lettres : le Sénat de Rome et le chancelier de l'Université de Paris lui proposent chacun de le couronner de laurier comme poète. Paris est alors la capitale incontestée du savoir.",
+          "Après hésitation, il choisit Rome, par amour de l'Antiquité : il est couronné au Capitole le 8 avril 1341. Paris a failli être la ville de son triomphe."],
+   auj:"Les bâtiments actuels datent du XVIIe (chapelle de Richelieu) et de la fin du XIXe siècle ; le collège médiéval de Robert de Sorbon, fondé en 1257, a disparu."},
+  {id:"cite", who:["petrarque"], titre:"Palais de la Cité", adresse:"Boulevard du Palais, 1er (Conciergerie, Sainte-Chapelle)", ll:[48.8556,2.3456], date:"Janvier 1361",
+   texte:["Pétrarque revient à Paris comme ambassadeur des Visconti de Milan, pour féliciter le roi Jean II le Bon, tout juste libéré de sa captivité en Angleterre. Il prononce devant la cour un discours latin sur la Fortune.",
+          "Il est frappé par la ruine du royaume après la guerre de Cent Ans et la peste : il écrira qu'il reconnaissait à peine Paris, autrefois si florissante. Le lieu exact de l'audience n'est pas connu ; le Palais de la Cité était le siège historique du pouvoir royal."],
+   auj:"La Conciergerie (salle des Gens d'armes) et la Sainte-Chapelle sont les vestiges du palais médiéval qu'il a pu connaître."},
+
+  // ---- Voltaire ----
+  {id:"saint-andre", who:["voltaire"], titre:"Saint-André-des-Arts", adresse:"Place Saint-André-des-Arts, 6e", ll:[48.8532,2.3427], date:"22 novembre 1694",
+   texte:["François-Marie Arouet, fils d'un notaire, naît le 21 novembre 1694 et est baptisé le lendemain dans l'église Saint-André-des-Arts (lui prétendra plus tard être né en février, ailleurs).",
+          "Il grandit à deux pas, sur l'île de la Cité, où son père a un office à la Chambre des comptes."],
+   auj:"L'église a été démolie à la Révolution : son emplacement correspond à la place actuelle, avec sa fontaine."},
+  {id:"llg", who:["voltaire"], titre:"Lycée Louis-le-Grand", adresse:"123 rue Saint-Jacques, 5e", ll:[48.8484,2.3445], date:"1704 – 1711",
+   texte:["Le jeune Arouet est élève des jésuites au collège Louis-le-Grand, le plus prestigieux de Paris. Il y prend le goût du théâtre (les pères font jouer des tragédies à leurs élèves) et noue des amitiés aristocratiques utiles toute sa vie.",
+          "Il gardera de l'estime pour certains de ses maîtres, tout en devenant le pourfendeur le plus célèbre de l'Église."],
+   auj:"Toujours un lycée (on ne visite pas), façade visible rue Saint-Jacques, face à la Sorbonne."},
+  {id:"procope", who:["voltaire"], titre:"Café Procope", adresse:"13 rue de l'Ancienne-Comédie, 6e", ll:[48.8530,2.3389], date:"1718 →",
+   texte:["En face, au n° 14, se trouvait la Comédie-Française : c'est là que triomphe en 1718 sa tragédie Œdipe, écrite à la Bastille et signée pour la première fois « Voltaire ».",
+          "Le Procope, plus vieux café de Paris (1686), devient le rendez-vous des gens de théâtre puis des philosophes. Voltaire y aurait bu des dizaines de tasses de café mêlé de chocolat par jour."],
+   auj:"Le Procope est toujours un restaurant ; on y montre une table attribuée à Voltaire. Plaque de l'ancienne Comédie au n° 14."},
+  {id:"bastille", who:["voltaire"], titre:"La Bastille", adresse:"Place de la Bastille, 4e/11e/12e", ll:[48.8532,2.3692], date:"1717-1718 et 1726",
+   texte:["Accusé d'avoir écrit des vers insultants contre le Régent, Arouet est enfermé onze mois à la Bastille. Il y écrit Œdipe et en sort avec un nouveau nom : Voltaire.",
+          "Il y retourne en 1726 après une querelle avec le chevalier de Rohan, qui l'a fait bastonner par ses laquais. Il n'en sort qu'à condition de s'exiler en Angleterre, d'où il rapportera les Lettres philosophiques."],
+   auj:"La forteresse a été rasée en 1789. Le tracé de ses tours est marqué par des pavés au sol, côté boulevard Henri-IV ; des vestiges sont visibles à la station de métro (ligne 5)."},
+  {id:"lambert", who:["voltaire"], titre:"Hôtel Lambert", adresse:"2 rue Saint-Louis-en-l'Île, 4e", ll:[48.8506,2.3601], date:"Années 1740",
+   texte:["La marquise du Châtelet, mathématicienne et traductrice de Newton, compagne de Voltaire, achète cet hôtel avec son mari en 1739. Le couple d'esprits y séjourne lors de ses passages à Paris, entre deux retraites studieuses au château de Cirey.",
+          "Voltaire jugeait l'endroit digne d'un souverain philosophe."],
+   auj:"Hôtel particulier privé (ne se visite pas) ; belle vue depuis la pointe de l'île Saint-Louis et le quai d'Anjou."},
+  {id:"comedie", who:["voltaire"], titre:"Comédie-Française", adresse:"Place Colette, 1er", ll:[48.8634,2.3363], date:"30 mars 1778",
+   texte:["De retour à Paris à 83 ans après presque trente ans d'absence, Voltaire assiste à une représentation de sa pièce Irène : on couronne son buste sur scène devant une salle en délire. La troupe jouait alors tout près, dans la salle des Machines des Tuileries.",
+          "C'est l'apogée de sa gloire, deux mois avant sa mort."],
+   auj:"Dans le foyer du théâtre trône le célèbre « Voltaire assis » sculpté par Houdon en 1781 (visible lors des visites guidées ou en allant au spectacle)."},
+  {id:"villette", who:["voltaire"], titre:"Hôtel de Villette — quai Voltaire", adresse:"27 quai Voltaire, 7e", ll:[48.8585,2.3304], date:"30 mai 1778",
+   texte:["Voltaire loge chez son ami le marquis de Villette, à l'angle de la rue de Beaune. Épuisé par les honneurs, il y meurt le 30 mai 1778.",
+          "Le clergé refusant de l'enterrer à Paris, son neveu fait sortir le corps en secret, assis dans un carrosse comme s'il était vivant, pour l'inhumer à l'abbaye de Scellières. Le quai prend son nom en 1791."],
+   auj:"Une plaque signale la maison. Belle perspective sur le Louvre depuis le quai."},
+  {id:"pantheon", who:["voltaire"], titre:"Panthéon", adresse:"Place du Panthéon, 5e", ll:[48.8462,2.3464], date:"11 juillet 1791",
+   texte:["La Révolution rapatrie ses restes en grande pompe : un cortège immense traverse Paris et s'arrête devant le quai Voltaire. Il est l'un des tout premiers « grands hommes » admis dans l'ancienne église Sainte-Geneviève.",
+          "Sur son cénotaphe : « Il combattit les athées et les fanatiques. Il inspira la tolérance. Il réclama les droits de l'homme contre la servitude de la féodalité »."],
+   auj:"Son tombeau, surmonté de sa statue par Houdon, est dans la crypte, face à celui de Rousseau, son grand adversaire."},
+
+  // ---- Commun ----
+  {id:"institut", who:["voltaire","lamartine"], titre:"Institut de France — Académie française", adresse:"23 quai de Conti, 6e", ll:[48.8574,2.3375], date:"1746 · 1778 · 1829",
+   texte:["Voltaire est élu à l'Académie française en 1746 après plusieurs échecs. En 1778, lors de son retour triomphal, il y préside une séance et presse ses confrères de refaire le Dictionnaire.",
+          "Lamartine y est élu en 1829, dix ans après le succès foudroyant des Méditations poétiques. L'Académie siégeait alors au Louvre ; elle s'installe sous la coupole de l'ancien collège des Quatre-Nations en 1805, siège où Lamartine fut reçu en 1830."],
+   auj:"La coupole se visite lors de visites guidées et des Journées du patrimoine ; la cour est souvent accessible."},
+
+  // ---- Lamartine ----
+  {id:"universite", who:["lamartine"], titre:"82 rue de l'Université", adresse:"82 rue de l'Université, 7e", ll:[48.8590,2.3203], date:"1837 – 1853",
+   texte:["Lamartine habite ici pendant ses années de député. Son salon réunit écrivains et hommes politiques ; c'est la période où il écrit l'Histoire des Girondins (1847), qui fait de lui l'idole de l'opinion à la veille de 1848.",
+          "L'adresse est à quelques minutes à pied de la Chambre des députés."],
+   auj:"Immeuble privé, à voir de l'extérieur."},
+  {id:"bourbon", who:["lamartine"], titre:"Palais Bourbon — Assemblée nationale", adresse:"126 rue de l'Université, 7e", ll:[48.8617,2.3186], date:"1833 – 1851",
+   texte:["Élu député en 1833, Lamartine devient l'un des grands orateurs de la Chambre. Le 24 février 1848, alors que Louis-Philippe abdique, il s'oppose à une régence et réclame un gouvernement provisoire.",
+          "Il est réélu triomphalement en avril 1848 sous la République, avant que sa popularité ne s'effondre."],
+   auj:"Visites possibles sur inscription auprès d'un député ; la façade sur la Seine fait face à la place de la Concorde."},
+  {id:"hdv", who:["lamartine"], titre:"Hôtel de Ville", adresse:"Place de l'Hôtel-de-Ville, 4e", ll:[48.8566,2.3522], date:"24-25 février 1848",
+   texte:["Le gouvernement provisoire, dont Lamartine est la figure de proue, proclame ici la IIe République. Le 25 février, face à une foule qui exige le drapeau rouge, il prononce son discours le plus célèbre : le drapeau rouge « n'a fait que le tour du Champ-de-Mars », le tricolore « a fait le tour du monde ».",
+          "Ministre des Affaires étrangères, il voit le gouvernement abolir l'esclavage et la peine de mort en matière politique. Candidat à la présidence en décembre 1848, il n'obtient qu'un peu plus de 17 000 voix face à Louis-Napoléon Bonaparte."],
+   auj:"L'Hôtel de Ville a été incendié sous la Commune (1871) et reconstruit à l'identique : le bâtiment actuel n'est pas celui de 1848."},
+  {id:"passy", who:["lamartine"], titre:"Square Lamartine — Passy", adresse:"Square Lamartine, 16e", ll:[48.8640,2.2752], date:"1860 – 1869",
+   texte:["Ruiné par ses dépenses et sa générosité, le vieux poète obtient de la Ville de Paris l'usage d'un chalet à Passy, alors en lisière de la capitale. Il y passe ses dernières années à écrire pour payer ses dettes.",
+          "Il y meurt le 28 février 1869, à 78 ans. Il est inhumé à Saint-Point, près de Mâcon, en Bourgogne."],
+   auj:"Le chalet a disparu ; sa statue assise se dresse dans le square qui porte son nom, avenue Henri-Martin (un peu à l'écart : métro Rue de la Pompe)."}
+];
+
+// ---------- Carte ----------
+const map = L.map('map', {zoomControl:false, tap:true}).setView([48.854,2.340], 14);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  maxZoom:19, attribution:'© OpenStreetMap, © CARTO'
+}).addTo(map);
+
+const active = new Set(Object.keys(PEOPLE));
+const markers = {};
+let current = null, meMarker = null, meLL = null;
+
+function bg(who){
+  if (who.length === 1) return PEOPLE[who[0]].c;
+  const cs = who.map(w => PEOPLE[w].c);
+  return `linear-gradient(135deg, ${cs[0]} 50%, ${cs[1]} 50%)`;
+}
+function pinHTML(p, cls=''){
+  return `<div class="pin ${cls}" style="background:${bg(p.who)}">${p.who.map(w=>PEOPLE[w].ini).join('')}</div>`;
+}
+function icon(p, isActive){
+  return L.divIcon({className:'', html:pinHTML(p, isActive?'active':''), iconSize:[34,34], iconAnchor:[17,17]});
+}
+
+PLACES.forEach(p => {
+  const m = L.marker(p.ll, {icon:icon(p,false), title:p.titre, riseOnHover:true});
+  m.on('click', () => openPlace(p.id));
+  markers[p.id] = m;
+});
+
+function refresh(){
+  PLACES.forEach(p => {
+    const show = p.who.some(w => active.has(w));
+    if (show) markers[p.id].addTo(map); else map.removeLayer(markers[p.id]);
+  });
+}
+
+// ---------- Filtres ----------
+const chips = document.getElementById('chips');
+Object.entries(PEOPLE).forEach(([k, pe]) => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.style.setProperty('--c', pe.c); b.setAttribute('aria-pressed','true');
+  b.innerHTML = `<span class="dot"></span>${pe.court}`;
+  b.onclick = () => {
+    if (active.has(k)) active.delete(k); else active.add(k);
+    b.setAttribute('aria-pressed', active.has(k));
+    refresh();
+  };
+  chips.appendChild(b);
+});
+
+// ---------- Encadré ----------
+const sheet = document.getElementById('sheet');
+const sTitle = document.getElementById('sheet-title');
+const sBody = document.getElementById('sheet-body');
+
+function openSheet(){ sheet.classList.add('open'); sBody.scrollTop = 0; }
+function closeSheet(){
+  sheet.classList.remove('open');
+  if (current){ markers[current].setIcon(icon(PLACES.find(x=>x.id===current), false)); current = null; }
+}
+document.getElementById('sheet-close').onclick = closeSheet;
+map.on('click', closeSheet);
+
+function dist(ll){
+  if (!meLL) return '';
+  const d = map.distance(meLL, ll);
+  return d < 1000 ? `${Math.round(d/10)*10} m` : `${(d/1000).toFixed(1).replace('.',',')} km`;
+}
+
+function openPlace(id){
+  const p = PLACES.find(x => x.id === id);
+  if (current && current !== id) markers[current].setIcon(icon(PLACES.find(x=>x.id===current), false));
+  current = id;
+  markers[id].setIcon(icon(p, true));
+  const c = PEOPLE[p.who[0]].c;
+  sTitle.innerHTML = `<div class="who">${p.who.map(w=>`<span class="tag" style="--c:${PEOPLE[w].c}">${PEOPLE[w].nom}</span>`).join('')}</div>`;
+  const nav = `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${p.ll[0]},${p.ll[1]}`;
+  const d = dist(p.ll);
+  sBody.innerHTML = `
+    <h2>${p.titre}</h2>
+    <div class="meta"><span class="date">${p.date}</span> · ${p.adresse}${d ? ' · à '+d : ''}</div>
+    <div class="block" style="--c:${c}">${p.texte.map(t=>`<p>${t}</p>`).join('')}</div>
+    <div class="today"><b>Aujourd'hui</b>${p.auj}</div>
+    <div class="actions">
+      <a class="btn primary" href="${nav}" target="_blank" rel="noopener">Y aller à pied</a>
+      <button class="btn ghost" id="btn-next">Lieu suivant →</button>
+    </div>`;
+  document.getElementById('btn-next').onclick = () => {
+    const vis = PLACES.filter(x => x.who.some(w => active.has(w)));
+    const i = vis.findIndex(x => x.id === id);
+    const n = vis[(i + 1) % vis.length];
+    map.flyTo(n.ll, Math.max(map.getZoom(), 16), {duration:.6});
+    openPlace(n.id);
+  };
+  openSheet();
+  // centre le lieu dans la partie visible au-dessus de l'encadré
+  const pt = map.project(p.ll, map.getZoom());
+  map.panTo(map.unproject(pt.add([0, window.innerHeight * 0.25]), map.getZoom()), {animate:true});
+}
+
+function openList(){
+  closeSheet();
+  sTitle.innerHTML = `<div class="kicker" style="color:var(--text-3)">${meLL ? 'Du plus proche au plus loin' : 'Tous les lieux'}</div>`;
+  let list = PLACES.filter(x => x.who.some(w => active.has(w)));
+  if (meLL) list = [...list].sort((a,b) => map.distance(meLL,a.ll) - map.distance(meLL,b.ll));
+  sBody.innerHTML = `<h2>Les lieux</h2>` + list.map(p => `
+    <div class="item" data-id="${p.id}">
+      ${pinHTML(p)}
+      <div><div class="t">${p.titre}</div><div class="s">${p.who.map(w=>PEOPLE[w].court).join(' & ')} · ${p.date}</div></div>
+      <div class="d">${dist(p.ll)}</div>
+    </div>`).join('');
+  sBody.querySelectorAll('.item').forEach(el => el.onclick = () => {
+    const p = PLACES.find(x => x.id === el.dataset.id);
+    map.setView(p.ll, 16);
+    openPlace(p.id);
+  });
+  openSheet();
+}
+
+function openInfo(){
+  closeSheet();
+  sTitle.innerHTML = `<div class="kicker" style="color:var(--text-3)">Mode d'emploi</div>`;
+  sBody.innerHTML = `<div class="intro">
+    <h2>Quatre hommes, <em>sept siècles</em></h2>
+    <p>Touchez un point pour lire son encadré. Les pastilles du haut masquent ou affichent un personnage. ◎ vous situe sur la carte, ☰ liste les lieux (triés par distance une fois localisé).</p>
+    ${Object.values(PEOPLE).map(pe=>`<div class="person" style="--c:${pe.c}"><span class="dot"></span><div><b>${pe.nom}</b> <span class="muted">${pe.dates}</span><br><span style="font-size:14px">${pe.resume}</span></div></div>`).join('')}
+    <p style="margin-top:14px"><b>Balade conseillée (≈ 3 h à pied) :</b> Panthéon → couvent Saint-Jacques → Louis-le-Grand → Sorbonne → place Maubert → rue Maître-Albert → Notre-Dame → Palais de la Cité → Saint-André-des-Arts → Procope → Grands-Augustins → Institut → quai Voltaire. L'hôtel Lambert se rattache facilement après Notre-Dame ; Bastille, Hôtel de Ville, Palais Bourbon et Passy se font à part.</p>
+    <p class="muted">Plusieurs lieux ont disparu : l'encadré « Aujourd'hui » dit ce qu'on voit réellement sur place.</p>
+  </div>`;
+  openSheet();
+}
+document.getElementById('btn-list').onclick = openList;
+document.getElementById('btn-info').onclick = openInfo;
+
+// ---------- Géolocalisation ----------
+document.getElementById('btn-loc').onclick = () => {
+  if (!navigator.geolocation) return alert("Géolocalisation indisponible sur cet appareil.");
+  navigator.geolocation.watchPosition(pos => {
+    const first = !meLL;
+    meLL = [pos.coords.latitude, pos.coords.longitude];
+    if (!meMarker) meMarker = L.marker(meLL, {icon:L.divIcon({className:'', html:'<div class="me"></div>', iconSize:[18,18], iconAnchor:[9,9]}), interactive:false, zIndexOffset:1000}).addTo(map);
+    else meMarker.setLatLng(meLL);
+    if (first) map.setView(meLL, 16);
+  }, () => alert("Impossible de vous localiser (autorisez la position dans le navigateur)."), {enableHighAccuracy:true});
+  if (meLL) map.setView(meLL, 16);
+};
+
+refresh();
+if (!localStorage.getItem('dlp-vu')) { openInfo(); localStorage.setItem('dlp-vu','1'); }
+</script>
+</body>
+</html>
