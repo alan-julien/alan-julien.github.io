@@ -46,7 +46,7 @@
   #btn-info{bottom:calc(144px + var(--safe-b))}
 
   /* Encadré (bottom sheet) */
-  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:1000;background:var(--surface);border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(44,39,35,.25);max-height:72dvh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--safe-b)}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:1000;background:var(--surface);border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(44,39,35,.25);max-height:62dvh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--safe-b)}
   .sheet.open{transform:none}
   .grip{width:40px;height:4px;border-radius:2px;background:var(--border);margin:8px auto 0;flex:none}
   .sheet-head{display:flex;align-items:flex-start;gap:12px;padding:8px 16px 0;flex:none}
@@ -184,7 +184,7 @@ const PLACES = [
   // ---- Commun ----
   {id:"institut", who:["voltaire","lamartine"], titre:"Institut de France — Académie française", adresse:"23 quai de Conti, 6e", ll:[48.8574,2.3375], date:"1746 · 1778 · 1829",
    texte:["Voltaire est élu à l'Académie française en 1746 après plusieurs échecs. En 1778, lors de son retour triomphal, il y préside une séance et presse ses confrères de refaire le Dictionnaire.",
-          "Lamartine y est élu en 1829, dix ans après le succès foudroyant des Méditations poétiques. L'Académie siégeait alors au Louvre ; elle s'installe sous la coupole de l'ancien collège des Quatre-Nations en 1805, siège où Lamartine fut reçu en 1830."],
+          "Lamartine y est élu en 1829, dix ans après le succès foudroyant des Méditations poétiques. Au temps de Voltaire, l'Académie siégeait au Louvre ; elle s'installe sous la coupole de l'ancien collège des Quatre-Nations en 1805, et c'est là que Lamartine est reçu en 1830."],
    auj:"La coupole se visite lors de visites guidées et des Journées du patrimoine ; la cour est souvent accessible."},
 
   // ---- Lamartine ----
@@ -208,8 +208,8 @@ const PLACES = [
 
 // ---------- Carte ----------
 const map = L.map('map', {zoomControl:false, tap:true}).setView([48.854,2.340], 14);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-  maxZoom:19, attribution:'© OpenStreetMap, © CARTO'
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom:19, attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
 const active = new Set(Object.keys(PEOPLE));
@@ -301,8 +301,10 @@ function openPlace(id){
   };
   openSheet();
   // centre le lieu dans la partie visible au-dessus de l'encadré
+  const r = map.getContainer().getBoundingClientRect();
+  const visible = Math.max(80, window.innerHeight - sheet.offsetHeight - r.top);
   const pt = map.project(p.ll, map.getZoom());
-  map.panTo(map.unproject(pt.add([0, window.innerHeight * 0.25]), map.getZoom()), {animate:true});
+  map.panTo(map.unproject(pt.add([0, r.height/2 - visible/2]), map.getZoom()), {animate:true});
 }
 
 function openList(){
