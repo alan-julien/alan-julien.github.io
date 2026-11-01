@@ -1,0 +1,1303 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La science des couleurs — des 12 saisons à la photo</title>
+<meta name="description" content="Tutoriel interactif : comprendre le lien entre la colorimétrie des 12 saisons, la physique de la lumière et les réglages d'une photo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f5ee; --indigo:#2c2a54; --indigo-hover:#211f42; --chataigne:#8a5137;
+  --ink:#2c2723; --text-2:#6b6258; --text-3:#9a9084; --border:#e2dccf; --fill:#efece2; --surface:#fbfaf5;
+  --on-indigo:#eef0f7; --on-indigo-muted:#a9abc4;
+  --ok:#3b6b3f; --ok-bg:#e6ede1; --ok-tx:#315833;
+  --warn:#b17a2b; --warn-bg:#f2e9d6; --warn-tx:#7e561b;
+  --err:#a13a31; --err-bg:#efdedb; --err-tx:#7f2f28;
+  --info:#3a5a72; --info-bg:#e4eaef; --info-tx:#2f4a5e;
+  --font-title:'Cormorant',Georgia,serif; --font-body:'Sora',system-ui,sans-serif;
+  --r-card:6px; --r-ctl:4px;
+  --elev-1:0 6px 20px rgba(44,39,35,.09); --elev-2:0 10px 30px rgba(44,39,35,.13); --elev-3:0 20px 48px rgba(44,39,35,.20);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--font-body);-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+h1,h2{font-family:var(--font-title);font-weight:600;color:var(--indigo);margin:0}
+h1{font-size:60px;line-height:1.05}
+h2{font-size:44px;line-height:1.08}
+h1 em,h2 em{font-style:italic}
+h3{font:600 20px/1.3 var(--font-body);margin:0 0 12px;color:var(--ink)}
+p{margin:0 0 14px}
+.lede{font-size:18px;line-height:1.5;color:var(--text-2);max-width:720px}
+.kicker{font:600 11px/1 var(--font-body);letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px}
+.small{font-size:13px;line-height:1.45;color:var(--text-2)}
+.meta{font-size:12px;color:var(--text-3)}
+a{color:var(--indigo)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+
+/* En-tête collant + rail des étapes */
+.top{position:sticky;top:0;z-index:20;background:rgba(247,245,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:58px}
+.brand{font:600 22px/1 var(--font-title);color:var(--indigo);white-space:nowrap;cursor:pointer}
+.brand em{font-style:italic}
+.rail{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none;padding:4px 0}
+.rail::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:7px;border:0;background:transparent;font:500 12.5px/1 var(--font-body);color:var(--text-2);padding:8px 10px;border-radius:var(--r-ctl);cursor:pointer;white-space:nowrap}
+.chip .n{width:20px;height:20px;border-radius:var(--r-ctl);display:grid;place-items:center;background:var(--fill);font-size:11px;font-weight:600}
+.chip.done .n{background:var(--ok-bg);color:var(--ok-tx)}
+.chip.active{color:var(--indigo);background:var(--fill)}
+.chip.active .n{background:var(--indigo);color:var(--on-indigo)}
+.progress{height:3px;background:var(--border)}
+.progress i{display:block;height:100%;width:0;background:var(--indigo);transition:width .4s}
+
+/* Étapes */
+.step{display:none;padding:48px 0 80px}
+.step.active{display:block;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.step-head{margin-bottom:30px}
+.step-head h2{margin-bottom:14px}
+.card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--elev-1);padding:28px;margin-bottom:26px}
+.card h3{margin-bottom:6px}
+.card > .small:first-of-type{margin-bottom:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.split{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:start}
+@media (max-width:900px){.grid2,.split,.grid3{grid-template-columns:1fr} h1{font-size:44px} h2{font-size:34px}}
+
+/* Curseurs */
+.ctl{margin-bottom:16px}
+.ctl .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+.ctl label{font:600 13px/1.3 var(--font-body)}
+.ctl .val{font:500 13px/1 var(--font-body);color:var(--indigo)}
+.ctl .hint{font-size:12px;color:var(--text-3);margin-top:4px;line-height:1.4}
+.ends{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-top:2px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:var(--r-ctl);background:var(--border);outline:none;margin:6px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:22px;border-radius:var(--r-ctl);background:var(--surface);border:2px solid var(--indigo);box-shadow:0 2px 6px rgba(44,39,35,.25);cursor:grab}
+input[type=range]::-moz-range-thumb{width:16px;height:20px;border-radius:var(--r-ctl);background:var(--surface);border:2px solid var(--indigo);box-shadow:0 2px 6px rgba(44,39,35,.25);cursor:grab}
+input[type=range]:focus-visible::-webkit-slider-thumb{outline:3px solid rgba(44,42,84,.3)}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--font-body);padding:12px 18px;border-radius:var(--r-ctl);border:1.5px solid transparent;cursor:pointer;background:transparent;color:var(--indigo)}
+.btn:focus-visible{outline:3px solid rgba(44,42,84,.3);outline-offset:2px}
+.btn--primary{background:var(--indigo);color:var(--on-indigo)}
+.btn--primary:hover{background:var(--indigo-hover)}
+.btn--secondary{border-color:var(--indigo)}
+.btn--accent{background:var(--chataigne);color:#fff}
+.btn--sm{padding:8px 12px;font-size:13px}
+.btn[disabled]{opacity:.4;cursor:default}
+.seg{display:inline-flex;background:var(--fill);border-radius:var(--r-ctl);padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;font:500 13px/1 var(--font-body);color:var(--text-2);padding:8px 12px;border-radius:var(--r-ctl);cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--indigo);box-shadow:0 1px 3px rgba(44,39,35,.15);font-weight:600}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+
+/* Encadrés */
+.retiens{border-left:2px solid var(--indigo);background:var(--fill);padding:20px 24px;border-radius:0 var(--r-card) var(--r-card) 0;margin-bottom:26px}
+.retiens h3{font-size:15px;margin-bottom:10px}
+.retiens ul{margin:0;padding-left:0;list-style:none}
+.retiens li{margin:8px 0;padding-left:0}
+.tag{display:inline-block;font:600 11px/1 var(--font-body);padding:5px 8px;border-radius:var(--r-ctl);background:var(--surface);color:var(--text-2);margin-right:6px;vertical-align:1px}
+.tag.s{background:#f1e4dc;color:#743f29}
+.tag.p{background:var(--info-bg);color:var(--info-tx)}
+.tag.c{background:#e7e6ef;color:var(--indigo)}
+.badge{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--font-body);padding:5px 9px;border-radius:var(--r-ctl)}
+.badge .dot{width:7px;height:7px;border-radius:50%}
+.badge.ok{background:var(--ok-bg);color:var(--ok-tx)} .badge.ok .dot{background:var(--ok)}
+.badge.err{background:var(--err-bg);color:var(--err-tx)} .badge.err .dot{background:var(--err)}
+.badge.warn{background:var(--warn-bg);color:var(--warn-tx)} .badge.warn .dot{background:var(--warn)}
+.alert{border-left:2px solid var(--warn);background:var(--warn-bg);color:var(--warn-tx);padding:10px 14px;font-size:13px;border-radius:0 var(--r-ctl) var(--r-ctl) 0;margin-top:10px}
+.alert.info{border-color:var(--info);background:var(--info-bg);color:var(--info-tx)}
+
+/* Défi */
+.defi{background:var(--indigo);color:var(--on-indigo);border-radius:var(--r-card);padding:28px;box-shadow:var(--elev-1)}
+.defi .kicker{color:var(--on-indigo-muted)}
+.defi h3{color:#fff}
+.opts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.opt{font:500 14px/1.3 var(--font-body);padding:11px 16px;border-radius:var(--r-ctl);border:1.5px solid rgba(238,240,247,.35);background:transparent;color:var(--on-indigo);cursor:pointer;text-align:left}
+.opt:hover{border-color:var(--on-indigo)}
+.opt.good{background:#e6ede1;color:#315833;border-color:#e6ede1}
+.opt.bad{background:#efdedb;color:#7f2f28;border-color:#efdedb}
+.fb{margin-top:14px;font-size:14px;min-height:1.4em;color:var(--on-indigo)}
+
+/* Divers */
+.swatch{border-radius:var(--r-ctl);box-shadow:inset 0 0 0 1px rgba(44,39,35,.08)}
+.readout{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}
+.readout dt{color:var(--text-3)} .readout dd{margin:0;font-weight:500}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pill{font:600 11.5px/1 var(--font-body);padding:6px 9px;border-radius:var(--r-ctl);background:var(--fill);color:var(--text-2)}
+.pill.on{background:var(--indigo);color:var(--on-indigo)}
+canvas{display:block;max-width:100%}
+.big-sw{height:150px;border-radius:var(--r-card);display:flex;align-items:flex-end;padding:12px;color:#fff;font:600 13px/1 var(--font-body);transition:background .15s}
+.spectrum{height:22px;border-radius:var(--r-ctl);position:relative;margin:10px 0 2px}
+.spectrum .mk{position:absolute;top:-5px;width:3px;height:32px;background:var(--ink);border-radius:2px;transform:translateX(-1px)}
+.row-sw{display:flex;gap:4px}
+.row-sw div{flex:1;height:44px}
+.mixrow{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;margin-bottom:10px}
+.mixrow b{font-size:13px} .mixrow span{display:block;font-size:11.5px;color:var(--text-3);font-weight:400}
+
+/* Accueil */
+.hero{padding:30px 0 10px}
+.hero h1{margin:6px 0 18px}
+.axes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:40px 0}
+@media (max-width:900px){.axes{grid-template-columns:1fr}}
+.axe{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--elev-1);padding:24px}
+.axe .bar{height:38px;border-radius:var(--r-ctl);margin:14px 0}
+.axe .voc{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:13px;align-items:center}
+.parcours{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}
+@media (max-width:900px){.parcours{grid-template-columns:repeat(2,1fr)}}
+.parcours button{text-align:left;background:var(--surface);border:0;border-radius:var(--r-card);padding:16px;cursor:pointer;box-shadow:var(--elev-1);font:500 13px/1.35 var(--font-body);color:var(--ink)}
+.parcours button:hover{box-shadow:var(--elev-2)}
+.parcours button b{display:block;font:600 26px/1 var(--font-title);color:var(--indigo);margin-bottom:6px}
+
+/* Mélanges RVB */
+.mixer{position:relative;height:300px;border-radius:var(--r-card);overflow:hidden}
+.mixer .c{position:absolute;width:170px;height:170px;border-radius:50%}
+
+/* Saisons */
+.seasons-map{display:grid;grid-template-columns:90px repeat(3,1fr);gap:6px;font-size:12px}
+.seasons-map .h{font-weight:600;color:var(--text-2);align-self:center}
+.seasons-map button{border:0;border-radius:var(--r-ctl);padding:8px 6px;cursor:pointer;font:600 11.5px/1.2 var(--font-body);background:var(--fill);color:var(--ink);display:flex;flex-direction:column;gap:5px;align-items:stretch;text-align:left}
+.seasons-map button .mini{display:flex;height:10px;border-radius:2px;overflow:hidden}
+.seasons-map button .mini i{flex:1}
+.seasons-map button.on{background:var(--indigo);color:var(--on-indigo)}
+.palette{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:12px 0}
+.palette button{height:46px;border:0;border-radius:var(--r-ctl);cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.palette button.on{outline:3px solid var(--indigo);outline-offset:2px}
+.meter{height:10px;border-radius:var(--r-ctl);background:var(--border);overflow:hidden;margin:6px 0 4px}
+.meter i{display:block;height:100%;transition:width .3s,background .3s}
+.face-wrap{background:var(--fill);border-radius:var(--r-card);overflow:hidden}
+
+/* Photo */
+.photo-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:26px;align-items:start}
+@media (max-width:980px){.photo-grid{grid-template-columns:1fr}}
+.photo-canvas{width:100%;border-radius:var(--r-card);cursor:crosshair;box-shadow:var(--elev-1)}
+.ctl-group{border-top:1px solid var(--border);padding-top:14px;margin-top:6px}
+.ctl-group .kicker{margin-bottom:10px}
+.checks{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;align-items:center}
+.checks label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.checks input{accent-color:var(--indigo);width:16px;height:16px}
+.pick{display:flex;gap:14px;align-items:center;margin-top:14px}
+.pick .sw{width:56px;height:56px;flex:none}
+
+/* Tableaux */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--fill);text-align:left;font-weight:600;padding:11px 12px;color:var(--text-2);font-size:12px;letter-spacing:.04em}
+td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+td:first-child{font-weight:600;color:var(--indigo);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.search{width:100%;max-width:380px;font:400 15px var(--font-body);padding:10px 2px;border:0;border-bottom:1.5px solid var(--border);background:transparent;margin-bottom:16px;outline:none}
+.search:focus{border-bottom:2px solid var(--indigo)}
+
+/* Jeu du pont */
+.lvl-sw{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.lvl-sw div{height:48px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media (max-width:600px){.card,.defi{padding:20px}.wrap{padding:0 16px}.palette{grid-template-columns:repeat(4,1fr)}.lvl-sw{grid-template-columns:repeat(4,1fr)}}
+footer{border-top:1px solid var(--border);padding:24px 0 40px;font-size:12px;color:var(--text-3)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand" data-go="0">La science des <em>couleurs</em></div>
+    <nav class="rail" id="rail" aria-label="Étapes"></nav>
+  </div>
+  <div class="progress"><i id="prog"></i></div>
+</header>
+
+<main class="wrap" id="main">
+
+<!-- ============ 0. ACCUEIL ============ -->
+<section class="step" data-title="Accueil">
+  <div class="hero">
+    <div class="kicker">Tutoriel interactif · 9 étapes · 25 minutes environ</div>
+    <h1>La science des <em>couleurs</em></h1>
+    <p class="lede">Pourquoi un bordeaux « éteint » un visage alors qu'un prune l'illumine ? Pourquoi une photo tire au jaune sous une ampoule ? Au fond, c'est la même histoire : <b>une lumière, un œil, et trois variables</b>. La conseillère en colorimétrie et le photographe les manipulent tous les deux, avec des mots différents.</p>
+  </div>
+
+  <div class="axes" id="homeAxes"></div>
+
+  <div class="card">
+    <div class="kicker">Le parcours</div>
+    <h3>Chaque étape : une idée, un jouet, un défi</h3>
+    <p class="small">Déplace les curseurs, observe, puis relève le défi pour valider l'étape. Ta progression est gardée sur cet appareil.</p>
+    <div class="parcours" id="parcours"></div>
+  </div>
+  <div class="nav"><span></span><button class="btn btn--primary" data-next>Commencer →</button></div>
+</section>
+
+<!-- ============ 1. LUMIÈRE ============ -->
+<section class="step" data-title="La lumière">
+  <div class="step-head">
+    <div class="kicker">Étape 1 · Physique</div>
+    <h2>Une couleur, c'est d'abord <em>une onde</em></h2>
+    <p class="lede">Un objet n'a pas de couleur en soi : il renvoie une partie de la lumière qu'il reçoit. Ton œil capte des ondes entre 380 et 750 nanomètres et ton cerveau les traduit en couleurs.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>La longueur d'onde (λ)</h3>
+      <p class="small">Fais glisser : courte onde = violet, très énergétique ; longue onde = rouge.</p>
+      <div class="big-sw" id="wlSw"></div>
+      <div class="spectrum" id="wlSpec"><div class="mk" id="wlMk"></div></div>
+      <div class="ends"><span>380 nm · UV au-delà</span><span>750 nm · infrarouge au-delà</span></div>
+      <div class="ctl" style="margin-top:14px">
+        <div class="row"><label for="wl">Longueur d'onde</label><span class="val num" id="wlV"></span></div>
+        <input type="range" id="wl" min="380" max="750" value="580">
+      </div>
+      <dl class="readout num" id="wlRead"></dl>
+      <div class="alert info">Il n'existe pas de longueur d'onde « magenta » ni « marron » : ce sont des <b>constructions du cerveau</b> (rouge + bleu sans vert, ou orange très sombre). Le spectre seul ne suffit donc pas à tout expliquer.</div>
+    </div>
+    <div class="card">
+      <h3>La température de couleur (Kelvin)</h3>
+      <p class="small">Une source de lumière chauffée émet un mélange d'ondes dont la teinte dépend de sa température. Observe la même feuille blanche, le même visage, la même carte grise.</p>
+      <svg id="kScene" viewBox="0 0 400 200" width="100%" style="border-radius:6px;display:block"></svg>
+      <div class="ctl" style="margin-top:14px">
+        <div class="row"><label for="kel">Température de la source</label><span class="val num" id="kelV"></span></div>
+        <input type="range" id="kel" min="1500" max="12000" step="50" value="5500">
+        <div class="ends"><span>Bougie</span><span>Ciel bleu à l'ombre</span></div>
+      </div>
+      <p style="margin:6px 0 0"><span class="pill on" id="kelSrc"></span></p>
+      <div class="alert">Paradoxe : une <b>basse</b> température (2700 K) donne une lumière qu'on dit <b>chaude</b> (orangée), une <b>haute</b> température (9000 K) une lumière <b>froide</b> (bleutée). Les physiciens et les décorateurs ne parlent pas dans le même sens !</div>
+    </div>
+  </div>
+  <div class="retiens">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag c">Science</span>La lumière est un mélange d'ondes. Sa « couleur » globale se mesure en <b>kelvins</b> : 2700 K orangée, 5500 K neutre (midi), 7500 K bleutée.</li>
+      <li><span class="tag p">Photo</span>La <b>balance des blancs</b> consiste à indiquer à l'appareil quelle lumière éclairait la scène, pour qu'il rende le blanc… blanc.</li>
+      <li><span class="tag s">Saisons</span>Une analyse de couleurs se fait à la <b>lumière du jour</b>, sans maquillage : une lampe orangée réchaufferait faussement le teint et fausserait le diagnostic.</li>
+    </ul>
+  </div>
+  <div class="defi" data-quiz="1"></div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 2. ŒIL & MÉLANGES ============ -->
+<section class="step" data-title="L'œil et les mélanges">
+  <div class="step-head">
+    <div class="kicker">Étape 2 · Perception</div>
+    <h2>Trois capteurs suffisent à <em>tout voir</em></h2>
+    <p class="lede">Ta rétine possède trois sortes de cônes, sensibles aux ondes courtes (S, vers 420 nm), moyennes (M, 534 nm) et longues (L, 564 nm). Toute couleur se résume à trois signaux : c'est pour cela qu'un écran n'a besoin que de trois lumières.</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <h3 style="margin:0">Mélanger</h3>
+        <div class="seg" id="mixMode"><button class="on" data-m="add">Lumières (additif)</button><button data-m="sub">Encres (soustractif)</button></div>
+      </div>
+      <div class="mixer" id="mixer">
+        <div class="c" id="mc1" style="left:calc(50% - 150px);top:25px"></div>
+        <div class="c" id="mc2" style="left:calc(50% - 20px);top:25px"></div>
+        <div class="c" id="mc3" style="left:calc(50% - 85px);top:115px"></div>
+      </div>
+      <p class="small" id="mixTxt" style="margin-top:14px"></p>
+    </div>
+    <div class="card">
+      <h3>Les trois doses</h3>
+      <p class="small" id="mixHint">Chaque curseur règle l'intensité d'une lumière, de 0 à 255.</p>
+      <div id="mixCtl"></div>
+      <div style="display:flex;gap:14px;align-items:center;margin-top:10px">
+        <div class="swatch" id="mixRes" style="width:72px;height:72px"></div>
+        <dl class="readout num" id="mixRead"></dl>
+      </div>
+    </div>
+  </div>
+  <div class="retiens">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag c">Science</span><b>Additif</b> : on ajoute des lumières, tout à fond donne du <b>blanc</b>. <b>Soustractif</b> : chaque pigment absorbe une partie de la lumière, tout ensemble donne du <b>noir</b>.</li>
+      <li><span class="tag p">Photo</span>Un capteur et un écran sont additifs : chaque pixel = 3 nombres (R, V, B). En 8 bits, 256 niveaux par canal, soit 256³ ≈ <b>16,7 millions</b> de couleurs.</li>
+      <li><span class="tag s">Saisons</span>Tissus, maquillage, teinture capillaire sont des <b>pigments</b> : un rouge à lèvres est rouge parce qu'il <b>absorbe</b> le vert et le bleu.</li>
+    </ul>
+  </div>
+  <div class="defi" data-quiz="2"></div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 3. TROIS DIMENSIONS ============ -->
+<section class="step" data-title="Les 3 dimensions">
+  <div class="step-head">
+    <div class="kicker">Étape 3 · Le cœur du sujet</div>
+    <h2>Teinte, valeur, <em>chroma</em></h2>
+    <p class="lede">En 1905, le peintre Albert Munsell montre que toute couleur se décrit par trois coordonnées. Le système des saisons, la science (espace CIELAB, ici en version LCh) et les logiciels photo utilisent tous ces trois axes, sous des noms différents.</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <h3>Le pupitre LCh</h3>
+      <p class="small">L = clarté (valeur), C = chroma (intensité), h = angle de teinte sur le cercle chromatique.</p>
+      <div class="big-sw" id="lchSw"></div>
+      <div id="lchGamut"></div>
+      <div style="margin-top:16px">
+        <div class="ctl"><div class="row"><label for="lL">Valeur · L*</label><span class="val num" id="lLv"></span></div><input type="range" id="lL" min="0" max="100" value="55"><div class="ends"><span>Noir · « profond »</span><span>Blanc · « clair »</span></div></div>
+        <div class="ctl"><div class="row"><label for="lC">Chroma · C*</label><span class="val num" id="lCv"></span></div><input type="range" id="lC" min="0" max="130" value="45"><div class="ends"><span>Gris · « doux, sourd »</span><span>Pur · « vif, clair »</span></div></div>
+        <div class="ctl"><div class="row"><label for="lH">Teinte · h°</label><span class="val num" id="lHv"></span></div><input type="range" id="lH" min="0" max="359" value="30"><div class="ends"><span>Rouge</span><span>Jaune · Vert · Bleu · Violet</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>Ce que diraient…</h3>
+        <dl class="readout num" id="lchRead"></dl>
+      </div>
+      <div class="card">
+        <h3>Le piège du « 50 % »</h3>
+        <p class="small">Dans le modèle HSL des logiciels, ces deux couleurs ont la même « luminosité » de 50 %. Pourtant…</p>
+        <div style="display:flex;gap:8px">
+          <div class="big-sw" id="hslY" style="flex:1;height:90px;background:#ffff00;color:#2c2723">Jaune · HSL L 50 %</div>
+          <div class="big-sw" id="hslB" style="flex:1;height:90px;background:#0000ff">Bleu · HSL L 50 %</div>
+        </div>
+        <div class="checks" style="margin-top:12px"><label><input type="checkbox" id="hslGray"> Voir en valeurs (noir et blanc)</label></div>
+        <p class="small" style="margin-top:10px">En valeur perçue (L*), le jaune vaut <b class="num">97</b> et le bleu <b class="num">32</b>. Les saisons parlent de la valeur perçue, pas du « L » de HSL.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div><h3>Les variantes d'une couleur</h3><p class="small" style="margin:0">À partir de la couleur du pupitre : on ajoute du blanc, du gris ou du noir. Voilà d'où viennent pastel, poudré, sourd, profond…</p></div>
+      <div class="checks"><label><input type="checkbox" id="mixGray"> Voir en valeurs</label></div>
+    </div>
+    <div style="margin-top:18px" id="variants"></div>
+  </div>
+
+  <div class="retiens">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag s">Saisons</span><b>Valeur</b> → « clair » (<i>light</i>) ou « profond » (<i>deep</i>). <b>Chroma</b> → « vif » (<i>bright, clear</i>) ou « doux » (<i>soft, muted</i>). <b>Teinte</b> → famille de couleur, et son biais chaud ou froid (étape suivante).</li>
+      <li><span class="tag c">Science</span>CIELAB (1976) est construit pour que la distance entre deux couleurs corresponde à la différence perçue : c'est le <b>ΔE</b>. Sous 2, la plupart des gens ne voient pas de différence.</li>
+      <li><span class="tag p">Photo</span>L'<b>exposition</b> agit surtout sur la valeur, la <b>saturation</b> sur le chroma, le réglage <b>TSL / HSL</b> sur la teinte, couleur par couleur.</li>
+    </ul>
+  </div>
+  <div class="defi" id="matchGame">
+    <div class="kicker">Défi · Œil de coloriste</div>
+    <h3>Retrouve cette couleur avec les trois curseurs</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0">
+      <div><div class="meta" style="color:var(--on-indigo-muted)">Cible</div><div class="swatch" id="mgT" style="height:90px;margin-top:6px"></div></div>
+      <div><div class="meta" style="color:var(--on-indigo-muted)">Ta couleur</div><div class="swatch" id="mgY" style="height:90px;margin-top:6px"></div></div>
+    </div>
+    <div class="grid3">
+      <div class="ctl"><div class="row"><label style="color:#fff">Valeur</label></div><input type="range" id="mgL" min="0" max="100" value="50"></div>
+      <div class="ctl"><div class="row"><label style="color:#fff">Chroma</label></div><input type="range" id="mgC" min="0" max="110" value="20"></div>
+      <div class="ctl"><div class="row"><label style="color:#fff">Teinte</label></div><input type="range" id="mgH" min="0" max="359" value="180"></div>
+    </div>
+    <div class="opts"><button class="opt" id="mgCheck">Vérifier</button><button class="opt" id="mgNew">Autre couleur</button></div>
+    <div class="fb" id="mgFb"></div>
+  </div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 4. CHAUD / FROID ============ -->
+<section class="step" data-title="Chaud ou froid">
+  <div class="step-head">
+    <div class="kicker">Étape 4 · Le sous-ton</div>
+    <h2>Chaud ou froid : <em>une question de biais</em></h2>
+    <p class="lede">Chaque famille de couleurs existe en version chaude (tirée vers le jaune) et froide (tirée vers le bleu). Un rouge tomate est chaud, un rouge framboise est froid. Pour la peau, on parle de <b>sous-ton</b> : doré ou pêche (chaud), rosé ou bleuté (froid), olive (neutre tirant vers le vert).</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <div class="seg" id="famSeg" style="margin-bottom:16px"></div>
+      <div style="display:flex;gap:8px">
+        <div class="big-sw" id="utCold" style="flex:1;height:110px">Version froide</div>
+        <div class="big-sw" id="utMid" style="flex:1.4;height:110px">Ta version</div>
+        <div class="big-sw" id="utWarm" style="flex:1;height:110px">Version chaude</div>
+      </div>
+      <div class="ctl" style="margin-top:16px">
+        <div class="row"><label for="ut">Sous-ton</label><span class="val" id="utV"></span></div>
+        <input type="range" id="ut" min="-100" max="100" value="0">
+        <div class="ends"><span>← vers le bleu (froid)</span><span>vers le jaune (chaud) →</span></div>
+      </div>
+      <p class="small" id="utTxt"></p>
+    </div>
+    <div class="card">
+      <h3>Le plan a*/b* de CIELAB</h3>
+      <p class="small">Vu de dessus, l'espace des couleurs : l'axe vertical b* va du bleu au jaune, c'est l'axe chaud/froid. L'axe horizontal a* va du vert au rouge/magenta.</p>
+      <canvas id="abCan" width="320" height="320" style="width:100%;max-width:320px;margin:0 auto"></canvas>
+    </div>
+  </div>
+  <div class="retiens">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag s">Saisons</span>Chaud = <b>Printemps</b> et <b>Automne</b>. Froid = <b>Été</b> et <b>Hiver</b>. Le blanc cassé ou crème est chaud, le blanc optique est froid ; l'or est chaud, l'argent est froid.</li>
+      <li><span class="tag c">Science</span>« Chaud » correspond à un déplacement vers +b* (jaune), « froid » vers −b* (bleu). Les neutres (gris, blanc) sont au centre, avec un chroma proche de 0.</li>
+      <li><span class="tag p">Photo</span>Le curseur <b>Température</b> déplace toute l'image sur cet axe bleu ↔ jaune ; le curseur <b>Teinte</b> sur l'axe vert ↔ magenta.</li>
+    </ul>
+  </div>
+  <div class="defi" id="warmGame">
+    <div class="kicker">Défi · Lequel est le plus chaud ?</div>
+    <h3 id="wgQ">Clique sur la couleur la plus chaude (5 manches, il en faut 4)</h3>
+    <div style="display:flex;gap:14px;margin-top:14px">
+      <button class="swatch" id="wgA" style="flex:1;height:100px;border:0;cursor:pointer"></button>
+      <button class="swatch" id="wgB" style="flex:1;height:100px;border:0;cursor:pointer"></button>
+    </div>
+    <div class="fb" id="wgFb"></div>
+  </div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 5. ILLUSIONS ============ -->
+<section class="step" data-title="L'œil se trompe">
+  <div class="step-head">
+    <div class="kicker">Étape 5 · Le contexte</div>
+    <h2>Une couleur ne vit <em>jamais seule</em></h2>
+    <p class="lede">Ton cerveau ne mesure pas les couleurs, il les compare. Deux phénomènes expliquent pourquoi le drapage (poser un tissu sous le visage) change la perception d'un teint, et pourquoi un pull n'a pas la même couleur en boutique et dehors.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Le contraste simultané</h3>
+      <p class="small">Les deux carrés centraux sont strictement identiques. Change le fond, puis cache-le pour vérifier.</p>
+      <div class="seg" id="scSeg" style="margin-bottom:12px"><button class="on" data-k="v">Valeur</button><button data-k="t">Chaud / froid</button><button data-k="c">Complémentaires</button></div>
+      <div id="scBox" style="display:grid;grid-template-columns:1fr 1fr;height:200px;border-radius:6px;overflow:hidden">
+        <div id="scL" style="display:grid;place-items:center"><div id="scA" style="width:70px;height:70px"></div></div>
+        <div id="scR" style="display:grid;place-items:center"><div id="scB" style="width:70px;height:70px"></div></div>
+      </div>
+      <div class="checks" style="margin-top:12px"><label><input type="checkbox" id="scHide"> Cacher les fonds</label></div>
+      <p class="small" id="scTxt" style="margin-top:10px"></p>
+    </div>
+    <div class="card">
+      <h3>Le métamérisme</h3>
+      <p class="small">Deux tissus aux <b>spectres différents</b> peuvent paraître identiques sous une lumière et différents sous une autre. Calcul réel : spectre de la lampe × spectre du tissu × sensibilité de l'œil.</p>
+      <div class="seg" id="illSeg" style="margin-bottom:12px"></div>
+      <div style="display:flex;gap:8px">
+        <div class="big-sw" id="metA" style="flex:1;height:100px">Tissu A</div>
+        <div class="big-sw" id="metB" style="flex:1;height:100px">Tissu B</div>
+      </div>
+      <p style="margin:10px 0 6px"><span id="metDE"></span></p>
+      <canvas id="specCan" width="520" height="150" style="width:100%;height:auto"></canvas>
+      <div class="checks" style="margin-top:8px"><label><input type="checkbox" id="adapt" checked> Adaptation de l'œil (balance des blancs automatique)</label></div>
+    </div>
+  </div>
+  <div class="retiens">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag s">Saisons</span>Le drapage exploite le contraste simultané : un tissu vert fait paraître la peau plus rosée (la complémentaire), un tissu trop foncé creuse les ombres du visage. C'est l'effet que tu verras à l'étape suivante.</li>
+      <li><span class="tag c">Science</span>Métamérisme : deux spectres différents peuvent produire les mêmes trois signaux de cônes. L'<b>IRC</b> (indice de rendu des couleurs, sur 100) d'une lampe dit à quel point elle respecte les couleurs comparée à la lumière naturelle.</li>
+      <li><span class="tag p">Photo</span>Un appareil fait comme ton œil : sa <b>balance des blancs</b> est une adaptation chromatique. Décoche la case pour voir la scène telle qu'un capteur réglé « lumière du jour » la verrait.</li>
+    </ul>
+  </div>
+  <div class="defi" data-quiz="5"></div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 6. LES 12 SAISONS ============ -->
+<section class="step" data-title="Les 12 saisons">
+  <div class="step-head">
+    <div class="kicker">Étape 6 · Colorimétrie</div>
+    <h2>Les 12 saisons, c'est <em>Munsell</em> appliqué à toi</h2>
+    <p class="lede">Johannes Itten (Bauhaus, années 1920) associe des palettes aux saisons ; Carole Jackson en fait 4 saisons en 1980 (<i>Color Me Beautiful</i>) ; le système à 12 (Sci\ART de Kathryn Kalisz) reprend les trois axes de Munsell. Chaque saison = <b>une caractéristique dominante</b> + une secondaire.</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <h3>Compose un visage</h3>
+      <p class="small">Les trois curseurs décrivent ta coloration naturelle (peau, cheveux, yeux). Puis clique sur une couleur de la palette pour « draper » le portrait.</p>
+      <div class="grid2" style="gap:20px;align-items:start">
+        <div class="face-wrap"><svg id="face" viewBox="0 0 240 280" width="100%"></svg></div>
+        <div>
+          <div class="ctl"><div class="row"><label for="sT">Température</label><span class="val" id="sTv"></span></div><input type="range" id="sT" min="-100" max="100" value="-40"><div class="ends"><span>Froid</span><span>Chaud</span></div><div class="hint">Sous-ton de la peau, reflets des cheveux (cendré ↔ doré, roux).</div></div>
+          <div class="ctl"><div class="row"><label for="sV">Valeur</label><span class="val" id="sVv"></span></div><input type="range" id="sV" min="-100" max="100" value="90"><div class="ends"><span>Profond</span><span>Clair</span></div><div class="hint">Clarté générale : peau, cheveux, yeux.</div></div>
+          <div class="ctl"><div class="row"><label for="sC">Chroma</label><span class="val" id="sCv"></span></div><input type="range" id="sC" min="-100" max="100" value="-30"><div class="ends"><span>Doux</span><span>Vif</span></div><div class="hint">Éclat des yeux, contraste cheveux/peau.</div></div>
+          <p class="meta" id="contrastTxt"></p>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="kicker">Drapage · palette de la saison</div>
+        <div class="palette" id="palette"></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap" class="small">
+          Essayer une couleur libre : <input type="color" id="freeDrape" value="#ff0a54" style="width:44px;height:30px;border:0;background:none;cursor:pointer">
+          <button class="btn btn--sm btn--secondary" id="oppDrape">Draper avec la saison opposée</button>
+        </div>
+        <div style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between" class="small"><b>Harmonie du drapé</b><span class="num" id="harmV"></span></div>
+          <div class="meter"><i id="harmBar"></i></div>
+          <p class="small" id="harmTxt" style="margin:0"></p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="seasonCard"></div>
+      <div class="card">
+        <h3>La carte des 12</h3>
+        <p class="small">Clique pour charger un profil type.</p>
+        <div class="seasons-map" id="smap"></div>
+      </div>
+    </div>
+  </div>
+  <div class="retiens">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag s">Saisons</span>Printemps = chaud + clair + vif · Été = froid + clair + doux · Automne = chaud + profond + doux · Hiver = froid + profond + vif. Les 12 saisons naissent quand on laisse <b>un seul axe dominer</b> : clair, profond, vif, doux, chaud ou froid.</li>
+      <li><span class="tag c">Science</span>Les trois axes sont mesurables au spectrophotomètre. L'attribution d'une saison, elle, reste un <b>jugement visuel</b> : c'est un modèle utile, pas une loi physique.</li>
+      <li><span class="tag p">Photo</span>Le « contraste personnel » (écart de valeur entre cheveux et peau) est exactement ce que mesure un photographe sur l'histogramme d'un portrait.</li>
+    </ul>
+  </div>
+  <div class="defi" data-quiz="6"></div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 7. LA PHOTO ============ -->
+<section class="step" data-title="L'image photo">
+  <div class="step-head">
+    <div class="kicker">Étape 7 · Photographie</div>
+    <h2>Les variables physiques <em>d'une image</em></h2>
+    <p class="lede">Une photo numérique est une grille de pixels, et chaque pixel vaut trois nombres. Tous les curseurs d'un logiciel comme Lightroom ne font que modifier ces nombres, en suivant les variables physiques déjà vues. Clique sur l'image pour mesurer un pixel.</p>
+  </div>
+  <div class="photo-grid">
+    <div>
+      <canvas id="photo" class="photo-canvas" width="640" height="400"></canvas>
+      <div class="card" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">Histogramme</h3><span id="clipBadge"></span></div>
+        <p class="small" style="margin:4px 0 10px">Combien de pixels à chaque niveau, des ombres (gauche) aux hautes lumières (droite).</p>
+        <canvas id="histo" width="600" height="120" style="width:100%;height:auto;background:var(--fill);border-radius:4px"></canvas>
+        <div class="pick" id="pick"><div class="swatch sw" id="pickSw" style="background:var(--fill)"></div><div class="small" id="pickTxt">Clique sur l'image (la mire en bas, le ciel, le soleil…) pour lire un pixel.</div></div>
+      </div>
+    </div>
+    <div class="card" id="photoCtl" style="margin-bottom:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 style="margin:0">Le développement</h3><button class="btn btn--sm btn--secondary" id="phReset">Réinitialiser</button></div>
+      <div id="phCtls"></div>
+    </div>
+  </div>
+  <div class="retiens" style="margin-top:26px">
+    <h3>Ce qu'il faut retenir</h3>
+    <ul>
+      <li><span class="tag p">Photo</span>Exposition, ombres, hautes lumières, contraste → <b>valeur</b>. Température, teinte → <b>axe chaud/froid</b> et vert/magenta. Saturation, vibrance → <b>chroma</b>. ISO, bits → <b>qualité du signal</b> (bruit, nuances disponibles).</li>
+      <li><span class="tag c">Science</span>L'exposition se calcule en <b>lumière linéaire</b> (+1 IL = deux fois plus de photons), mais l'œil perçoit de façon logarithmique : d'où la courbe <b>gamma</b> des fichiers. Ce qui dépasse 255 est <b>écrêté</b> : l'information est perdue.</li>
+      <li><span class="tag s">Saisons</span>Passe en « mode valeur » : c'est l'outil des coloristes pour juger le contraste d'une tenue, en oubliant la teinte.</li>
+    </ul>
+  </div>
+  <div class="defi" data-quiz="7"></div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 8. LE PONT ============ -->
+<section class="step" data-title="Le pont">
+  <div class="step-head">
+    <div class="kicker">Étape 8 · Tout relier</div>
+    <h2>Changer de saison <em>avec des curseurs photo</em></h2>
+    <p class="lede">Puisque les saisons sont des positions sur les trois axes, les curseurs d'un logiciel photo peuvent transformer une palette d'une saison en une autre. Preuve par le jeu.</p>
+  </div>
+  <div class="card">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Variable</th><th>Langage des saisons</th><th>Langage scientifique</th><th>Curseur photo</th></tr></thead>
+        <tbody>
+          <tr><td>Température</td><td>Chaud (doré, pêche, crème) / froid (rosé, bleuté, blanc optique)</td><td>Position sur l'axe b* (jaune ↔ bleu), angle de teinte h</td><td>Balance des blancs : Température (K)</td></tr>
+          <tr><td>Biais vert/rose</td><td>Sous-ton olive / rosé</td><td>Axe a* (vert ↔ rouge-magenta)</td><td>Balance des blancs : Teinte</td></tr>
+          <tr><td>Valeur</td><td>Clair (<i>light</i>) / profond (<i>deep, dark</i>)</td><td>Clarté L*, luminance Y, valeur de Munsell</td><td>Exposition, Ombres, Hautes lumières, Blancs, Noirs</td></tr>
+          <tr><td>Chroma</td><td>Vif, clair, net (<i>bright, clear</i>) / doux, sourd, poudré (<i>soft, muted</i>)</td><td>Chroma C*, saturation (chroma relatif à la clarté)</td><td>Saturation, Vibrance</td></tr>
+          <tr><td>Contraste</td><td>Contraste personnel (cheveux/peau/yeux), contraste d'une tenue</td><td>Écart de valeur ΔL*, rapport de luminance</td><td>Contraste, Courbe des tonalités</td></tr>
+          <tr><td>Teinte</td><td>Famille de couleur (rouge, prune, sarcelle…)</td><td>Longueur d'onde dominante, angle h</td><td>TSL / HSL (teinte, couleur par couleur)</td></tr>
+          <tr><td>Lumière</td><td>Diagnostic à la lumière du jour</td><td>Illuminant, IRC, métamérisme</td><td>Profil d'appareil, mode de mesure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div><div class="kicker" id="lvlK"></div><h3 id="lvlT" style="margin:0"></h3></div>
+      <div class="seg" id="lvlSeg"></div>
+    </div>
+    <p class="small" id="lvlHint" style="margin-top:8px"></p>
+    <div class="split" style="margin-top:10px">
+      <div>
+        <div class="meta" style="margin-bottom:6px">Ta palette</div><div class="lvl-sw" id="lvlYou"></div>
+        <div class="meta" style="margin:14px 0 6px">Cible</div><div class="lvl-sw" id="lvlTgt"></div>
+        <div style="margin-top:18px"><div style="display:flex;justify-content:space-between" class="small"><b>Ressemblance</b><span class="num" id="lvlScore"></span></div><div class="meter"><i id="lvlBar"></i></div><p class="small" id="lvlFb"></p></div>
+      </div>
+      <div id="lvlCtl"></div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--primary" data-next>Suivant →</button></div>
+</section>
+
+<!-- ============ 9. DICTIONNAIRE & QUIZ ============ -->
+<section class="step" data-title="Dictionnaire">
+  <div class="step-head">
+    <div class="kicker">Étape 9 · Pour finir</div>
+    <h2>Le dictionnaire <em>et l'examen</em></h2>
+    <p class="lede">Tous les mots rencontrés, traduits d'un monde à l'autre. Puis un dernier quiz pour décrocher ton badge de coloriste.</p>
+  </div>
+  <div class="card">
+    <input class="search" id="gSearch" placeholder="Chercher un terme (ex. poudré, gamma, IRC…)" aria-label="Chercher un terme">
+    <div class="tablewrap"><table><thead><tr><th>Terme</th><th>Ce que ça veut dire</th><th>Monde</th></tr></thead><tbody id="gloss"></tbody></table></div>
+  </div>
+  <div class="defi" id="final"></div>
+  <div class="nav"><button class="btn" data-prev>← Précédent</button><button class="btn btn--secondary" data-go="0">Retour à l'accueil</button></div>
+</section>
+
+</main>
+<footer><div class="wrap">La science des couleurs · Alan Julien · Les calculs (CIELAB, spectres, balance des blancs) sont réels mais simplifiés pour le jeu ; le drapage est une simulation pédagogique.</div></footer>
+<canvas class="confetti" id="confetti"></canvas>
+
+<script>
+/* =====================================================================
+   Outils couleur
+   ===================================================================== */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const s2l=c=>c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+const l2s=c=>c<=0.0031308?12.92*c:1.055*Math.pow(c,1/2.4)-0.055;
+const WHITE=[0.95047,1,1.08883];
+function lin2xyz([r,g,b]){return[0.4124564*r+0.3575761*g+0.1804375*b,0.2126729*r+0.7151522*g+0.0721750*b,0.0193339*r+0.1191920*g+0.9503041*b]}
+function xyz2lin([x,y,z]){return[3.2404542*x-1.5371385*y-0.4985314*z,-0.9692660*x+1.8760108*y+0.0415560*z,0.0556434*x-0.2040259*y+1.0572252*z]}
+function xyz2lab([x,y,z]){const f=t=>t>0.008856?Math.cbrt(t):7.787*t+16/116;const fx=f(x/WHITE[0]),fy=f(y/WHITE[1]),fz=f(z/WHITE[2]);return[116*fy-16,500*(fx-fy),200*(fy-fz)]}
+function lab2xyz([L,a,b]){const fy=(L+16)/116,fx=fy+a/500,fz=fy-b/200;const fi=t=>t*t*t>0.008856?t*t*t:(t-16/116)/7.787;return[WHITE[0]*fi(fx),WHITE[1]*fi(fy),WHITE[2]*fi(fz)]}
+function rgb2lab(rgb){return xyz2lab(lin2xyz(rgb.map(v=>s2l(v/255))))}
+function lab2rgbInfo(lab){const l=xyz2lin(lab2xyz(lab));const ok=l.every(v=>v>-0.002&&v<1.002);return{rgb:l.map(v=>Math.round(clamp(l2s(clamp(v)))*255)),ok}}
+const lab2rgb=lab=>lab2rgbInfo(lab).rgb;
+function lch2lab(L,C,h){const r=h*Math.PI/180;return[L,C*Math.cos(r),C*Math.sin(r)]}
+function lab2lch([L,a,b]){let h=Math.atan2(b,a)*180/Math.PI;if(h<0)h+=360;return[L,Math.hypot(a,b),h]}
+const lch2rgb=(L,C,h)=>lab2rgb(lch2lab(L,C,h));
+/* Ramène une couleur dans le gamut sRGB en réduisant le chroma */
+function lchFit(L,C,h){let lo=0,hi=C;if(lab2rgbInfo(lch2lab(L,C,h)).ok)return lch2rgb(L,C,h);for(let i=0;i<18;i++){const m=(lo+hi)/2;if(lab2rgbInfo(lch2lab(L,m,h)).ok)lo=m;else hi=m}return lch2rgb(L,lo,h)}
+const hex2rgb=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.substr(i,2),16))};
+const rgb2hex=rgb=>'#'+rgb.map(v=>Math.round(clamp(v,0,255)).toString(16).padStart(2,'0')).join('');
+const css=rgb=>`rgb(${rgb.map(Math.round).join(',')})`;
+const dE=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+const textOn=rgb=>rgb2lab(rgb)[0]>62?'#2c2723':'#ffffff';
+function grayOf(rgb){const L=rgb2lab(rgb)[0];return lab2rgb([L,0,0])}
+/* Vocabulaire « saisons » d'une couleur */
+function warmth(lab){const[L,C,h]=lab2lch(lab);return Math.cos((h-75)*Math.PI/180)*Math.min(C/30,1)}
+function vocab(rgb){
+  const lab=rgb2lab(rgb),[L,C]=lab2lch(lab),w=warmth(lab);
+  const v=L>70?'claire':L>45?'moyenne':'profonde';
+  const c=C<12?'neutre':C<30?'douce, sourde':C<55?'modérée':'vive, nette';
+  const t=C<8?'neutre':w>0.25?'chaude':w<-0.25?'froide':'plutôt neutre';
+  return{L,C,w,v,c,t};
+}
+function hueName(h,C){if(C<8)return'gris / neutre';const n=[[20,'rose-rouge'],[45,'rouge'],[65,'orangé'],[85,'jaune-orangé'],[105,'jaune'],[140,'vert-jaune'],[180,'vert'],[215,'vert-bleu'],[245,'cyan-bleu'],[285,'bleu'],[315,'violet'],[345,'magenta'],[361,'rose-rouge']];return n.find(x=>h<x[0])[1]}
+
+/* Longueur d'onde → RVB (approximation de Bruton) */
+function wl2rgb(w){let r=0,g=0,b=0;
+  if(w<440){r=-(w-440)/60;b=1}else if(w<490){g=(w-440)/50;b=1}else if(w<510){g=1;b=-(w-510)/20}
+  else if(w<580){r=(w-510)/70;g=1}else if(w<645){r=1;g=-(w-645)/65}else{r=1}
+  let f=w<420?0.3+0.7*(w-380)/40:w>700?0.3+0.7*(750-w)/50:1;
+  return[r,g,b].map(c=>Math.round(255*Math.pow(c*f,0.8)));
+}
+const wlName=w=>w<450?'violet':w<485?'bleu':w<500?'cyan':w<565?'vert':w<590?'jaune':w<625?'orange':'rouge';
+/* Kelvin → RVB (approximation de Tanner Helland) */
+function k2rgb(K){const t=K/100;let r,g,b;
+  r=t<=66?255:329.698727446*Math.pow(t-60,-0.1332047592);
+  g=t<=66?99.4708025861*Math.log(t)-161.1195681661:288.1221695283*Math.pow(t-60,-0.0755148492);
+  b=t>=66?255:t<=19?0:138.5177312231*Math.log(t-10)-305.0447927307;
+  return[r,g,b].map(v=>clamp(v,0,255));
+}
+
+/* =====================================================================
+   Navigation & progression
+   ===================================================================== */
+const steps=$$('.step');
+const STORE='science-couleurs-v1';
+let state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"step":0}');
+const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
+function markDone(i){if(!state.done.includes(i)){state.done.push(i);save();confetti()}renderRail()}
+function renderRail(){
+  $('#rail').innerHTML=steps.map((s,i)=>`<button class="chip ${i===state.step?'active':''} ${state.done.includes(i)?'done':''}" data-go="${i}"><span class="n num">${state.done.includes(i)?'✓':i}</span>${s.dataset.title}</button>`).join('');
+  const n=steps.length-1;$('#prog').style.width=(state.done.filter(i=>i>0).length/n*100)+'%';
+}
+function go(i){
+  i=clamp(i,0,steps.length-1);state.step=i;save();
+  steps.forEach((s,k)=>s.classList.toggle('active',k===i));renderRail();
+  window.scrollTo({top:0,behavior:'smooth'});
+  const a=$('#rail .chip.active');if(a)a.scrollIntoView({inline:'center',block:'nearest'});
+  if(i===7)renderPhoto();
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){go(+g.dataset.go);return}
+  if(e.target.closest('[data-next]'))go(state.step+1);
+  if(e.target.closest('[data-prev]'))go(state.step-1);
+});
+
+/* Confettis aux couleurs des 12 saisons */
+function confetti(){
+  const c=$('#confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=Object.values(SEASONS).flatMap(s=>s.pal.slice(0,3));
+  const ps=Array.from({length:90},()=>({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*12-4,s:5+Math.random()*6,c:cols[Math.random()*cols.length|0],r:Math.random()*6}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.4;p.r+=0.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++t<90)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})();
+}
+
+/* Quiz à choix (une question par étape) */
+const QUIZ={
+  1:{q:"Une ampoule à 2700 K donne une lumière…",o:["orangée, dite « chaude »","bleutée, dite « froide »","parfaitement blanche"],a:0,e:"Basse température = lumière orangée. C'est pour cela que les photos sous ampoule tirent au jaune."},
+  2:{q:"Sur un écran, rouge + vert à fond (et pas de bleu) donnent…",o:["du marron","du jaune","du blanc"],a:1,e:"En additif, R + V = jaune. Avec des peintures, rouge + vert donnerait un brun sombre (soustractif)."},
+  5:{q:"Deux pulls identiques en boutique, différents en plein soleil : c'est…",o:["le contraste simultané","le métamérisme","une mauvaise balance des blancs"],a:1,e:"Spectres différents, même réponse des cônes sous la lampe de la boutique : métamérisme."},
+  6:{q:"Une personne dont la caractéristique dominante est « douce » et le sous-ton froid est…",o:["Automne doux","Été doux","Hiver froid"],a:1,e:"Doux + froid = Été doux (Soft Summer). Doux + chaud serait Automne doux."},
+  7:{q:"Ton portrait tire à l'orange sous une ampoule. Quel réglage corrige ?",o:["Augmenter la saturation","Baisser la température (vers le bleu)","Augmenter l'exposition"],a:1,e:"On indique à l'appareil une source plus « chaude » (≈ 2800 K) : il compense en ajoutant du bleu."}
+};
+function mountQuiz(el,qz,onOk){
+  el.innerHTML=`<div class="kicker">Défi</div><h3>${qz.q}</h3><div class="opts">${qz.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div><div class="fb"></div>`;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const ok=+b.dataset.i===qz.a;b.classList.add(ok?'good':'bad');
+    el.querySelector('.fb').innerHTML=(ok?'<b>Bravo !</b> ':'<b>Pas tout à fait.</b> ')+qz.e;
+    if(ok)onOk();
+  });
+}
+$$('[data-quiz]').forEach(el=>{const n=+el.dataset.quiz;mountQuiz(el,QUIZ[n],()=>markDone(n))});
+
+/* =====================================================================
+   Données : les 12 saisons
+   ===================================================================== */
+const SEASONS={
+  "light-spring":{fr:"Printemps clair",en:"Light Spring",fam:"Printemps",dom:"Clair",sec:"Chaud",p:[40,90,30],opp:"deep-winter",
+    d:"Couleurs lumineuses et légères, toujours teintées de chaud : pêche, beurre frais, aqua. Pas de noir près du visage.",
+    pal:["#f6c1a0","#f4de8a","#f49a8a","#8fd8cf","#a8bceb","#b6d98a","#d8b78a","#fbf1dc"]},
+  "true-spring":{fr:"Printemps chaud",en:"Warm Spring",fam:"Printemps",dom:"Chaud",sec:"Vif",p:[90,30,40],opp:"true-summer",
+    d:"Le plus doré des printemps : orange, jaune soleil, vert herbe, turquoise chaud. L'or plutôt que l'argent.",
+    pal:["#f28c28","#f5c518","#e9573f","#7dbb42","#2bb3a3","#c98a4b","#f48c6e","#faebc8"]},
+  "bright-spring":{fr:"Printemps vif",en:"Bright Spring",fam:"Printemps",dom:"Vif",sec:"Chaud",p:[40,20,90],opp:"soft-summer",
+    d:"Couleurs saturées et nettes, chaleur légère : coquelicot, turquoise, bleu roi. Fort contraste toléré.",
+    pal:["#ff5a36","#ffc300","#00b3a1","#2d7ff9","#ff4f8b","#6cc24a","#7e3fa0","#1f2a44"]},
+  "light-summer":{fr:"Été clair",en:"Light Summer",fam:"Été",dom:"Clair",sec:"Froid",p:[-40,90,-30],opp:"deep-autumn",
+    d:"Pastels froids et poudrés : bleu poudre, lavande, rose dragée, gris perle. Rien de lourd ni de trop vif.",
+    pal:["#c9d7f0","#e8c4d4","#a9d3cf","#cfc3e6","#e7e3e9","#9db4d8","#e4a9b6","#b7c3cf"]},
+  "true-summer":{fr:"Été froid",en:"Cool Summer",fam:"Été",dom:"Froid",sec:"Doux",p:[-90,30,-30],opp:"true-spring",
+    d:"Le plus froid des étés : bleus moyens, framboise douce, prune, ardoise. L'argent avant tout.",
+    pal:["#5b7db1","#8e6e9c","#c96f8f","#4e8c8a","#7d8a99","#d3a1b8","#3c4e70","#a7b9d6"]},
+  "soft-summer":{fr:"Été doux",en:"Soft Summer",fam:"Été",dom:"Doux",sec:"Froid",p:[-30,10,-90],opp:"bright-spring",
+    d:"Couleurs grisées, fumées : gris-bleu, mauve, vert sauge, vieux rose. Le contraste fort écrase.",
+    pal:["#8a9ba8","#a88b9a","#7e9384","#b89a9a","#5f6b7a","#9c8e8a","#6e7fa3","#c2b6c7"]},
+  "soft-autumn":{fr:"Automne doux",en:"Soft Autumn",fam:"Automne",dom:"Doux",sec:"Chaud",p:[30,-10,-90],opp:"bright-winter",
+    d:"Tons naturels et feutrés : camel, kaki, terre rosée, eucalyptus. Le noir et le blanc pur durcissent.",
+    pal:["#c7a27c","#a8a27a","#b88a7a","#7f9a8c","#d2b48c","#8e7a6b","#c49a6c","#6f8f8a"]},
+  "true-autumn":{fr:"Automne chaud",en:"Warm Autumn",fam:"Automne",dom:"Chaud",sec:"Doux",p:[90,-30,-30],opp:"true-winter",
+    d:"Les couleurs des feuilles mortes : rouille, moutarde, olive, terracotta, sarcelle profond.",
+    pal:["#c0662b","#d19a2a","#6b7b2d","#8b4a2b","#b5562a","#2e6e62","#7a4e2d","#e0b15a"]},
+  "deep-autumn":{fr:"Automne profond",en:"Deep Autumn",fam:"Automne",dom:"Profond",sec:"Chaud",p:[30,-90,-20],opp:"light-summer",
+    d:"Riche et sombre, chaleur en fond : chocolat, bordeaux chaud, vert forêt, bronze, pétrole.",
+    pal:["#5a2e1e","#7a1f1f","#2f4a2a","#8c5a1e","#1f4e4a","#a0522d","#4a3b2a","#b8862b"]},
+  "deep-winter":{fr:"Hiver profond",en:"Deep Winter",fam:"Hiver",dom:"Profond",sec:"Froid",p:[-30,-90,30],opp:"light-spring",
+    d:"Sombre et intense, froid en fond : noir, bordeaux froid, émeraude, indigo, aubergine.",
+    pal:["#1a1a2e","#7b0f2e","#0b5a3e","#2a2f6b","#4b1e5a","#f2f3f5","#a3133f","#0e5e6f"]},
+  "true-winter":{fr:"Hiver froid",en:"Cool Winter",fam:"Hiver",dom:"Froid",sec:"Vif",p:[-90,-30,40],opp:"true-autumn",
+    d:"Couleurs pures et glacées : rouge vrai, cobalt, émeraude, fuchsia, noir et blanc optique.",
+    pal:["#111111","#ffffff","#c8102e","#0047ab","#00843d","#d6338a","#5b2a86","#bfc5d2"]},
+  "bright-winter":{fr:"Hiver vif",en:"Bright Winter",fam:"Hiver",dom:"Vif",sec:"Froid",p:[-40,-20,90],opp:"soft-autumn",
+    d:"Le maximum de chroma : fuchsia électrique, bleu vif, émeraude, jaune citron glacé, noir et blanc.",
+    pal:["#ff0a54","#0055ff","#00a86b","#f4f35b","#ffffff","#000000","#7a00ff","#e4002b"]}
+};
+const FAM=["Printemps","Été","Automne","Hiver"];
+function seasonOf(t,v,c){
+  const a=[['t',Math.abs(t)],['v',Math.abs(v)],['c',Math.abs(c)]].sort((x,y)=>y[1]-x[1])[0][0];
+  if(a==='t')return t>0?(v+c>0?'true-spring':'true-autumn'):(c-v>0?'true-winter':'true-summer');
+  if(a==='v')return v>0?(t>0?'light-spring':'light-summer'):(t>0?'deep-autumn':'deep-winter');
+  return c>0?(t>0?'bright-spring':'bright-winter'):(t>0?'soft-autumn':'soft-summer');
+}
+
+/* =====================================================================
+   0. Accueil
+   ===================================================================== */
+(function(){
+  const g=(f,n=12)=>`linear-gradient(90deg,${Array.from({length:n},(_,i)=>rgb2hex(f(i/(n-1)))).join(',')})`;
+  const ax=[
+    {k:"Axe 1",t:"Teinte & température",b:g(x=>lchFit(62,55,(x*330+20)%360)),v:[["Saisons","chaud / froid, sous-ton"],["Science","angle h, axe b*"],["Photo","Température, Teinte, TSL"]]},
+    {k:"Axe 2",t:"Valeur",b:g(x=>lchFit(8+x*88,20,300)),v:[["Saisons","clair / profond"],["Science","clarté L*, luminance"],["Photo","Exposition, ombres, hautes lum."]]},
+    {k:"Axe 3",t:"Chroma",b:g(x=>lchFit(55,x*70,25)),v:[["Saisons","vif / doux, sourd"],["Science","chroma C*, saturation"],["Photo","Saturation, Vibrance"]]}
+  ];
+  $('#homeAxes').innerHTML=ax.map(a=>`<div class="axe"><div class="kicker">${a.k}</div><h3>${a.t}</h3><div class="bar" style="background:${a.b}"></div><div class="voc">${a.v.map(([m,x])=>`<span class="tag ${m==='Saisons'?'s':m==='Photo'?'p':'c'}">${m}</span><span>${x}</span>`).join('')}</div></div>`).join('');
+  const desc=["","Ondes et kelvins","Trois cônes, deux mélanges","Teinte, valeur, chroma","Chaud ou froid","Illusions et métamérisme","Les 12 saisons","Les réglages d'une photo","Changer de saison","Dictionnaire et quiz"];
+  $('#parcours').innerHTML=desc.slice(1).map((d,i)=>`<button data-go="${i+1}"><b>${i+1}</b>${d}</button>`).join('');
+})();
+
+/* =====================================================================
+   1. Lumière
+   ===================================================================== */
+(function(){
+  const stops=[];for(let w=380;w<=750;w+=10)stops.push(`${css(wl2rgb(w))} ${((w-380)/370*100).toFixed(1)}%`);
+  $('#wlSpec').style.background=`linear-gradient(90deg,${stops.join(',')})`;
+  const upd=()=>{const w=+$('#wl').value,rgb=wl2rgb(w);
+    $('#wlSw').style.background=css(rgb);$('#wlSw').style.color=textOn(rgb);$('#wlSw').textContent=wlName(w);
+    $('#wlMk').style.left=((w-380)/370*100)+'%';$('#wlV').textContent=w+' nm';
+    $('#wlRead').innerHTML=`<dt>Fréquence</dt><dd>${(299792/w).toFixed(0)} THz (milliers de milliards d'oscillations/s)</dd><dt>Énergie d'un photon</dt><dd>${(1239.84/w).toFixed(2)} eV</dd><dt>Cône le plus excité</dt><dd>${w<480?'S (courtes)':w<550?'M (moyennes)':'L (longues)'}</dd>`;};
+  $('#wl').oninput=upd;upd();
+  const SRC=[[1900,"Bougie"],[2700,"Ampoule domestique"],[3200,"Halogène, studio tungstène"],[4000,"Lever / coucher de soleil, néon blanc"],[5500,"Soleil de midi, flash"],[6500,"Ciel couvert (D65, la référence)"],[8000,"Ombre"],[12001,"Ciel bleu sans soleil direct"]];
+  const sc=$('#kScene');
+  const base={paper:[245,244,240],skin:[224,178,150],gray:[128,128,128],wall:[200,196,190],shirt:[70,96,150]};
+  const upK=()=>{const K=+$('#kel').value,k=k2rgb(K),ref=k2rgb(6500);
+    const lit=c=>css(c.map((v,i)=>Math.round(255*l2s(clamp(s2l(v/255)*s2l(k[i]/255)/s2l(ref[i]/255))))));
+    sc.innerHTML=`<rect width="400" height="200" fill="${lit(base.wall)}"/>
+      <circle cx="40" cy="38" r="18" fill="${css(k)}"/><circle cx="40" cy="38" r="30" fill="${css(k)}" opacity=".25"/>
+      <rect x="70" y="60" width="110" height="120" rx="3" fill="${lit(base.paper)}"/><text x="125" y="125" text-anchor="middle" font-family="Sora" font-size="11" fill="${lit([120,115,110])}">feuille blanche</text>
+      <rect x="200" y="100" width="60" height="60" rx="3" fill="${lit(base.gray)}"/><text x="230" y="176" text-anchor="middle" font-family="Sora" font-size="10" fill="${lit([90,90,90])}">gris 18 %</text>
+      <ellipse cx="330" cy="95" rx="34" ry="42" fill="${lit(base.skin)}"/><path d="M280 200 C 285 150 375 150 380 200Z" fill="${lit(base.shirt)}"/>`;
+    $('#kelV').textContent=K+' K';$('#kelSrc').textContent=SRC.find(s=>K<s[0]+250)[1];
+    $('#kel').style.background=`linear-gradient(90deg,${[1500,2500,3500,4500,5500,6500,8000,10000,12000].map(x=>css(k2rgb(x))).join(',')})`;};
+  $('#kel').oninput=upK;upK();
+})();
+
+/* =====================================================================
+   2. Mélanges
+   ===================================================================== */
+(function(){
+  let mode='add';const v=[220,180,90];
+  const names={add:["Rouge","Vert","Bleu"],sub:["Cyan","Magenta","Jaune"]};
+  function build(){
+    $('#mixCtl').innerHTML=names[mode].map((n,i)=>`<div class="ctl"><div class="row"><label>${n}</label><span class="val num" id="mv${i}"></span></div><input type="range" min="0" max="255" value="${v[i]}" data-i="${i}"></div>`).join('');
+    $$('#mixCtl input').forEach(r=>r.oninput=()=>{v[+r.dataset.i]=+r.value;upd()});
+    $('#mixHint').textContent=mode==='add'?"Chaque curseur règle l'intensité d'une lumière, de 0 (éteinte) à 255 (à fond).":"Chaque curseur règle la quantité d'encre, de 0 (rien) à 255 (couche pleine).";
+    upd();
+  }
+  function upd(){
+    const m=$('#mixer'),c=[$('#mc1'),$('#mc2'),$('#mc3')];let res;
+    if(mode==='add'){m.style.background='#0e0d12';
+      const cols=[[v[0],0,0],[0,v[1],0],[0,0,v[2]]];c.forEach((e,i)=>{e.style.background=css(cols[i]);e.style.mixBlendMode='screen'});res=[v[0],v[1],v[2]];
+      $('#mixTxt').innerHTML="Lumières sur fond noir : là où elles se superposent, elles <b>s'additionnent</b>. R + V = jaune, V + B = cyan, R + B = magenta, les trois = blanc.";
+    }else{m.style.background='#ffffff';
+      const cols=[[255-v[0],255,255],[255,255-v[1],255],[255,255,255-v[2]]];c.forEach((e,i)=>{e.style.background=css(cols[i]);e.style.mixBlendMode='multiply'});res=[255-v[0],255-v[1],255-v[2]];
+      $('#mixTxt').innerHTML="Encres sur papier blanc : chaque encre <b>retire</b> une lumière. Le cyan absorbe le rouge, le magenta le vert, le jaune le bleu. Les trois ensemble ≈ noir (on ajoute du vrai noir, le K de CMJN).";}
+    v.forEach((x,i)=>$('#mv'+i).textContent=x);
+    $('#mixRes').style.background=css(res);
+    const vo=vocab(res);
+    $('#mixRead').innerHTML=`<dt>Résultat</dt><dd>${rgb2hex(res)} · R ${res[0]} V ${res[1]} B ${res[2]}</dd><dt>Famille</dt><dd>${hueName(lab2lch(rgb2lab(res))[2],vo.C)}</dd>`;
+  }
+  $$('#mixMode button').forEach(b=>b.onclick=()=>{$$('#mixMode button').forEach(x=>x.classList.toggle('on',x===b));mode=b.dataset.m;build()});
+  build();
+})();
+
+/* =====================================================================
+   3. Trois dimensions
+   ===================================================================== */
+(function(){
+  function upd(){
+    const L=+$('#lL').value,C=+$('#lC').value,h=+$('#lH').value;
+    const info=lab2rgbInfo(lch2lab(L,C,h)),rgb=info.ok?info.rgb:lchFit(L,C,h);
+    $('#lLv').textContent=L;$('#lCv').textContent=C;$('#lHv').textContent=h+'°';
+    $('#lchSw').style.background=css(rgb);$('#lchSw').style.color=textOn(rgb);$('#lchSw').textContent=rgb2hex(rgb);
+    $('#lchGamut').innerHTML=info.ok?'':'<div class="alert">Hors du gamut sRGB : ton écran ne peut pas afficher ce chroma à cette valeur. On montre la couleur affichable la plus proche. (Toutes les teintes n\'atteignent pas le même chroma : le jaune vif n\'existe qu\'en clair, le bleu vif qu\'en moyen-foncé.)</div>';
+    $('#lH').style.background=`linear-gradient(90deg,${Array.from({length:13},(_,i)=>rgb2hex(lchFit(L,Math.max(C,25),i*30))).join(',')})`;
+    $('#lC').style.background=`linear-gradient(90deg,${Array.from({length:8},(_,i)=>rgb2hex(lchFit(L,i*130/7,h))).join(',')})`;
+    $('#lL').style.background=`linear-gradient(90deg,${Array.from({length:8},(_,i)=>rgb2hex(lchFit(i*100/7,C,h))).join(',')})`;
+    const vo=vocab(rgb);
+    $('#lchRead').innerHTML=`<dt><span class="tag s">Saisons</span></dt><dd>Couleur ${vo.v}, ${vo.c}, ${vo.t}</dd>
+      <dt><span class="tag c">Science</span></dt><dd>L* ${vo.L.toFixed(0)} · C* ${vo.C.toFixed(0)} · h ${h}° (${hueName(h,vo.C)})</dd>
+      <dt><span class="tag p">Photo</span></dt><dd>${rgb2hex(rgb)} · R ${rgb[0]} V ${rgb[1]} B ${rgb[2]}</dd>`;
+    variants(rgb);
+  }
+  function variants(rgb){
+    const lab=rgb2lab(rgb),gray=$('#mixGray').checked;
+    const mix=(a,b,t)=>a.map((x,i)=>x+(b[i]-x)*t);
+    const rows=[["+ blanc","Teinte claire, pastel","tint",[255,255,255]],["+ gris","Ton rompu, poudré, sourd","tone",lab2rgb([lab[0],0,0])],["+ noir","Ombre, profond","shade",[0,0,0]]];
+    $('#variants').innerHTML=rows.map(([n,s,en,t])=>`<div class="mixrow"><b>${n}<span>${s} · <i>${en}</i></span></b><div class="row-sw">${Array.from({length:8},(_,i)=>{let c=mix(rgb,t,i/8);if(gray)c=grayOf(c);return`<div class="swatch" style="background:${css(c)}" title="${rgb2hex(c)}"></div>`}).join('')}</div></div>`).join('')
+      +`<p class="small" style="margin-top:8px">Pastel = chroma bas et valeur haute (Été clair, Printemps clair). Poudré, grisé = chroma bas, valeur moyenne (Été doux, Automne doux). Profond = valeur basse (Hiver et Automne profonds).</p>`;
+  }
+  ['#lL','#lC','#lH'].forEach(s=>$(s).oninput=upd);$('#mixGray').onchange=upd;upd();
+  $('#hslGray').onchange=e=>{const g=e.target.checked;$('#hslY').style.background=g?css(grayOf([255,255,0])):'#ffff00';$('#hslB').style.background=g?css(grayOf([0,0,255])):'#0000ff'};
+
+  /* Jeu : retrouver une couleur */
+  let target;
+  function newT(){let ok=false,L,C,h;while(!ok){L=30+Math.random()*55;C=15+Math.random()*55;h=Math.random()*360;ok=lab2rgbInfo(lch2lab(L,C,h)).ok}target=lch2rgb(L,C,h);$('#mgT').style.background=css(target);$('#mgFb').textContent='';updY()}
+  function you(){return lchFit(+$('#mgL').value,+$('#mgC').value,+$('#mgH').value)}
+  function updY(){$('#mgY').style.background=css(you())}
+  ['#mgL','#mgC','#mgH'].forEach(s=>$(s).oninput=updY);
+  $('#mgNew').onclick=newT;
+  $('#mgCheck').onclick=()=>{
+    const d=dE(rgb2lab(target),rgb2lab(you())),tl=lab2lch(rgb2lab(target)),yl=lab2lch(rgb2lab(you()));
+    let tip=[];if(Math.abs(tl[0]-yl[0])>4)tip.push(yl[0]<tl[0]?'plus clair':'plus foncé');
+    if(Math.abs(tl[1]-yl[1])>5)tip.push(yl[1]<tl[1]?'plus vif':'plus doux');
+    let dh=((tl[2]-yl[2]+540)%360)-180;if(Math.abs(dh)>6&&tl[1]>10)tip.push(dh>0?'teinte un peu plus loin à droite':'teinte un peu plus à gauche');
+    if(d<6){$('#mgFb').innerHTML=`<b>Dans le mille !</b> ΔE = ${d.toFixed(1)}. Sous 2, l'œil ne verrait même plus de différence.`;markDone(3)}
+    else $('#mgFb').innerHTML=`ΔE = <b class="num">${d.toFixed(1)}</b> (il faut moins de 6). Conseil : ${tip.join(', ')||'tu y es presque'}.`;
+  };
+  newT();
+})();
+
+/* =====================================================================
+   4. Chaud / froid
+   ===================================================================== */
+(function(){
+  const F={"Rouge":[48,62,35],"Rose":[68,38,358],"Vert":[55,45,145],"Bleu":[48,45,262],"Violet":[42,42,315],"Jaune":[82,62,92],"Beige":[78,16,70],"Blanc":[96,4,90]};
+  let fam="Rouge";
+  /* déplace la teinte vers le jaune (h≈85) ou le bleu (h≈265) */
+  function shift(L,C,h,t){const goal=t>0?85:265;let d=((goal-h+540)%360)-180;const k=Math.min(Math.abs(t)*40,Math.abs(d));let nh=h+Math.sign(d)*k;
+    if(fam==='Blanc'){return[L,4+Math.abs(t)*8,t>0?85:255]}
+    return[L,C,(nh+360)%360]}
+  $('#famSeg').innerHTML=Object.keys(F).map(f=>`<button class="${f===fam?'on':''}" data-f="${f}">${f}</button>`).join('');
+  $$('#famSeg button').forEach(b=>b.onclick=()=>{fam=b.dataset.f;$$('#famSeg button').forEach(x=>x.classList.toggle('on',x===b));upd()});
+  const ab=$('#abCan'),x=ab.getContext('2d');
+  function plane(L){const W=320,img=x.createImageData(W,W);for(let j=0;j<W;j++)for(let i=0;i<W;i++){const a=(i-W/2)/W*200,b=-(j-W/2)/W*200;const r=lab2rgbInfo([L,a,b]);const o=(j*W+i)*4;const c=r.ok?r.rgb:[239,236,226];img.data[o]=c[0];img.data[o+1]=c[1];img.data[o+2]=c[2];img.data[o+3]=255}return img}
+  let cacheL=-1,cacheImg;
+  function draw(pts,L){if(L!==cacheL){cacheImg=plane(L);cacheL=L}x.putImageData(cacheImg,0,0);
+    x.strokeStyle='rgba(44,39,35,.35)';x.beginPath();x.moveTo(160,0);x.lineTo(160,320);x.moveTo(0,160);x.lineTo(320,160);x.stroke();
+    x.font='600 11px Sora';x.fillStyle='#2c2723';x.fillText('+b* jaune · chaud',166,14);x.fillText('−b* bleu · froid',166,312);x.fillText('−a* vert',4,154);x.textAlign='right';x.fillText('+a* rouge',316,154);x.textAlign='left';
+    pts.forEach(([lab,lbl,big])=>{const px=160+lab[1]/200*320,py=160-lab[2]/200*320;x.beginPath();x.arc(px,py,big?9:6,0,7);x.fillStyle=css(lab2rgb(lab));x.fill();x.lineWidth=2.5;x.strokeStyle='#fff';x.stroke();x.lineWidth=1;x.strokeStyle='#2c2723';x.stroke()});}
+  function upd(){const t=+$('#ut').value/100,[L,C,h]=F[fam];
+    const cold=lch2lab(...shift(L,C,h,-1)),warm=lch2lab(...shift(L,C,h,1)),mid=lch2lab(...shift(L,C,h,t));
+    [['#utCold',cold],['#utWarm',warm],['#utMid',mid]].forEach(([s,l])=>{const r=lchFit(...lab2lch(l));$(s).style.background=css(r);$(s).style.color=textOn(r)});
+    $('#utMid').textContent='Ta version · '+rgb2hex(lchFit(...lab2lch(mid)));
+    $('#utV').textContent=t>0.15?'chaud':t<-0.15?'froid':'neutre';
+    const EX={"Rouge":["rouge framboise, cerise (Hiver, Été)","rouge tomate, brique (Printemps, Automne)"],"Rose":["rose fuchsia, dragée (Hiver, Été)","rose saumon, corail (Printemps, Automne)"],"Vert":["vert émeraude, sapin bleuté (Hiver)","vert olive, mousse, pomme (Automne, Printemps)"],"Bleu":["bleu glacier, cobalt (Hiver, Été)","bleu sarcelle, pétrole (Automne)"],"Violet":["violet, prune bleutée (Hiver, Été)","aubergine chaude, mauve rosé (Automne)"],"Jaune":["jaune citron glacé (Hiver vif)","jaune d'or, moutarde (Printemps, Automne)"],"Beige":["taupe rosé, gris-beige (Été)","camel, sable doré (Automne, Printemps)"],"Blanc":["blanc optique (Hiver)","blanc cassé, crème, ivoire (Printemps, Automne)"]}[fam];
+    $('#utTxt').innerHTML=`<b>Froid</b> : ${EX[0]}. <b>Chaud</b> : ${EX[1]}.`;
+    draw([[cold,'',0],[warm,'',0],[mid,'',1]],L);}
+  $('#ut').oninput=upd;upd();
+
+  /* Jeu chaud/froid */
+  let round=0,score=0,warmSide;
+  function next(){if(round>=5){const ok=score>=4;$('#wgFb').innerHTML=ok?`<b>${score}/5, bravo !</b> Ton œil sait lire le biais jaune/bleu.`:`<b>${score}/5.</b> Il en faut 4. Clique sur une couleur pour rejouer.`;if(ok)markDone(4);round=0;score=0;return}
+    const keys=Object.keys(F).filter(k=>k!=='Blanc'),fk=keys[Math.random()*keys.length|0],[L,C,h]=F[fk];
+    const prev=fam;fam=fk;const a=lchFit(...shift(L,C,h,0.45)),b=lchFit(...shift(L,C,h,-0.45));fam=prev;
+    warmSide=Math.random()<.5?0:1;$('#wgA').style.background=css(warmSide===0?a:b);$('#wgB').style.background=css(warmSide===0?b:a);
+    $('#wgQ').textContent=`Manche ${round+1}/5 · ${fk} : clique sur la version la plus chaude`;}
+  [$('#wgA'),$('#wgB')].forEach((el,i)=>el.onclick=()=>{if(round===0&&$('#wgFb').innerHTML.includes('/5')){$('#wgFb').innerHTML='';}
+    const ok=i===warmSide;if(ok)score++;round++;$('#wgFb').innerHTML=(ok?'✓ Oui, plus jaune.':'✗ Non, l\'autre tire plus vers le jaune.')+` Score ${score}/${round}`;setTimeout(next,650)});
+  next();
+})();
+
+/* =====================================================================
+   5. Illusions & métamérisme
+   ===================================================================== */
+(function(){
+  const SC={v:{l:'#25232b',r:'#e9e6df',sq:'#8a8580',t:"Sur fond sombre, le gris paraît plus clair ; sur fond clair, plus foncé. Un vêtement noir fait paraître une peau claire encore plus pâle."},
+    t:{l:'#2f62b8',r:'#e08a2b',sq:'#b49a84',t:"Le même beige paraît plus chaud à côté du bleu, plus froid et grisé à côté de l'orange : chaque fond pousse la couleur vers sa complémentaire."},
+    c:{l:'#3e8a4e',r:'#b04a7a',sq:'#c9a08a',t:"Ce ton chair paraît plus rose à côté du vert et plus jaune-vert à côté du magenta. C'est l'effet qu'exploite un drapé sous le visage."}};
+  let k='v';function updSC(){const s=SC[k],h=$('#scHide').checked;$('#scL').style.background=h?'#efece2':s.l;$('#scR').style.background=h?'#efece2':s.r;$('#scA').style.background=s.sq;$('#scB').style.background=s.sq;$('#scTxt').textContent=s.t}
+  $$('#scSeg button').forEach(b=>b.onclick=()=>{k=b.dataset.k;$$('#scSeg button').forEach(x=>x.classList.toggle('on',x===b));updSC()});$('#scHide').onchange=updSC;updSC();
+
+  /* Spectres : sensibilité de l'œil (approximation analytique de Wyman et al., 2013) */
+  const LAM=[];for(let l=400;l<=700;l+=5)LAM.push(l);
+  const g=(l,m,s1,s2)=>{const t=(l-m)/(l<m?s1:s2);return Math.exp(-0.5*t*t)};
+  const xb=l=>1.056*g(l,599.8,37.9,31)+0.362*g(l,442,16,26.7)-0.065*g(l,501.1,20.4,26.2);
+  const yb=l=>0.821*g(l,568.8,46.9,40.5)+0.286*g(l,530.9,16.3,31.1);
+  const zb=l=>1.217*g(l,437,11.8,36)+0.681*g(l,459,26,13.8);
+  const planck=T=>LAM.map(l=>{const L=l*1e-9;return 1/(Math.pow(L,5)*(Math.exp(1.4388e-2/(L*T))-1))});
+  const gauss=(m,s)=>LAM.map(l=>Math.exp(-0.5*((l-m)/s)**2));
+  const norm=a=>{const m=Math.max(...a);return a.map(v=>v/m)};
+  const ILL={
+    "Lumière du jour":norm(planck(6500)),
+    "Ampoule 2700 K":norm(planck(2700)),
+    "LED blanche":norm(gauss(450,11).map((v,i)=>v+0.85*gauss(565,50)[i])),
+    "Néon tri-bande":norm(gauss(435,6).map((v,i)=>0.7*v+gauss(545,7)[i]+0.9*gauss(611,8)[i]+0.06))
+  };
+  const XB=LAM.map(xb),YB=LAM.map(yb),ZB=LAM.map(zb);
+  function xyz(R,S){let X=0,Y=0,Z=0,N=0;for(let i=0;i<LAM.length;i++){X+=R[i]*S[i]*XB[i];Y+=R[i]*S[i]*YB[i];Z+=R[i]*S[i]*ZB[i];N+=S[i]*YB[i]}return[X/N,Y/N,Z/N]}
+  /* Tissu A : beige-taupe. Tissu B = A + un « noir métamérique » (invisible sous la lumière du jour) */
+  const A=LAM.map(l=>0.22+0.33/(1+Math.exp(-(l-575)/28)));
+  const D=ILL["Lumière du jour"];
+  const basis=[XB,YB,ZB].map(c=>c.map((v,i)=>v*D[i]));
+  const ortho=[];basis.forEach(b=>{let v=b.slice();ortho.forEach(o=>{const d=v.reduce((s,x,i)=>s+x*o[i],0);v=v.map((x,i)=>x-d*o[i])});const n=Math.hypot(...v);ortho.push(v.map(x=>x/n))});
+  let p=LAM.map(l=>0.16*Math.sin((l-400)/300*2*Math.PI*2.2));
+  ortho.forEach(o=>{const d=p.reduce((s,x,i)=>s+x*o[i],0);p=p.map((x,i)=>x-d*o[i])});
+  const B=A.map((v,i)=>clamp(v+p[i],0.02,0.98));
+  const MB=[[0.8951,0.2664,-0.1614],[-0.7502,1.7135,0.0367],[0.0389,-0.0685,1.0296]],MI=[[0.9869929,-0.1470543,0.1599627],[0.4323053,0.5183603,0.0492912],[-0.0085287,0.0400428,0.9684867]];
+  const mul=(M,v)=>M.map(r=>r[0]*v[0]+r[1]*v[1]+r[2]*v[2]);
+  function adapt(X,W){const s=mul(MB,X),w=mul(MB,W),d=mul(MB,WHITE);return mul(MI,s.map((v,i)=>v*d[i]/w[i]))}
+  let ill="Lumière du jour";
+  $('#illSeg').innerHTML=Object.keys(ILL).map(n=>`<button class="${n===ill?'on':''}" data-n="${n}">${n}</button>`).join('');
+  $$('#illSeg button').forEach(b=>b.onclick=()=>{ill=b.dataset.n;$$('#illSeg button').forEach(x=>x.classList.toggle('on',x===b));upd()});
+  $('#adapt').onchange=upd;
+  const sc=$('#specCan'),cx=sc.getContext('2d');
+  function upd(){const S=ILL[ill],W=xyz(LAM.map(()=>1),S),ad=$('#adapt').checked;
+    const col=R=>{let X=xyz(R,S);if(ad)X=adapt(X,W);else{const k=1/Math.max(...xyz2lin(W));X=X.map(v=>v*k*0.95)}return X};
+    const la=xyz2lab(col(A)),lb=xyz2lab(col(B)),ra=lab2rgb(la),rb=lab2rgb(lb),d=dE(la,lb);
+    $('#metA').style.background=css(ra);$('#metB').style.background=css(rb);$('#metA').style.color=$('#metB').style.color=textOn(ra);
+    $('#metDE').innerHTML=d<1.5?`<span class="badge ok"><span class="dot"></span>ΔE ${d.toFixed(1)} · identiques à l'œil</span>`:`<span class="badge ${d<5?'warn':'err'}"><span class="dot"></span>ΔE ${d.toFixed(1)} · ${d<5?'différence visible de près':'nettement différents'}</span>`;
+    const Wc=sc.width,H=sc.height;cx.clearRect(0,0,Wc,H);
+    for(let i=0;i<LAM.length-1;i++){cx.fillStyle=css(wl2rgb(LAM[i]));cx.globalAlpha=.25;cx.fillRect(i/(LAM.length-1)*Wc,H-8,Wc/(LAM.length-1)+1,8)}cx.globalAlpha=1;
+    const line=(arr,c,dash,max=1)=>{cx.beginPath();cx.setLineDash(dash);arr.forEach((v,i)=>{const X=i/(LAM.length-1)*Wc,Y=H-10-v/max*(H-24);i?cx.lineTo(X,Y):cx.moveTo(X,Y)});cx.strokeStyle=c;cx.lineWidth=2.5;cx.stroke();cx.setLineDash([])};
+    line(S,'#9a9084',[5,4]);line(A,css(ra),[]);line(B,'#2c2a54',[]);
+    cx.font='600 12px Sora';cx.fillStyle='#9a9084';cx.fillText('lampe',6,16);cx.fillStyle='#2c2a54';cx.fillText('spectre B',70,16);cx.fillStyle=css(ra);cx.fillText('spectre A',160,16);cx.fillStyle='#9a9084';cx.textAlign='right';cx.fillText('400 → 700 nm',Wc-4,16);cx.textAlign='left';}
+  upd();
+})();
+
+/* =====================================================================
+   6. Les 12 saisons
+   ===================================================================== */
+(function(){
+  let drape=null,lastKey=null;
+  const val=s=>+$(s).value/100;
+  function features(t,v,c){
+    const skin=lchFit(64+20*v,17+5*Math.max(t,0)+3*c,55+16*t);
+    const hairL=clamp(42+36*v-14*Math.max(c,0)+8*Math.min(c,0),12,86);
+    const hair=lchFit(hairL,6+22*Math.max(t,0)+(t<0?2:6),t>0?62:70);
+    const eye=lchFit(clamp(42+16*v,25,70),12+22*(c+1)/2,t>0.1?100:t<-0.1?240:180);
+    const lips=lchFit(52+14*v,28+8*c,22+12*t);
+    const skinD=lchFit(54+20*v,19+5*Math.max(t,0),55+16*t);
+    return{skin,hair,eye,lips,skinD,hairL};
+  }
+  function harmony(t,v,c,rgb){
+    const lab=rgb2lab(rgb),[L,C]=lab2lch(lab);
+    const d=[warmth(lab)-t,clamp((L-50)/40,-1,1)-v,clamp((C-38)/32,-1,1)-c];
+    const w=[1.1,1,1];const dist=Math.sqrt(d.reduce((s,x,i)=>s+w[i]*x*x,0));
+    const axis=100*(1-dist/2.3);
+    /* proximité à la palette de la saison (les noirs/blancs purs de l'Hiver échappent aux axes) */
+    const pal=lastKey?SEASONS[lastKey].pal:[],near=pal.length?Math.min(...pal.map(p=>dE(lab,rgb2lab(hex2rgb(p))))):99;
+    return{score:Math.round(clamp(Math.max(axis,100-near*2.5),0,100)),d};
+  }
+  function drawFace(t,v,c){
+    const f=features(t,v,c),dr=drape||'#c9c4ba';
+    const h=drape?harmony(t,v,c,hex2rgb(drape)):{score:70,d:[0,0,0]},bad=clamp((60-h.score)/50,0,1),good=clamp((h.score-70)/30,0,1);
+    const hairDark=css(f.hair.map(x=>x*0.7));
+    $('#face').innerHTML=`<rect width="240" height="280" fill="#e7e3da"/>
+      <ellipse cx="120" cy="118" rx="74" ry="88" fill="${css(f.hair)}"/>
+      <rect x="101" y="160" width="38" height="55" fill="${css(f.skinD)}"/>
+      <path d="M8 280 C 16 222 66 204 120 204 C 174 204 224 222 232 280 Z" fill="${dr}"/>
+      <path d="M96 204 L120 236 L144 204 Z" fill="${css(f.skinD)}"/>
+      <ellipse cx="120" cy="122" rx="52" ry="64" fill="${css(f.skin)}"/>
+      <ellipse cx="120" cy="150" rx="40" ry="22" fill="${dr}" opacity="${0.10+0.12*bad}" style="mix-blend-mode:multiply"/>
+      <ellipse cx="97" cy="134" rx="13" ry="5" fill="#5a4656" opacity="${0.04+0.30*bad}"/>
+      <ellipse cx="143" cy="134" rx="13" ry="5" fill="#5a4656" opacity="${0.04+0.30*bad}"/>
+      <circle cx="90" cy="146" r="11" fill="${css(f.lips)}" opacity="${0.10+0.12*good}"/><circle cx="150" cy="146" r="11" fill="${css(f.lips)}" opacity="${0.10+0.12*good}"/>
+      <ellipse cx="120" cy="122" rx="52" ry="64" fill="#8a8f78" opacity="${0.16*bad}"/>
+      <ellipse cx="120" cy="110" rx="40" ry="44" fill="#fff" opacity="${0.10*good}"/>
+      <path d="M66 112 C 66 58 98 42 124 44 C 162 46 178 76 174 114 C 160 84 136 72 112 78 C 92 82 76 94 66 112Z" fill="${css(f.hair)}"/>
+      <path d="M84 110 Q97 103 110 109 M130 109 Q143 103 156 110" stroke="${hairDark}" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="97" cy="124" rx="10" ry="6" fill="#f6f3ec"/><ellipse cx="143" cy="124" rx="10" ry="6" fill="#f6f3ec"/>
+      <circle cx="97" cy="124" r="5" fill="${css(f.eye)}"/><circle cx="143" cy="124" r="5" fill="${css(f.eye)}"/>
+      <circle cx="97" cy="124" r="2.1" fill="#1b1a1a"/><circle cx="143" cy="124" r="2.1" fill="#1b1a1a"/>
+      <circle cx="98.5" cy="122.5" r="1.1" fill="#fff" opacity="${0.6+0.4*good}"/><circle cx="144.5" cy="122.5" r="1.1" fill="#fff" opacity="${0.6+0.4*good}"/>
+      <path d="M120 124 Q116 142 113 146 Q120 150 127 146" stroke="${css(f.skinD)}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M106 161 Q120 155 134 161 Q120 170 106 161Z" fill="${css(f.lips)}"/>`;
+    const sl=rgb2lab(f.skin)[0],hl=rgb2lab(f.hair)[0],dl=Math.abs(sl-hl);
+    $('#contrastTxt').innerHTML=`Contraste personnel (ΔL* cheveux/peau) : <b class="num">${dl.toFixed(0)}</b> · ${dl>40?'élevé':dl>22?'moyen':'faible'}`;
+    if(drape){
+      $('#harmV').textContent=h.score+' %';$('#harmBar').style.width=h.score+'%';$('#harmBar').style.background=h.score>72?'var(--ok)':h.score>50?'var(--warn)':'var(--err)';
+      const ax=['température','valeur','chroma'],i=h.d.map(Math.abs).indexOf(Math.max(...h.d.map(Math.abs)));
+      const why=[h.d[0]>0?'trop chaude':'trop froide',h.d[1]>0?'trop claire':'trop foncée',h.d[2]>0?'trop vive':'trop éteinte'][i];
+      $('#harmTxt').innerHTML=h.score>72?"<b>Ça illumine.</b> Teint unifié, regard net, les cernes s'effacent.":h.score>50?`<b>Correct, sans plus.</b> Couleur un peu ${why} pour ce profil (axe ${ax[i]}).`:`<b>Ça fatigue le visage.</b> Couleur ${why} (axe ${ax[i]}) : ombres creusées, teint terne.`;
+    }else{$('#harmV').textContent='—';$('#harmBar').style.width='0';$('#harmTxt').textContent='Choisis une couleur à draper.'}
+  }
+  function upd(){
+    const t=val('#sT'),v=val('#sV'),c=val('#sC');
+    $('#sTv').textContent=t>0.15?'chaud':t<-0.15?'froid':'neutre';$('#sVv').textContent=v>0.15?'clair':v<-0.15?'profond':'moyen';$('#sCv').textContent=c>0.15?'vif':c<-0.15?'doux':'modéré';
+    const key=seasonOf(t,v,c),S=SEASONS[key];
+    if(key!==lastKey){lastKey=key;
+      $('#palette').innerHTML=S.pal.map(p=>`<button style="background:${p}" data-c="${p}" title="${p}"></button>`).join('');
+      $$('#palette button').forEach(b=>b.onclick=()=>{drape=b.dataset.c;$$('#palette button').forEach(x=>x.classList.toggle('on',x===b));drawFace(val('#sT'),val('#sV'),val('#sC'))});
+      $$('#smap button').forEach(b=>b.classList.toggle('on',b.dataset.k===key));
+    }
+    const axes=[['Température',t,'chaud','froid'],['Valeur',v,'clair','profond'],['Chroma',c,'vif','doux']];
+    $('#seasonCard').innerHTML=`<div class="kicker">Ta saison</div><h2 style="font-size:40px;margin-bottom:4px">${S.fr}</h2><div class="meta" style="margin-bottom:14px">${S.en} · famille ${S.fam}</div>
+      <div class="pills"><span class="pill on">Dominante : ${S.dom}</span><span class="pill">Secondaire : ${S.sec}</span></div>
+      <p style="margin-top:14px">${S.d}</p>
+      <div style="display:flex;height:34px;border-radius:4px;overflow:hidden;margin:10px 0 16px">${S.pal.map(p=>`<div style="flex:1;background:${p}"></div>`).join('')}</div>
+      ${axes.map(([n,x,a,b])=>`<div class="small" style="display:flex;justify-content:space-between"><span>${n}</span><span>${x>=0?a:b} ${Math.round(Math.abs(x)*100)} %</span></div><div class="meter"><i style="width:${Math.abs(x)*100}%;background:var(--indigo)"></i></div>`).join('')}
+      <p class="small" style="margin-top:10px">Saison opposée (le moins flatteur) : <b>${SEASONS[S.opp].fr}</b>.</p>`;
+    drawFace(t,v,c);
+  }
+  $('#smap').innerHTML=FAM.map(f=>`<div class="h">${f}</div>`+Object.entries(SEASONS).filter(([k,s])=>s.fam===f).map(([k,s])=>`<button data-k="${k}">${s.fr.replace(f+' ','')}<span class="mini">${s.pal.slice(0,5).map(p=>`<i style="background:${p}"></i>`).join('')}</span></button>`).join('')).join('');
+  $$('#smap button').forEach(b=>b.onclick=()=>{const p=SEASONS[b.dataset.k].p;$('#sT').value=p[0];$('#sV').value=p[1];$('#sC').value=p[2];upd()});
+  ['#sT','#sV','#sC'].forEach(s=>$(s).oninput=upd);
+  $('#freeDrape').oninput=e=>{drape=e.target.value;$$('#palette button').forEach(x=>x.classList.remove('on'));drawFace(val('#sT'),val('#sV'),val('#sC'))};
+  $('#oppDrape').onclick=()=>{const S=SEASONS[SEASONS[lastKey].opp];drape=S.pal[Math.random()*4|0];$$('#palette button').forEach(x=>x.classList.remove('on'));drawFace(val('#sT'),val('#sV'),val('#sC'))};
+  upd();
+})();
+
+/* =====================================================================
+   7. La photo : pipeline de développement
+   ===================================================================== */
+const PH={W:640,H:400};
+const LUT_S2L=new Float32Array(256).map((_,i)=>s2l(i/255));
+const LUT_L2S=new Float32Array(4097).map((_,i)=>l2s(i/4096));
+const enc=v=>LUT_L2S[(clamp(v)*4096)|0];
+/* Gains de balance des blancs : on compense une source de température K */
+function wbGains(K,tint){const b=k2rgb(6500),c=k2rgb(K);let g=b.map((v,i)=>s2l(v/255)/Math.max(s2l(c[i]/255),0.02));g[1]*=1-tint/250;const y=0.2126*g[0]+0.7152*g[1]+0.0722*g[2];return g.map(v=>v/y)}
+/* Un pixel : entrée linéaire → sortie 0..1 encodée */
+function devPixel(r,g,b,P,G){
+  const k=Math.pow(2,P.ev);r*=k*G[0];g*=k*G[1];b*=k*G[2];
+  let R=enc(r),Gc=enc(g),B=enc(b);
+  const Y=0.299*R+0.587*Gc+0.114*B;
+  const dl=P.sh/100*0.35*(1-Y)*(1-Y)+P.hl/100*0.35*Y*Y;R+=dl;Gc+=dl;B+=dl;
+  const cf=1+P.contrast/100;
+  const sc=x=>{x=clamp(x);const s=x<0.5?0.5*Math.pow(2*x,cf):1-0.5*Math.pow(2*(1-x),cf);return s};
+  R=sc(R);Gc=sc(Gc);B=sc(B);
+  const Y2=0.299*R+0.587*Gc+0.114*B,mx=Math.max(R,Gc,B),mn=Math.min(R,Gc,B),sat=mx-mn;
+  const f=(1+P.sat/100)*(1+P.vib/100*(1-sat)*(P.vib>0?1:0.6));
+  R=Y2+(R-Y2)*f;Gc=Y2+(Gc-Y2)*f;B=Y2+(B-Y2)*f;
+  return[clamp(R),clamp(Gc),clamp(B)];
+}
+const PH_DEF={ev:0,K:6500,tint:0,contrast:0,hl:0,sh:0,sat:0,vib:0,iso:100,bits:8,value:false,cR:true,cG:true,cB:true};
+let PHP={...PH_DEF},phSrc=null,phNoise=null,phOut=null,phPick=null,phQueued=false;
+const PH_CTL=[
+  ["Lumière · valeur",[
+    ["ev","Exposition",-3,3,0.1,v=>(v>0?'+':'')+(+v).toFixed(1)+' IL',"+1 IL = deux fois plus de lumière captée. Pousse trop : le soleil et le ciel « brûlent »."],
+    ["hl","Hautes lumières",-100,100,1,v=>v,"N'agit que sur les zones claires (ciel, peau éclairée)."],
+    ["sh","Ombres",-100,100,1,v=>v,"N'agit que sur les zones sombres : déboucher un contre-jour."],
+    ["contrast","Contraste",-60,100,1,v=>v,"Écarte (ou rapproche) les valeurs claires et sombres, autour du gris moyen."]]],
+  ["Couleur · teinte & chroma",[
+    ["K","Température (balance des blancs)",2800,12000,50,v=>v+' K',"La lumière que tu déclares : 2800 K = « c'était une ampoule », l'appareil ajoute du bleu. 10000 K = il réchauffe."],
+    ["tint","Teinte",-60,60,1,v=>v>0?'+'+v+' magenta':v<0?v+' vert':'0',"Corrige l'axe vert ↔ magenta (néons, végétation)."],
+    ["sat","Saturation",-100,100,1,v=>v,"Multiplie le chroma de tous les pixels. −100 = noir et blanc."],
+    ["vib","Vibrance",-100,100,1,v=>v,"Saturation « intelligente » : agit surtout sur les couleurs ternes, épargne celles déjà vives (dont la peau)."]]],
+  ["Capteur & fichier",[
+    ["iso","Sensibilité ISO",100,12800,100,v=>v+' ISO',"Moins de lumière, plus d'amplification : le bruit (grain coloré) apparaît, surtout dans les ombres."],
+    ["bits","Profondeur de couleur",1,8,1,v=>v+' bits · '+Math.pow(2,v)+' niveaux/canal',"8 bits = 256 niveaux par canal. En dessous : aplats et « escaliers » dans les dégradés du ciel."]]]
+];
+function buildPhotoCtl(){
+  $('#phCtls').innerHTML=PH_CTL.map(([g,cs])=>`<div class="ctl-group"><div class="kicker">${g}</div>${cs.map(([k,n,mi,ma,st,fmt,h])=>`<div class="ctl"><div class="row"><label for="ph_${k}">${n}</label><span class="val num" id="phv_${k}">${fmt(PHP[k])}</span></div><input type="range" id="ph_${k}" min="${mi}" max="${ma}" step="${st}" value="${PHP[k]}" data-k="${k}"><div class="hint">${h}</div></div>`).join('')}</div>`).join('')
+  +`<div class="ctl-group"><div class="kicker">Voir</div><div class="checks"><label><input type="checkbox" id="ph_value"> Mode valeur (N&amp;B)</label><label><input type="checkbox" id="ph_cR" checked> R</label><label><input type="checkbox" id="ph_cG" checked> V</label><label><input type="checkbox" id="ph_cB" checked> B</label></div><div class="hint" style="font-size:12px;color:var(--text-3);margin-top:6px">Décoche des canaux : chaque pixel n'est que la somme de trois lumières.</div></div>`;
+  $('#ph_K').style.background=`linear-gradient(90deg,${[2800,4000,5500,6500,8000,10000,12000].map(x=>{const g=wbGains(x,0);return css(g.map(v=>255*l2s(clamp(v*0.6))))}).join(',')})`;
+  PH_CTL.forEach(([g,cs])=>cs.forEach(([k,,,,,fmt])=>{$('#ph_'+k).oninput=e=>{PHP[k]=+e.target.value;$('#phv_'+k).textContent=fmt(PHP[k]);queuePhoto()}}));
+  ['value','cR','cG','cB'].forEach(k=>$('#ph_'+k).onchange=e=>{PHP[k]=e.target.checked;queuePhoto()});
+}
+$('#phReset').onclick=()=>{PHP={...PH_DEF};buildPhotoCtl();renderPhoto()};
+function drawScene(){
+  const c=document.createElement('canvas');c.width=PH.W;c.height=PH.H;const x=c.getContext('2d');
+  let s=7;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+  let gr=x.createLinearGradient(0,0,0,200);gr.addColorStop(0,'#2f5fa8');gr.addColorStop(.7,'#8fb7e0');gr.addColorStop(1,'#e8eef0');x.fillStyle=gr;x.fillRect(0,0,640,200);
+  gr=x.createRadialGradient(500,70,0,500,70,90);gr.addColorStop(0,'#ffffff');gr.addColorStop(.18,'#ffffff');gr.addColorStop(.3,'rgba(255,246,214,.9)');gr.addColorStop(1,'rgba(255,240,200,0)');x.fillStyle=gr;x.fillRect(380,0,240,200);
+  x.fillStyle='rgba(255,255,255,.75)';[[140,60,50,14],[180,52,34,12],[300,90,60,10],[90,110,40,8]].forEach(([a,b,c2,d])=>{x.beginPath();x.ellipse(a,b,c2,d,0,0,7);x.fill()});
+  x.fillStyle='#8c9cbc';x.beginPath();x.moveTo(0,200);[[0,150],[70,120],[140,150],[230,100],[320,145],[400,115],[480,150],[560,125],[640,150],[640,200]].forEach(p=>x.lineTo(...p));x.fill();
+  x.fillStyle='#6f7f9f';x.beginPath();x.moveTo(0,200);[[0,175],[100,160],[200,180],[300,165],[420,185],[540,168],[640,182],[640,200]].forEach(p=>x.lineTo(...p));x.fill();
+  gr=x.createLinearGradient(0,200,0,250);gr.addColorStop(0,'#9cb8d6');gr.addColorStop(1,'#3f6390');x.fillStyle=gr;x.fillRect(0,200,640,50);
+  x.fillStyle='rgba(255,250,225,.6)';for(let i=0;i<14;i++)x.fillRect(470+rnd()*60,203+i*3.3,20+rnd()*30,1.5);
+  gr=x.createLinearGradient(0,245,0,330);gr.addColorStop(0,'#5f8f3c');gr.addColorStop(1,'#2f5222');x.fillStyle=gr;x.beginPath();x.moveTo(0,330);x.lineTo(0,255);x.quadraticCurveTo(320,236,640,256);x.lineTo(640,330);x.fill();
+  x.fillStyle='#e9e3d4';x.fillRect(70,232,90,52);x.fillStyle='#b24530';x.beginPath();x.moveTo(62,234);x.lineTo(115,204);x.lineTo(168,234);x.fill();x.fillStyle='#3c2f2a';x.fillRect(105,258,18,26);x.fillStyle='#7aa6cf';x.fillRect(80,244,16,14);x.fillRect(134,244,16,14);
+  x.fillStyle='#4a3424';x.fillRect(566,236,10,50);x.fillStyle='#2f5a26';[[571,222,30],[552,236,20],[590,236,20]].forEach(([a,b,r])=>{x.beginPath();x.arc(a,b,r,0,7);x.fill()});
+  ['#c8323a','#e8c228','#7a4fa0','#f0f0f0','#e07a2f'].forEach((cl,j)=>{x.fillStyle=cl;for(let i=0;i<45;i++){x.beginPath();x.arc(rnd()*640,272+rnd()*55,1.6+rnd()*2.2,0,7);x.fill()}});
+  const CC=["#735244","#c29682","#627a9d","#576c43","#8580b1","#67bdaa","#d67e2c","#505ba6","#c15a63","#5e3c6c","#9dbc40","#e0a32e","#383d96","#469449","#af363c","#e7c71f","#bb5695","#0885a1","#f3f3f2","#c8c8c8","#a0a0a0","#7a7a79","#555555","#343434"];
+  x.fillStyle='#1d1c1f';x.fillRect(0,330,640,70);
+  CC.forEach((cl,i)=>{const col=i%12,row=i/12|0;x.fillStyle=cl;x.fillRect(6+col*52.8,336+row*32,48,28)});
+  return x.getImageData(0,0,PH.W,PH.H);
+}
+function initPhoto(){
+  const id=drawScene(),n=PH.W*PH.H;phSrc=new Float32Array(n*3);phNoise=new Float32Array(n*3);
+  for(let i=0;i<n;i++)for(let k=0;k<3;k++)phSrc[i*3+k]=LUT_S2L[id.data[i*4+k]];
+  let s=11;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+  for(let i=0;i<n*3;i+=2){const u=Math.max(rnd(),1e-9),v=rnd(),r=Math.sqrt(-2*Math.log(u));phNoise[i]=r*Math.cos(6.2832*v);if(i+1<n*3)phNoise[i+1]=r*Math.sin(6.2832*v)}
+  const cv=$('#photo');phOut=cv.getContext('2d').createImageData(PH.W,PH.H);
+  cv.onclick=e=>{const r=cv.getBoundingClientRect();phPick=[Math.floor((e.clientX-r.left)/r.width*PH.W),Math.floor((e.clientY-r.top)/r.height*PH.H)];renderPhoto()};
+  buildPhotoCtl();
+}
+function queuePhoto(){if(!phQueued){phQueued=true;requestAnimationFrame(()=>{phQueued=false;renderPhoto()})}}
+function renderPhoto(){
+  if(!phSrc)initPhoto();
+  const P=PHP,G=wbGains(P.K,P.tint),n=PH.W*PH.H,d=phOut.data,sig=0.0035*(Math.sqrt(P.iso/100)-1),lv=Math.pow(2,P.bits)-1;
+  const hR=new Uint32Array(256),hG=new Uint32Array(256),hB=new Uint32Array(256),hL=new Uint32Array(256);let clip=0,crush=0;const k=Math.pow(2,P.ev);
+  for(let i=0;i<n;i++){
+    let r=phSrc[i*3],g=phSrc[i*3+1],b=phSrc[i*3+2];
+    if(sig>0){const lum=0.2*r+0.7*g+0.1*b,a=sig*(0.6+1.4*Math.sqrt(0.18/(lum+0.02)))*0.25;r=Math.max(0,r+a*phNoise[i*3]);g=Math.max(0,g+a*phNoise[i*3+1]);b=Math.max(0,b+a*phNoise[i*3+2])}
+    if(Math.max(r*G[0],g*G[1],b*G[2])*k>=1)clip++;
+    let[R,Gc,B]=devPixel(r,g,b,P,G);
+    if(lv<255){R=Math.round(R*lv)/lv;Gc=Math.round(Gc*lv)/lv;B=Math.round(B*lv)/lv}
+    if(P.value){const Y=enc(0.2126*LUT_S2L[R*255|0]+0.7152*LUT_S2L[Gc*255|0]+0.0722*LUT_S2L[B*255|0]);R=Gc=B=Y}
+    if(!P.cR)R=0;if(!P.cG)Gc=0;if(!P.cB)B=0;
+    const o=i*4,r8=R*255+.5|0,g8=Gc*255+.5|0,b8=B*255+.5|0;d[o]=r8;d[o+1]=g8;d[o+2]=b8;d[o+3]=255;
+    if(i<PH.W*330){hR[r8]++;hG[g8]++;hB[b8]++;hL[(0.299*r8+0.587*g8+0.114*b8)|0]++;if(r8<3&&g8<3&&b8<3)crush++}
+  }
+  const cx=$('#photo').getContext('2d');cx.putImageData(phOut,0,0);
+  if(phPick){const[px,py]=phPick;cx.strokeStyle='#fff';cx.lineWidth=2;cx.beginPath();cx.arc(px,py,8,0,7);cx.stroke();cx.strokeStyle='#000';cx.lineWidth=1;cx.beginPath();cx.arc(px,py,9.5,0,7);cx.stroke();
+    const o=(py*PH.W+px)*4,rgb=[d[o],d[o+1],d[o+2]],lab=rgb2lab(rgb),[L,C,h]=lab2lch(lab),vo=vocab(rgb);
+    $('#pickSw').style.background=css(rgb);
+    $('#pickTxt').innerHTML=`<b class="num">${rgb2hex(rgb)}</b> · R ${rgb[0]} V ${rgb[1]} B ${rgb[2]}<br><span class="tag c">Science</span>L* ${L.toFixed(0)} · C* ${C.toFixed(0)} · h ${h.toFixed(0)}° (${hueName(h,C)})<br><span class="tag s">Saisons</span>couleur ${vo.v}, ${vo.c}, ${vo.t}`;}
+  /* histogramme */
+  const hc=$('#histo'),hx=hc.getContext('2d'),HW=hc.width,HH=hc.height;hx.clearRect(0,0,HW,HH);
+  const mx=Math.max(...[hR,hG,hB].flatMap(a=>[...a].slice(2,254)))*1.1||1;
+  const area=(a,c)=>{hx.beginPath();hx.moveTo(0,HH);for(let i=0;i<256;i++)hx.lineTo(i/255*HW,HH-Math.min(a[i]/mx,1)*HH);hx.lineTo(HW,HH);hx.closePath();hx.fillStyle=c;hx.fill()};
+  hx.globalCompositeOperation='multiply';area(hR,'rgba(209,80,70,.45)');area(hG,'rgba(70,160,90,.45)');area(hB,'rgba(70,100,210,.45)');hx.globalCompositeOperation='source-over';
+  const pc=clip/(PH.W*330)*100,pk=crush/(PH.W*330)*100;
+  $('#clipBadge').innerHTML=pc>0.5?`<span class="badge err"><span class="dot"></span>${pc.toFixed(1)} % brûlé</span>`:pk>3?`<span class="badge warn"><span class="dot"></span>${pk.toFixed(1)} % bouché</span>`:`<span class="badge ok"><span class="dot"></span>Pas d'écrêtage notable</span>`;
+}
+
+/* =====================================================================
+   8. Le pont : jeu des transformations de saison
+   ===================================================================== */
+(function(){
+  const LV=[
+    {from:"soft-summer",to:"Automne doux",t:{K:6500+3000,ev:0,contrast:0,sat:0},hint:"Été doux et Automne doux ne diffèrent que par la température. Un seul curseur suffit.",use:["K"]},
+    {from:"light-summer",to:"Hiver froid",t:{K:6500,ev:-1.2,contrast:40,sat:60},hint:"Pour passer d'un pastel froid à un hiver : plus profond (valeur), plus de contraste, plus vif (chroma). La température ne bouge pas.",use:["ev","contrast","sat"]},
+    {from:"true-spring",to:"Été doux",t:{K:4600,ev:0.3,contrast:-20,sat:-50},hint:"Du plus chaud et lumineux au plus grisé et froid : refroidis, adoucis, désature.",use:["K","ev","contrast","sat"]},
+    {from:"true-autumn",to:"Printemps vif",t:{K:6500,ev:1,contrast:0,sat:45},hint:"Garde la chaleur, mais éclaircis et ravive : l'Automne et le Printemps sont deux chauds, de valeur et de chroma opposés.",use:["K","ev","contrast","sat"]}
+  ];
+  const CT={K:["Température",4000,10000,100,v=>v+' K'],ev:["Exposition",-2,2,0.1,v=>(v>0?'+':'')+(+v).toFixed(1)+' IL'],contrast:["Contraste",-50,80,5,v=>v],sat:["Saturation",-80,80,5,v=>v]};
+  let L=0,cur,won=new Set(JSON.parse(localStorage.getItem('sc-pont')||'[]'));
+  const P0={ev:0,K:6500,tint:0,contrast:0,hl:0,sh:0,sat:0,vib:0};
+  const tr=(hex,p)=>{const P={...P0,...p},G=wbGains(P.K,0),l=hex2rgb(hex).map(v=>s2l(v/255));return devPixel(l[0],l[1],l[2],P,G).map(v=>Math.round(v*255))};
+  function seg(){$('#lvlSeg').innerHTML=LV.map((_,i)=>`<button class="${i===L?'on':''}" data-l="${i}">${won.has(i)?'✓ ':''}Niveau ${i+1}</button>`).join('');$$('#lvlSeg button').forEach(b=>b.onclick=()=>{L=+b.dataset.l;load()})}
+  function load(){const lv=LV[L];cur={K:6500,ev:0,contrast:0,sat:0};seg();
+    $('#lvlK').textContent=`Niveau ${L+1} / ${LV.length}`;$('#lvlT').textContent=`${SEASONS[lv.from].fr} → ${lv.to}`;$('#lvlHint').textContent=lv.hint;
+    $('#lvlCtl').innerHTML=lv.use.map(k=>{const[n,mi,ma,st,f]=CT[k];return`<div class="ctl"><div class="row"><label>${n}</label><span class="val num" id="lvv_${k}">${f(cur[k])}</span></div><input type="range" min="${mi}" max="${ma}" step="${st}" value="${cur[k]}" data-k="${k}"></div>`}).join('');
+    $$('#lvlCtl input').forEach(r=>r.oninput=()=>{const k=r.dataset.k;cur[k]=+r.value;$('#lvv_'+k).textContent=CT[k][4](cur[k]);upd()});
+    $('#lvlTgt').innerHTML=SEASONS[lv.from].pal.map(h=>`<div class="swatch" style="background:${css(tr(h,lv.t))}"></div>`).join('');upd()}
+  function upd(){const lv=LV[L],pal=SEASONS[lv.from].pal;let s=0;
+    $('#lvlYou').innerHTML=pal.map(h=>{const a=tr(h,cur),b=tr(h,lv.t);s+=dE(rgb2lab(a),rgb2lab(b));return`<div class="swatch" style="background:${css(a)}"></div>`}).join('');
+    const m=s/pal.length,sc=Math.round(clamp(100-m*2.2,0,100));
+    $('#lvlScore').textContent=sc+' %';$('#lvlBar').style.width=sc+'%';$('#lvlBar').style.background=sc>=90?'var(--ok)':sc>65?'var(--warn)':'var(--indigo)';
+    if(sc>=90){$('#lvlFb').innerHTML=`<span class="badge ok"><span class="dot"></span>Réussi · ΔE moyen ${m.toFixed(1)}</span> Tu viens de changer de saison avec des curseurs photo.`;if(!won.has(L)){won.add(L);localStorage.setItem('sc-pont',JSON.stringify([...won]));seg();if(won.size===LV.length)markDone(8);else confetti()}}
+    else $('#lvlFb').textContent=`ΔE moyen ${m.toFixed(1)} : il faut atteindre 90 %.`;}
+  load();
+})();
+
+/* =====================================================================
+   9. Dictionnaire & quiz final
+   ===================================================================== */
+(function(){
+  const G=[
+    ["Teinte (hue)","La famille de couleur : rouge, jaune, bleu… Mesurée par un angle h sur le cercle chromatique.","Tous"],
+    ["Valeur (value)","Clarté perçue d'une couleur, du noir au blanc. Notée L* en CIELAB.","Tous"],
+    ["Chroma","Intensité d'une couleur par rapport à un gris de même valeur. Chroma 0 = gris.","Science, saisons"],
+    ["Saturation","Chroma relatif à la clarté. En photo, le curseur qui multiplie le chroma de tous les pixels.","Photo, science"],
+    ["Clarté / luminosité","Clarté = valeur perçue (L*). La « luminosité » de HSL n'est qu'un calcul RVB, sans rapport avec la perception (jaune et bleu à 50 %).","Science"],
+    ["Luminance (Y)","Quantité de lumière perçue, pondérée par la sensibilité de l'œil (le vert compte le plus).","Science, photo"],
+    ["Sous-ton (undertone)","Biais permanent de la peau : doré/pêche (chaud), rosé/bleuté (froid), olive (neutre-vert). Ne change pas avec le bronzage.","Saisons"],
+    ["Surton (overtone)","Couleur visible en surface de la peau (peut changer avec le soleil, les rougeurs).","Saisons"],
+    ["Chaud / froid","Biais d'une couleur vers le jaune (chaud) ou le bleu (froid). Axe b* de CIELAB.","Tous"],
+    ["Clair (light)","Saison dominée par une valeur haute : Printemps clair, Été clair.","Saisons"],
+    ["Profond (deep, dark)","Saison dominée par une valeur basse : Automne profond, Hiver profond.","Saisons"],
+    ["Vif / net (bright, clear)","Saison dominée par un chroma élevé : Printemps vif, Hiver vif.","Saisons"],
+    ["Doux / sourd (soft, muted)","Saison dominée par un chroma bas : Été doux, Automne doux.","Saisons"],
+    ["Pur / vrai (true)","Saison dominée par la température : Printemps chaud, Été froid, Automne chaud, Hiver froid.","Saisons"],
+    ["Pastel","Teinte + blanc : valeur haute, chroma bas. En anglais tint.","Saisons, peinture"],
+    ["Ton rompu, poudré, grisé","Teinte + gris : chroma réduit, valeur à peu près conservée. En anglais tone.","Saisons, peinture"],
+    ["Ombre (shade)","Teinte + noir : valeur basse. Les couleurs « profondes ».","Peinture"],
+    ["Neutre","Couleur de chroma quasi nul : blanc, gris, noir, et par extension beige, marine, camel (neutres de garde-robe).","Tous"],
+    ["Contraste personnel","Écart de valeur entre cheveux, peau et yeux. Élevé : Hiver ; faible : Été doux, Automne doux.","Saisons"],
+    ["Drapage","Poser des tissus colorés sous le visage, à la lumière du jour, pour juger leur effet sur le teint.","Saisons"],
+    ["Contraste simultané","Une couleur paraît différente selon ses voisines : elle est poussée vers la complémentaire du fond (Chevreul, 1839).","Science"],
+    ["Complémentaire","Couleur opposée sur le cercle (rouge / vert, bleu / orange). Ensemble, elles se renforcent.","Tous"],
+    ["Analogue","Couleurs voisines sur le cercle : harmonies calmes.","Saisons, design"],
+    ["Longueur d'onde (λ)","Distance entre deux crêtes d'une onde lumineuse. Visible : 380–750 nm.","Science"],
+    ["Spectre","Répartition de l'énergie d'une lumière (ou de la réflexion d'un objet) selon la longueur d'onde.","Science"],
+    ["Cônes S, M, L","Les trois capteurs de couleur de la rétine (courtes, moyennes, longues ondes).","Science"],
+    ["Bâtonnets","Capteurs de faible lumière, aveugles aux couleurs : la nuit, tout devient gris.","Science"],
+    ["Additif / soustractif","Lumières qui s'ajoutent (écran, RVB) / pigments qui absorbent (encre, tissu, CMJN).","Science, photo"],
+    ["Métamérisme","Deux spectres différents vus identiques sous une lumière, différents sous une autre.","Science"],
+    ["Température de couleur (K)","Teinte d'une source lumineuse, en kelvins : 2700 K orangé, 6500 K bleuté-neutre.","Science, photo"],
+    ["IRC / CRI","Indice de rendu des couleurs d'une lampe (0–100). Au-dessus de 90 : fidèle.","Science, photo"],
+    ["Illuminant D65","Lumière du jour de référence (≈ 6500 K), utilisée pour les mesures et les écrans.","Science"],
+    ["Adaptation chromatique","Le cerveau neutralise la couleur de l'éclairage pour voir le blanc blanc. L'appareil photo l'imite avec la balance des blancs.","Science, photo"],
+    ["Balance des blancs","Réglage qui compense la couleur de la lumière (curseurs Température et Teinte).","Photo"],
+    ["Exposition (IL / EV)","Quantité de lumière captée. +1 IL = double. Se règle avec ouverture, vitesse, ISO.","Photo"],
+    ["ISO","Amplification du signal du capteur. Plus il est haut, plus il y a de bruit.","Photo"],
+    ["Bruit","Grain aléatoire, lumineux et coloré, surtout visible dans les ombres.","Photo"],
+    ["Hautes lumières / ombres","Zones les plus claires / les plus sombres d'une image, réglables séparément.","Photo"],
+    ["Écrêtage (brûlé, bouché)","Valeurs bloquées à 255 (brûlé) ou à 0 (bouché) : le détail y est perdu.","Photo"],
+    ["Histogramme","Graphique du nombre de pixels à chaque niveau de valeur.","Photo"],
+    ["Vibrance","Saturation qui épargne les couleurs déjà vives et les tons chair.","Photo"],
+    ["TSL / HSL","Réglage Teinte, Saturation, Luminance, couleur par couleur, dans les logiciels photo.","Photo"],
+    ["Gamma","Courbe qui encode la lumière de façon perceptuelle : plus de niveaux pour les ombres, où l'œil est sensible.","Photo, science"],
+    ["Profondeur de bits","Nombre de niveaux par canal : 8 bits = 256, 14 bits (RAW) = 16 384.","Photo"],
+    ["RAW / JPEG","RAW : données brutes du capteur, en lumière linéaire, tout réglable. JPEG : image déjà développée, 8 bits.","Photo"],
+    ["Gamut","Ensemble des couleurs qu'un appareil peut reproduire. sRGB < Display P3 < Adobe RGB.","Photo, science"],
+    ["sRGB","L'espace de couleur standard du web et de la plupart des écrans.","Photo"],
+    ["CIELAB / LCh","Espace de couleur perceptuel (1976) : L* clarté, a* vert↔rouge, b* bleu↔jaune ; ou L, C (chroma), h (teinte).","Science"],
+    ["ΔE (delta E)","Distance entre deux couleurs dans CIELAB. Sous 2 : quasi invisible ; au-dessus de 5 : nettement visible.","Science"],
+    ["Munsell","Système de 1905 qui classe les couleurs en teinte, valeur et chroma. Base des 12 saisons.","Science, saisons"],
+    ["Pantone","Nuancier commercial de couleurs normalisées (encre, textile).","Design"]
+  ];
+  const render=q=>{q=(q||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    $('#gloss').innerHTML=G.filter(r=>r.join(' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').includes(q)).map(([t,d,m])=>`<tr><td>${t}</td><td>${d}</td><td><span class="meta">${m}</span></td></tr>`).join('')};
+  $('#gSearch').oninput=e=>render(e.target.value);render();
+
+  const FQ=[
+    ["Dans les 12 saisons, « Bright » (vif, net) correspond à…",["un chroma élevé","une valeur claire","un sous-ton chaud"],0],
+    ["Le curseur Exposition agit surtout sur…",["la teinte","la valeur","le chroma"],1],
+    ["Pourquoi faire un drapage à la lumière du jour ?",["Pour mieux voir les cernes","Pour que la couleur de la lampe ne fausse pas le teint","Parce que les tissus sont plus vifs dehors"],1],
+    ["Un pastel, c'est…",["une teinte + du noir","une teinte + du blanc","une teinte + sa complémentaire"],1],
+    ["8 bits par canal, c'est combien de niveaux ?",["8","256","16,7 millions"],1],
+    ["Jaune et bleu purs ont tous deux « 50 % » en HSL. En valeur perçue…",["ils sont égaux","le bleu est plus clair","le jaune est bien plus clair"],2],
+    ["« Automne profond » signifie…",["profond d'abord, chaud ensuite","chaud d'abord, doux ensuite","vif d'abord, chaud ensuite"],0],
+    ["Un ciel brûlé (255, 255, 255) dans un JPEG : peut-on récupérer le détail ?",["Oui, en baissant l'exposition","Oui, avec les hautes lumières","Non, l'information est perdue"],2]
+  ];
+  let qi=0,ok=0;
+  function show(){const el=$('#final');
+    if(qi>=FQ.length){const win=ok>=6;el.innerHTML=`<div class="kicker">Résultat</div><h3>${ok} / ${FQ.length}${win?' · Badge « Coloriste » obtenu':''}</h3><p>${win?'Tu parles désormais trois langues : celle des saisons, celle des physiciens et celle des photographes.':'Il faut 6 bonnes réponses. Les étapes 3, 6 et 7 sont tes meilleures alliées.'}</p><div class="opts"><button class="opt" id="fqR">Recommencer</button></div>`;
+      $('#fqR').onclick=()=>{qi=0;ok=0;show()};if(win)markDone(9);return}
+    const[q,o,a]=FQ[qi];
+    el.innerHTML=`<div class="kicker">Examen final · question ${qi+1} / ${FQ.length}</div><h3>${q}</h3><div class="opts">${o.map((x,i)=>`<button class="opt" data-i="${i}">${x}</button>`).join('')}</div><div class="fb"></div>`;
+    el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(el.dataset.lock)return;el.dataset.lock=1;const g=+b.dataset.i===a;if(g)ok++;b.classList.add(g?'good':'bad');if(!g)el.querySelector(`[data-i="${a}"]`).classList.add('good');setTimeout(()=>{delete el.dataset.lock;qi++;show()},900)});}
+  show();
+})();
+
+/* Démarrage */
+go(state.step||0);
+</script>
+</body>
+</html>
