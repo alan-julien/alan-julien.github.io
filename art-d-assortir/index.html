@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L’art d’assortir — s’habiller avec ses couleurs</title>
+<meta name="description" content="Apprendre à assortir ses vêtements à partir de sa palette de colorimétrie : neutres, harmonies, proportions, matières, règles et mythes, cabine d’essayage et jeu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+:root{
+  --paper:#f7f5ee; --indigo:#2c2a54; --indigo-hover:#211f42; --chataigne:#8a5137;
+  --ink:#2c2723; --text-2:#6b6258; --text-3:#9a9084; --border:#e2dccf; --fill:#efece2; --surface:#fbfaf5;
+  --on-indigo:#eef0f7; --on-indigo-muted:#a9abc4;
+  --ok:#3b6b3f; --ok-bg:#e6ede1; --ok-tx:#315833;
+  --warn:#b17a2b; --warn-bg:#f2e9d6; --warn-tx:#7e561b;
+  --err:#a13a31; --err-bg:#efdedb; --err-tx:#7f2f28;
+  --info:#3a5a72; --info-bg:#e4eaef; --info-tx:#2f4a5e;
+  --font-title:'Cormorant',Georgia,serif; --font-body:'Sora',system-ui,sans-serif;
+  --r-card:6px; --r-ctl:4px;
+  --elev-1:0 6px 20px rgba(44,39,35,.09); --elev-2:0 10px 30px rgba(44,39,35,.13); --elev-3:0 20px 48px rgba(44,39,35,.20);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--font-body);-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums}
+h1,h2{font-family:var(--font-title);font-weight:600;color:var(--indigo);margin:0}
+h1{font-size:60px;line-height:1.05}
+h2{font-size:44px;line-height:1.08}
+h1 em,h2 em{font-style:italic}
+h3{font:600 20px/1.3 var(--font-body);margin:0 0 12px}
+h4{font:600 15px/1.35 var(--font-body);margin:0 0 6px}
+p{margin:0 0 14px}
+.lede{font-size:18px;line-height:1.5;color:var(--text-2);max-width:720px}
+.kicker{font:600 11px/1 var(--font-body);letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px}
+.small{font-size:13px;line-height:1.45;color:var(--text-2)}
+.meta{font-size:12px;color:var(--text-3)}
+a{color:var(--indigo)}
+b,strong{font-weight:600}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+
+.top{position:sticky;top:0;z-index:20;background:rgba(247,245,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:58px}
+.brand{font:600 22px/1 var(--font-title);color:var(--indigo);white-space:nowrap;cursor:pointer}
+.brand em{font-style:italic}
+.rail{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none;padding:4px 0}
+.rail::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:7px;border:0;background:transparent;font:500 12.5px/1 var(--font-body);color:var(--text-2);padding:8px 10px;border-radius:var(--r-ctl);cursor:pointer;white-space:nowrap}
+.chip .n{width:20px;height:20px;border-radius:var(--r-ctl);display:grid;place-items:center;background:var(--fill);font-size:11px;font-weight:600}
+.chip.done .n{background:var(--ok-bg);color:var(--ok-tx)}
+.chip.active{color:var(--indigo);background:var(--fill)}
+.chip.active .n{background:var(--indigo);color:var(--on-indigo)}
+.progress{height:3px;background:var(--border)}
+.progress i{display:block;height:100%;width:0;background:var(--indigo);transition:width .4s}
+.mypal{display:flex;gap:3px;align-items:center;cursor:pointer;flex:none}
+.mypal i{width:12px;height:22px;border-radius:2px}
+
+.step{display:none;padding:48px 0 80px}
+.step.active{display:block;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.step-head{margin-bottom:30px}
+.step-head h2{margin-bottom:14px}
+.card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--elev-1);padding:28px;margin-bottom:26px}
+.card h3{margin-bottom:6px}
+.card > .small:first-of-type{margin-bottom:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.split{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:start}
+@media (max-width:900px){.grid2,.split,.grid3{grid-template-columns:1fr} h1{font-size:44px} h2{font-size:34px} .card{padding:20px}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--font-body);padding:12px 18px;border-radius:var(--r-ctl);border:1.5px solid transparent;cursor:pointer;background:transparent;color:var(--indigo)}
+.btn i{font-size:16px}
+.btn:focus-visible{outline:3px solid rgba(44,42,84,.3);outline-offset:2px}
+.btn--primary{background:var(--indigo);color:var(--on-indigo)}
+.btn--primary:hover{background:var(--indigo-hover)}
+.btn--secondary{border-color:var(--indigo)}
+.btn--accent{background:var(--chataigne);color:#fff}
+.btn--sm{padding:8px 12px;font-size:13px}
+.btn[disabled]{opacity:.4;cursor:default}
+.seg{display:inline-flex;background:var(--fill);border-radius:var(--r-ctl);padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;font:500 13px/1 var(--font-body);color:var(--text-2);padding:8px 12px;border-radius:var(--r-ctl);cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--indigo);box-shadow:0 1px 3px rgba(44,39,35,.15);font-weight:600}
+.seg.sm button{padding:6px 9px;font-size:12px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+
+.retiens{border-left:2px solid var(--indigo);background:var(--fill);padding:20px 24px;border-radius:0 var(--r-card) var(--r-card) 0;margin-bottom:26px}
+.retiens h3{font-size:15px;margin-bottom:10px}
+.retiens ul{margin:0;padding-left:18px}
+.retiens li{margin:7px 0}
+.badge{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--font-body);padding:5px 9px;border-radius:var(--r-ctl);white-space:nowrap}
+.badge .dot{width:7px;height:7px;border-radius:50%}
+.badge.ok{background:var(--ok-bg);color:var(--ok-tx)} .badge.ok .dot{background:var(--ok)}
+.badge.err{background:var(--err-bg);color:var(--err-tx)} .badge.err .dot{background:var(--err)}
+.badge.warn{background:var(--warn-bg);color:var(--warn-tx)} .badge.warn .dot{background:var(--warn)}
+.badge.info{background:var(--info-bg);color:var(--info-tx)} .badge.info .dot{background:var(--info)}
+.tag{display:inline-block;font:600 11px/1 var(--font-body);padding:5px 8px;border-radius:var(--r-ctl);background:var(--fill);color:var(--text-2)}
+.alert{border-left:2px solid var(--warn);background:var(--warn-bg);color:var(--warn-tx);padding:10px 14px;font-size:13px;border-radius:0 var(--r-ctl) var(--r-ctl) 0;margin-top:10px}
+.alert.info{border-color:var(--info);background:var(--info-bg);color:var(--info-tx)}
+
+.defi{background:var(--indigo);color:var(--on-indigo);border-radius:var(--r-card);padding:28px;box-shadow:var(--elev-1)}
+.defi .kicker{color:var(--on-indigo-muted)}
+.defi h3{color:#fff}
+.opts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.opt{font:500 14px/1.3 var(--font-body);padding:11px 16px;border-radius:var(--r-ctl);border:1.5px solid rgba(238,240,247,.35);background:transparent;color:var(--on-indigo);cursor:pointer;text-align:left}
+.opt:hover{border-color:var(--on-indigo)}
+.opt.good{background:#e6ede1;color:#315833;border-color:#e6ede1}
+.opt.bad{background:#efdedb;color:#7f2f28;border-color:#efdedb}
+.fb{margin-top:14px;font-size:14px;min-height:1.4em}
+
+/* Saisons (accueil) */
+.fams{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media (max-width:1000px){.fams{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.fams{grid-template-columns:1fr}}
+.fam h4{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.fam h4 i{width:10px;height:10px;border-radius:50%}
+.sea{display:block;width:100%;text-align:left;background:var(--surface);border:1.5px solid transparent;border-radius:var(--r-card);box-shadow:var(--elev-1);padding:14px;margin-bottom:12px;cursor:pointer;font:inherit;color:inherit}
+.sea:hover{box-shadow:var(--elev-2)}
+.sea.on{border-color:var(--indigo);background:#fff}
+.sea .t{display:flex;justify-content:space-between;align-items:center;font:600 14px/1.2 var(--font-body)}
+.sea .box{width:18px;height:18px;border-radius:var(--r-ctl);border:1.5px solid var(--text-3);display:grid;place-items:center;color:#fff;font-size:12px}
+.sea.on .box{background:var(--indigo);border-color:var(--indigo)}
+.sea .a{font-size:12px;color:var(--text-2);margin:6px 0 10px;line-height:1.4}
+.strip{display:flex;height:16px;border-radius:3px;overflow:hidden}
+.strip i{flex:1}
+.selbar{position:sticky;bottom:16px;z-index:10;background:var(--indigo);color:var(--on-indigo);border-radius:var(--r-card);box-shadow:var(--elev-3);padding:16px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:24px}
+.selbar .lbl{flex:1;min-width:200px;font-size:14px}
+.selbar .seg{background:rgba(255,255,255,.1)}
+.selbar .seg button{color:var(--on-indigo-muted)}
+.selbar .seg button.on{background:var(--surface);color:var(--indigo)}
+
+/* Nuanciers */
+.sw{display:inline-flex;flex-direction:column;gap:5px;width:78px;vertical-align:top;margin:0 8px 12px 0;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left}
+.sw .c{display:block;height:54px;border-radius:var(--r-ctl);box-shadow:inset 0 0 0 1px rgba(44,39,35,.1);position:relative}
+.sw .c b{position:absolute;top:4px;right:5px;font-size:11px}
+.sw .n{display:block;font-size:11.5px;line-height:1.25;color:var(--text-2)}
+.sw.on .c{outline:2.5px solid var(--indigo);outline-offset:2px}
+.dots{display:flex;flex-wrap:wrap;gap:6px}
+.dot-btn{width:28px;height:28px;border-radius:var(--r-ctl);border:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(44,39,35,.15);padding:0}
+.dot-btn.on{outline:2.5px solid var(--indigo);outline-offset:2px}
+.role h4{display:flex;gap:10px;align-items:baseline}
+.role h4 span{font:500 12px/1 var(--font-body);color:var(--text-3)}
+.axe{margin-bottom:18px}
+.axe .bar{height:12px;border-radius:var(--r-ctl);position:relative;margin:8px 0 4px}
+.axe .mk{position:absolute;top:-6px;width:4px;height:24px;border-radius:2px;background:var(--ink);transform:translateX(-2px)}
+.axe .mk span{position:absolute;top:calc(26px + var(--o,0px));left:50%;transform:translateX(-50%);font-size:10.5px;white-space:nowrap;color:var(--text-2)}
+.axe .ends{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-top:44px}
+.detail{min-height:120px}
+
+/* Tenues */
+input[type=range]{accent-color:var(--indigo)}
+.flat{width:100%;height:auto;background:#f1eee4;border-radius:var(--r-card);display:block}
+.pieces{list-style:none;padding:0;margin:0}
+.pieces li{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.pieces li i.s{width:18px;height:18px;border-radius:3px;flex:none;box-shadow:inset 0 0 0 1px rgba(44,39,35,.12)}
+.verdict{list-style:none;padding:0;margin:0}
+.verdict li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:13.5px;line-height:1.45}
+.verdict li .badge{flex:none;margin-top:1px}
+.score{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}
+.score b{font:600 40px/1 var(--font-body)}
+.slot{padding:14px 0;border-bottom:1px solid var(--border)}
+.slot:last-child{border-bottom:0}
+.slot .lb{font:600 12px/1 var(--font-body);color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.slot .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.slot input[type=color]{width:28px;height:28px;border:0;padding:0;background:none;cursor:pointer}
+.capsule{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.cap{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--elev-1);padding:12px}
+.cap svg{width:100%;height:96px;display:block}
+.cap h4{font-size:13px;margin:6px 0 2px}
+.cap p{font-size:11.5px;color:var(--text-2);margin:0;line-height:1.4}
+.kpi{font:600 40px/1 var(--font-body);color:var(--indigo)}
+.wheel{width:100%;max-width:380px;display:block;margin:0 auto}
+.harmo{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.mat{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px}
+.mat figure{margin:0}
+.mat svg{width:100%;height:110px;border-radius:var(--r-ctl);display:block}
+.mat figcaption{font-size:12px;margin-top:6px;color:var(--text-2);line-height:1.35}
+.mat figcaption b{display:block;color:var(--ink);font-size:13px}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{background:var(--fill);text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);padding:9px 10px}
+table.t td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+table.t tr.hl td{background:#fff}
+details.rule{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--elev-1);margin-bottom:10px;padding:0 20px}
+details.rule summary{cursor:pointer;padding:16px 0;font-weight:600;font-size:15px;list-style:none;display:flex;gap:12px;align-items:center}
+details.rule summary::-webkit-details-marker{display:none}
+details.rule summary i{color:var(--indigo);font-size:20px}
+details.rule[open] summary{border-bottom:1px solid var(--border)}
+details.rule .bd{padding:14px 0 18px;font-size:14px;color:var(--text-2)}
+details.rule .bd p:last-child{margin:0}
+.game{text-align:center}
+.game input[type=range]{accent-color:var(--indigo)}
+.flat{max-width:560px;margin:0 auto}
+.game .big{display:flex;gap:14px;justify-content:center;margin:20px 0}
+.game .big .btn{font-size:16px;padding:14px 24px}
+.motifs{display:flex;gap:16px;flex-wrap:wrap}
+.motifs svg{width:120px;height:120px;border-radius:var(--r-ctl);display:block}
+.occ{margin-bottom:20px}
+.look{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start}
+@media (max-width:900px){.look{grid-template-columns:1fr}}
+.hero{padding:16px 0 10px}
+.hero h1{margin-bottom:18px}
+.axes3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:28px 0}
+@media (max-width:800px){.axes3{grid-template-columns:1fr}}
+.axes3 .card{margin:0}
+.axes3 .g{height:12px;border-radius:var(--r-ctl);margin:10px 0 8px}
+.tl{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-3)}
+footer{border-top:1px solid var(--border);padding:24px 0 40px;font-size:12px;color:var(--text-3)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <pattern id="tx-cord" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="1.7" height="4" fill="rgba(0,0,0,.18)"/><rect x="2.4" width=".8" height="4" fill="rgba(255,255,255,.08)"/></pattern>
+  <pattern id="tx-tweed" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="rgba(255,255,255,.3)"/><circle cx="4" cy="3" r=".9" fill="rgba(0,0,0,.28)"/><circle cx="2.4" cy="5" r=".7" fill="rgba(255,255,255,.2)"/><circle cx="5.3" cy=".6" r=".6" fill="rgba(0,0,0,.22)"/><circle cx="0.4" cy="3.6" r=".5" fill="rgba(200,120,60,.35)"/></pattern>
+  <pattern id="tx-flannel" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="rgba(255,255,255,.1)"/><circle cx="2.4" cy="2.3" r=".6" fill="rgba(0,0,0,.08)"/></pattern>
+  <pattern id="tx-denim" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="1.3" height="4" fill="rgba(255,255,255,.16)"/></pattern>
+  <pattern id="tx-linen" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height=".7" fill="rgba(255,255,255,.2)"/><rect width=".7" height="3" fill="rgba(0,0,0,.09)"/></pattern>
+  <pattern id="tx-oxford" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="rgba(255,255,255,.16)"/><rect x="1" y="1" width="1" height="1" fill="rgba(0,0,0,.06)"/></pattern>
+  <pattern id="tx-knit" width="6" height="5" patternUnits="userSpaceOnUse"><path d="M0 0 L3 4 L6 0" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1"/></pattern>
+  <pattern id="tx-suede" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".6" fill="rgba(255,255,255,.13)"/><circle cx="3.5" cy="4" r=".7" fill="rgba(0,0,0,.13)"/><circle cx="4.2" cy="1" r=".4" fill="rgba(0,0,0,.1)"/></pattern>
+  <linearGradient id="tx-gloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".42" stop-color="#fff" stop-opacity=".32"/><stop offset=".58" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>
+  <linearGradient id="tx-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+</defs></svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand" data-go="0">L’art d’<em>assortir</em></div>
+    <nav class="rail" id="rail"></nav>
+    <div class="mypal" id="mypal" data-go="0" title="Mes palettes"></div>
+  </div>
+  <div class="progress"><i id="prog"></i></div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ 0. Accueil : choix des palettes -->
+<section class="step" data-step="0">
+  <div class="hero">
+    <div class="kicker">Atelier interactif · couleurs & vêtements</div>
+    <h1>L’art d’<em>assortir</em></h1>
+    <p class="lede">Connaître sa saison, c’est savoir quelles couleurs vous vont. Encore faut-il savoir les <b>porter ensemble</b> : quels neutres, quelles harmonies, quelles proportions, quelles matières, et quelles règles valent vraiment. Choisissez vos palettes : tous les exemples, jeux et tenues seront tirés de vos couleurs.</p>
+  </div>
+  <div class="axes3" id="axes3"></div>
+  <h3>1. Vos palettes</h3>
+  <p class="small">Cochez une à quatre saisons (celles que Nuance vous a données, par exemple). Plusieurs saisons voisines, c’est normal : elles partagent un axe dominant.</p>
+  <div class="fams" id="fams"></div>
+  <div class="selbar">
+    <div class="lbl" id="selLbl"></div>
+    <div><div class="small" style="color:var(--on-indigo-muted);margin-bottom:4px">2. Les vêtements</div><div class="seg" id="sexe"><button data-v="homme">Homme</button><button data-v="femme">Femme</button></div></div>
+    <button class="btn btn--accent" id="start">Commencer <i class="ph-light ph-arrow-right"></i></button>
+  </div>
+  <div class="card" style="margin-top:32px">
+    <div class="kicker">Le parcours</div>
+    <div class="grid3" id="parcours"></div>
+  </div>
+</section>
+
+<!-- ============ 1. Ma palette, version vestiaire -->
+<section class="step" data-step="1">
+  <div class="step-head">
+    <div class="kicker">Étape 1 · Ma palette</div>
+    <h2>Votre palette, rangée comme une <em>garde-robe</em></h2>
+    <p class="lede">Une palette n’est pas une liste de couleurs à porter au hasard : chaque couleur a un rôle. Les <b>neutres</b> font la structure, les <b>couleurs principales</b> donnent le caractère, les <b>accents</b> ponctuent.</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <h3>Vos trois axes</h3>
+      <p class="small">Toute saison se lit sur trois axes : la <b>température</b> (chaud ↔ froid), la <b>valeur</b> (clair ↔ profond) et le <b>chroma</b> (doux ↔ vif, l’intensité de la couleur). Chaque trait = une de vos saisons.</p>
+      <div id="myAxes"></div>
+      <div id="axesTxt" class="small"></div>
+    </div>
+    <div class="card detail" id="swDetail"><h3>Touchez une couleur</h3><p class="small">Pour voir son nom, ses saisons, et où la porter.</p></div>
+  </div>
+  <div class="card" id="roles"></div>
+  <div class="grid2">
+    <div class="card" id="avoid"></div>
+    <div class="card" id="noirMetal"></div>
+  </div>
+  <div class="retiens"><h3>Ce qu’il faut retenir</h3><ul id="ret1"></ul></div>
+  <div class="defi" data-quiz="1"></div>
+</section>
+
+<!-- ============ 2. Les basiques -->
+<section class="step" data-step="2">
+  <div class="step-head">
+    <div class="kicker">Étape 2 · Les basiques</div>
+    <h2>Trois neutres, deux couleurs, <em>des dizaines</em> de tenues</h2>
+    <p class="lede">Une garde-robe qui fonctionne repose sur peu de couleurs : un <b>neutre foncé</b> (le « noir » de votre palette), un <b>neutre moyen</b>, un <b>neutre clair</b>, puis deux couleurs que vous aimez. Tout se combine avec tout, et chaque achat s’ajoute au reste.</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <h3>Choisissez vos fondations</h3>
+      <p class="small">Proposées à partir de vos palettes. Changez-les et regardez le nombre de tenues évoluer.</p>
+      <div id="capPick"></div>
+    </div>
+    <div class="card">
+      <div class="kicker">Votre capsule</div>
+      <div class="kpi num" id="capN">–</div>
+      <p class="small" id="capTxt"></p>
+      <div id="capWhy" class="small"></div>
+    </div>
+  </div>
+  <div class="capsule" id="capsule"></div>
+  <div class="retiens" style="margin-top:26px"><h3>Ce qu’il faut retenir</h3><ul>
+    <li><b>La règle des neutres</b> : 3 neutres qui vont ensemble valent mieux que 10 couleurs. Le neutre foncé remplace le noir si le noir vous durcit.</li>
+    <li><b>Le cuir</b> (chaussures, ceinture, bracelet de montre) est un neutre à part entière : choisissez-en une ou deux teintes et tenez-vous-y.</li>
+    <li><b>Le jean brut</b> (indigo foncé) se comporte comme un neutre : il va avec tout.</li>
+    <li><b>Achetez par rôle</b> : avant tout achat, demandez-vous « avec quelles pièces que j’ai déjà ? » Moins de trois réponses : on repose.</li>
+  </ul></div>
+  <div class="defi" data-quiz="2"></div>
+</section>
+
+<!-- ============ 3. Harmonies -->
+<section class="step" data-step="3">
+  <div class="step-head">
+    <div class="kicker">Étape 3 · Les harmonies</div>
+    <h2>Ce qui va <em>ensemble</em> : la roue des couleurs</h2>
+    <p class="lede">Deux couleurs s’accordent quand leur relation sur la roue est lisible : voisines (analogues), opposées (complémentaires), ou la même couleur en plusieurs intensités (ton sur ton). Vos couleurs sont placées sur la roue des peintres, celle des stylistes : choisissez-en une.</p>
+  </div>
+  <div class="split">
+    <div class="card">
+      <svg class="wheel" id="wheel" viewBox="-14 -14 348 348"></svg>
+      <p class="meta" style="text-align:center">Angle = teinte (roue des peintres). Distance au centre = intensité. Les neutres sont au centre.</p>
+    </div>
+    <div class="card">
+      <h3 id="hBaseName">Choisissez une couleur</h3>
+      <div class="dots" id="hBase"></div>
+      <div class="seg harmo" id="hType"></div>
+      <p class="small" id="hDesc"></p>
+      <div class="dots" id="hMatch"></div>
+    </div>
+  </div>
+  <div class="card look" id="hLook"></div>
+  <div class="card">
+    <h3>Les cinq accords, du plus sûr au plus audacieux</h3>
+    <table class="t"><thead><tr><th>Accord</th><th>Sur la roue</th><th>Effet</th><th>Le secret</th></tr></thead><tbody>
+      <tr><td><b>Neutres + 1 couleur</b></td><td>une seule teinte</td><td>Le plus sûr, le plus polyvalent</td><td>La couleur va près du visage, les neutres font le reste.</td></tr>
+      <tr><td><b>Ton sur ton</b></td><td>même teinte, clartés différentes</td><td>Élégant, allonge la silhouette</td><td>Écart de clarté franc + matières variées, sinon c’est plat.</td></tr>
+      <tr><td><b>Analogue</b></td><td>voisines (≤ 60°)</td><td>Doux, naturel, harmonieux</td><td>Une couleur domine, les autres l’accompagnent.</td></tr>
+      <tr><td><b>Complémentaire</b></td><td>opposées (≈ 180°)</td><td>Contraste vivant</td><td>Assagir : une couleur foncée ou désaturée, l’autre en petite touche.</td></tr>
+      <tr><td><b>Triade</b></td><td>trois teintes à ≈ 120°</td><td>Riche, plus difficile</td><td>Deux d’entre elles discrètes ; réservée aux tenues décontractées ou créatives.</td></tr>
+    </tbody></table>
+  </div>
+  <div class="retiens"><h3>Ce qu’il faut retenir</h3><ul>
+    <li>Les couleurs d’une même palette s’accordent déjà entre elles par leur <b>valeur</b> et leur <b>intensité</b> : c’est pour ça que la palette aide autant.</li>
+    <li>Deux couleurs « ni voisines ni opposées » (≈ 90°) créent une <b>tension</b> : possible, mais il faut que ce soit voulu.</li>
+    <li>Plus les couleurs sont <b>vives</b>, plus l’accord doit être simple ; plus elles sont <b>sourdes ou foncées</b>, plus on peut en mélanger.</li>
+  </ul></div>
+  <div class="defi" data-quiz="3"></div>
+</section>
+
+<!-- ============ 4. Proportions et contraste -->
+<section class="step" data-step="4">
+  <div class="step-head">
+    <div class="kicker">Étape 4 · Proportions & contraste</div>
+    <h2>Combien de chaque, et <em>où</em></h2>
+    <p class="lede">La même paire de couleurs peut être chic ou criarde selon les surfaces. Deux outils : la règle <b>60 / 30 / 10</b> (dominante, secondaire, accent) et le <b>contraste de clarté</b> entre le haut et le bas, qui doit ressembler au vôtre (cheveux, peau, yeux).</p>
+  </div>
+  <div class="card look" id="propLook"></div>
+  <div class="card">
+    <h3>Le contraste haut / bas</h3>
+    <p class="small" id="contrIntro"></p>
+    <div class="split" style="margin:0">
+      <div>
+        <label class="small" for="contr"><b>Écart de clarté entre le haut et le bas</b></label>
+        <input type="range" id="contr" min="0" max="80" value="40" style="width:100%">
+        <div class="axe"><div class="bar" id="contrBar"></div><div class="tl"><span>Ton sur ton</span><span>Moyen</span><span>Noir / blanc</span></div></div>
+        <p class="small" id="contrTxt"></p>
+      </div>
+      <svg id="contrFig" viewBox="0 0 200 220" style="width:100%;max-width:220px;margin:0 auto;display:block"></svg>
+    </div>
+  </div>
+  <div class="retiens"><h3>Ce qu’il faut retenir</h3><ul>
+    <li><b>60 / 30 / 10</b> : un neutre domine (pantalon, veste), une couleur secondaire (haut), un accent (cravate, écharpe, pochette, foulard, chaussettes).</li>
+    <li>Une couleur <b>vive</b> se dose : petite surface, de préférence <b>près du visage</b>. Une couleur <b>foncée</b> peut couvrir de grandes surfaces.</li>
+    <li>Le <b>foncé recule</b> et affine, le <b>clair avance</b> et élargit : on met le plus foncé là où l’on veut paraître plus étroit.</li>
+    <li>Une ligne de couleur continue (ton sur ton, ou bas et chaussures de même valeur) <b>allonge</b> ; une rupture nette (haut clair / bas foncé) coupe la silhouette à cet endroit.</li>
+  </ul></div>
+  <div class="defi" data-quiz="4"></div>
+</section>
+
+<!-- ============ 5. Matières et motifs -->
+<section class="step" data-step="5">
+  <div class="step-head">
+    <div class="kicker">Étape 5 · Matières & motifs</div>
+    <h2>La même couleur ne se porte pas <em>pareil</em> en velours et en satin</h2>
+    <p class="lede">La matière change la couleur : le mat l’adoucit et la rend plus chaude, le brillant la rend plus froide et plus habillée, le texturé (tweed, côtelé, grosse maille) la rend plus riche et plus décontractée. Votre saison a aussi ses matières.</p>
+  </div>
+  <div class="card">
+    <h3>Une couleur, huit matières</h3>
+    <div class="dots" id="matBase" style="margin-bottom:16px"></div>
+    <div class="mat" id="matGrid"></div>
+  </div>
+  <div class="card">
+    <h3>Les matières de vos saisons</h3>
+    <p class="small">Ligne surlignée = une de vos familles.</p>
+    <table class="t" id="matTable"></table>
+  </div>
+  <div class="card">
+    <h3>Le mélangeur de motifs</h3>
+    <p class="small">Règle d’or : <b>deux motifs ensemble doivent différer d’échelle</b> (petit + grand) et <b>partager une couleur</b>. Trois motifs : niveau expert, chacun de taille différente.</p>
+    <div class="grid2" style="gap:20px">
+      <div id="motifPick"></div>
+      <div><div class="motifs" id="motifView"></div><ul class="verdict" id="motifVerdict" style="margin-top:14px"></ul></div>
+    </div>
+    <p class="small" id="motifSeason" style="margin-top:12px"></p>
+  </div>
+  <div class="retiens"><h3>Ce qu’il faut retenir</h3><ul>
+    <li><b>Ton sur ton = textures variées</b> : marron en daim, maille et flanelle est riche ; le même marron en coton partout est plat.</li>
+    <li><b>Une seule pièce brillante</b> par tenue (soie, satin, cuir verni) : elle attire l’œil.</li>
+    <li><b>Les matières ont une saison</b> : lin, coton léger, toile au printemps et en été ; flanelle, tweed, velours, cachemire en automne et en hiver. On évite de mélanger le lin et la flanelle.</li>
+    <li><b>Formalité</b> : lisse, fin, sombre et uni = habillé ; texturé, épais, clair et à motifs = décontracté.</li>
+  </ul></div>
+  <div class="defi" data-quiz="5"></div>
+</section>
+
+<!-- ============ 6. Règles et mythes -->
+<section class="step" data-step="6">
+  <div class="step-head">
+    <div class="kicker">Étape 6 · Les règles</div>
+    <h2>Les grands principes, et les <em>mythes</em></h2>
+    <p class="lede">Il n’y a pas de règle absolue, mais il y a des principes qui marchent presque toujours, et de vieilles règles qu’on peut oublier. D’abord les principes, ensuite le jeu « règle ou mythe ? ».</p>
+  </div>
+  <div id="rules"></div>
+  <div class="defi" id="myth" style="margin-top:26px"></div>
+</section>
+
+<!-- ============ 7. Cabine -->
+<section class="step" data-step="7">
+  <div class="step-head">
+    <div class="kicker">Étape 7 · La cabine</div>
+    <h2>Composez, le <em>juge</em> commente</h2>
+    <p class="lede">Choisissez chaque pièce, sa couleur et sa matière. Le juge applique tout ce qu’on a vu : palette, couleur près du visage, nombre de couleurs, harmonie, cuirs, contraste, formalité, matières. Essayez aussi de le piéger avec les couleurs « hors palette ».</p>
+  </div>
+  <div class="split">
+    <div>
+      <div class="card" style="padding:16px"><svg class="flat" id="cabFlat" viewBox="0 0 440 300"></svg>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn--secondary btn--sm" id="cabRand"><i class="ph-light ph-shuffle"></i>Tenue au hasard</button><button class="btn btn--sm" id="cabReset"><i class="ph-light ph-arrow-counter-clockwise"></i>Repartir de zéro</button></div>
+      </div>
+      <div class="card"><div class="score"><b class="num" id="cabScore">–</b><span id="cabVerdict" class="badge"></span></div><ul class="verdict" id="cabJudge"></ul></div>
+    </div>
+    <div class="card" id="cabSlots"></div>
+  </div>
+</section>
+
+<!-- ============ 8. Jeu -->
+<section class="step" data-step="8">
+  <div class="step-head">
+    <div class="kicker">Étape 8 · Le jeu</div>
+    <h2>Assorti ou <em>raté</em> ?</h2>
+    <p class="lede">Dix tenues tirées de vos couleurs. Certaines sont réussies, d’autres cachent une faute (couleur à éviter près du visage, cuirs dépareillés, trop de couleurs…). À vous de juger.</p>
+  </div>
+  <div class="card game" id="game"></div>
+</section>
+
+<!-- ============ 9. Lookbook -->
+<section class="step" data-step="9">
+  <div class="step-head">
+    <div class="kicker">Étape 9 · Lookbook</div>
+    <h2>Des tenues <em>concrètes</em>, pour chaque occasion</h2>
+    <p class="lede">Des idées complètes, pièce par pièce, dans vos couleurs. Chaque tenue explique pourquoi elle fonctionne. Relancez pour d’autres idées, ou envoyez-la dans la cabine pour la modifier.</p>
+  </div>
+  <div class="seg" id="occTabs" style="margin-bottom:22px"></div>
+  <div id="lookbook"></div>
+  <div class="retiens"><h3>Pour aller plus loin</h3><ul>
+    <li>Prenez en photo vos vêtements réels et comparez-les à vos nuanciers à la lumière du jour (près d’une fenêtre).</li>
+    <li>Commencez par les pièces <b>près du visage</b> (hauts, écharpes, cravates) : c’est là que la palette compte le plus. Le bas et les chaussures tolèrent davantage.</li>
+    <li>La coupe passe avant la couleur : une pièce bien ajustée dans une couleur « correcte » bat une couleur parfaite mal coupée.</li>
+  </ul></div>
+</section>
+
+</main>
+<footer><div class="wrap">L’art d’assortir · palettes issues de l’application Nuance (repères de conseillers en image, pas des mesures) · voir aussi <a href="../science-des-couleurs/">La science des couleurs</a> · <a href="../">toutes les pages</a></div></footer>
+<script>
+/* =====================================================================
+   Données : les 12 saisons (reprises de l'application Nuance)
+   ===================================================================== */
+const SEASONS=[{"id":"printemps-clair","famille":"printemps","nom":"Printemps Clair","accroche":"Une lumière de matin d’avril : délicate, dorée, fraîche.","profil":{"T":0.35,"D":0.15,"C":0.1,"K":0.3},"palette":["#f8c9a8","#fbb08c","#f58f7c","#f6a6a8","#f4a1b8","#fbe39a","#f3cf63","#cfe6a0","#9fd8b5","#7fcfc1","#8fd3e8","#a8c8f0","#c8b8ea","#f2c4a0"],"neutres":["#fff4de","#f3dfc2","#e1c39a","#c9a074","#9a7452","#5e7f9b"],"eviter":["#0b0b0f","#3d1f33","#6e1428","#1f3b66","#6a7280","#4a3a3a","#7b1fa2","#0b5e4a"],"raisonEviter":"Les teintes sombres, froides ou très saturées écrasent votre teint délicat et créent un contraste que votre visage ne porte pas.","metaux":{"aller":["Or jaune clair","Or rose"],"eviter":["Argent très brillant","Étain sombre"]},"motifs":"Petits motifs floraux, aquarelle, pastel. Contraste intérieur faible entre haut et bas.","noir":"Remplacez le noir par un brun doux, un bleu marine adouci ou un gris bleuté chaud."},{"id":"printemps-chaud","famille":"printemps","nom":"Printemps Chaud","accroche":"Du soleil dans le teint : doré, éclatant, généreux.","profil":{"T":0.85,"D":0.35,"C":0.3,"K":0.4},"palette":["#f9c74f","#f4a261","#ee7b30","#ef5b3f","#f28f6b","#fa7268","#a8c94a","#5fb760","#28a99b","#3fb8c9","#4c9bd6","#7e8fd6","#e8a0a0","#f5d36b"],"neutres":["#fff1d0","#e6c28f","#c98f52","#9c6b3a","#2f5573","#6d5a3c"],"eviter":["#0b0b0f","#d6d6e6","#7a1f4b","#c2185b","#5c6b7a","#e8d5e8","#4b0082","#9fa8b8"],"raisonEviter":"Les gris-bleus, roses froids et noirs durs créent une ombre grise sur votre peau dorée.","metaux":{"aller":["Or jaune","Or cuivré"],"eviter":["Argent","Platine"]},"motifs":"Motifs francs et colorés, rayures chaudes, imprimés tropicaux ou fleuris, contraste moyen.","noir":"Préférez le brun chaud, le marine tiède (#2f5573) ou le vert forêt chaud au noir."},{"id":"printemps-vif","famille":"printemps","nom":"Printemps Vif","accroche":"Un éclat franc : couleurs pures, vives, électriques mais chaudes.","profil":{"T":0.35,"D":0.4,"C":0.85,"K":0.7},"palette":["#ff5a5f","#ff8a00","#ffd400","#62d04f","#00b28e","#00a6c8","#2f80ed","#8a5cf6","#f6419b","#ff7a59","#2ec4b6","#f9c80e","#ff6fa5","#4cc9f0"],"neutres":["#fffbf0","#f0e1c8","#b7bdc6","#6b4a33","#1f3b66","#2d2d33"],"eviter":["#a89f91","#8b7d6b","#7d6b5a","#c9b8a6","#a47c7c","#6e7f6a","#9b8aa0","#b8a89a"],"raisonEviter":"Les teintes poussiéreuses, grisées ou beige terne voilent l’éclat de votre regard et de votre teint.","metaux":{"aller":["Or brillant","Or rose poli"],"eviter":["Bronze mat","Argent oxydé"]},"motifs":"Grands motifs graphiques, color-blocking, forts contrastes de couleurs pures.","noir":"Le noir est possible en petite touche ; sinon un marine profond ou un brun chocolat chaud."},{"id":"ete-clair","famille":"ete","nom":"Été Clair","accroche":"Un voile de brume : pastel, frais, soyeux.","profil":{"T":-0.35,"D":0.15,"C":-0.1,"K":0.25},"palette":["#f4c2d0","#e8a8c0","#d9b3e0","#b8c4f0","#a5d3ea","#9ed8d2","#b8e0c4","#f2a0a8","#f3c1b8","#c6b6e0","#a9c7e6","#d6a9c9","#88b8d8","#cfe6d8"],"neutres":["#f5f0ee","#d8d4da","#a8a5b5","#8e99ad","#c2a8a3","#7c8db0"],"eviter":["#0b0b0f","#e36414","#8b4513","#c9a227","#6b8e23","#2b1b17","#b8860b","#a0291e"],"raisonEviter":"Les teintes sombres, orangées ou terreuses dominent votre visage et accentuent les ombres.","metaux":{"aller":["Argent","Or blanc","Or rose pâle"],"eviter":["Or jaune brillant"]},"motifs":"Aquarelle, petits motifs doux, rayures fines tonales. Contraste très faible.","noir":"Gris perle, bleu denim doux ou marine pâle plutôt que le noir."},{"id":"ete-froid","famille":"ete","nom":"Été Froid","accroche":"Élégance fraîche : bleus, roses framboise et gris bleutés.","profil":{"T":-0.85,"D":0.4,"C":-0.35,"K":0.4},"palette":["#c85a84","#a8456b","#8e6ba8","#5c7ab0","#4a7fb5","#4e9ba5","#5fa896","#9bb5d6","#d9a5bc","#b7a5c9","#7a6fb0","#e7b6c7","#6a8fc0","#8c6a9a"],"neutres":["#f1eef2","#a9aebb","#7b8394","#3f4d6e","#8c7480","#5e5368"],"eviter":["#e8742c","#f2c14e","#a0522d","#d4a017","#7a8b3a","#c46a2a","#b5481f","#f5deb3"],"raisonEviter":"Les teintes dorées, orangées et terreuses jaunissent la peau et cassent l’harmonie rosée.","metaux":{"aller":["Argent","Or blanc","Platine"],"eviter":["Or jaune franc","Cuivre"]},"motifs":"Rayures bleu-blanc, motifs floraux froids, tons sur tons. Contraste moyen.","noir":"Marine doux, gris anthracite bleuté ou aubergine douce remplacent bien le noir."},{"id":"ete-doux","famille":"ete","nom":"Été Doux","accroche":"Un tableau pastel estompé : nuancé, voilé, sophistiqué.","profil":{"T":-0.25,"D":0.45,"C":-0.85,"K":0.25},"palette":["#b97a8f","#a8697f","#9c86a8","#7e8fa8","#6c93a3","#7da297","#a7b7a4","#c9a3a8","#b7a0b8","#d0b2a4","#8aa0b8","#9a8fb0","#c08a8a","#8fb0a6"],"neutres":["#ede6e3","#bdb6b8","#8f8c99","#6a7080","#5e6a7e","#8b7570"],"eviter":["#f2187f","#ff6a00","#ffd400","#0b0b0f","#00b2e0","#e30022","#7bd62e","#ffffff"],"raisonEviter":"Les couleurs pures, fluo ou très contrastées sont « plus fortes » que vous : on voit la couleur avant votre visage.","metaux":{"aller":["Argent brossé","Or rose","Or blanc"],"eviter":["Or jaune très brillant"]},"motifs":"Imprimés fondus, tie & dye, dégradés, tons sur tons. Éviter les oppositions franches.","noir":"Gris ardoise, bleu nuit grisé ou taupe froid."},{"id":"automne-doux","famille":"automne","nom":"Automne Doux","accroche":"Un sous-bois voilé : sauge, terre, rose thé.","profil":{"T":0.25,"D":0.5,"C":-0.85,"K":0.25},"palette":["#c58a6a","#d6a27a","#b8825a","#c2a055","#a7aa6e","#8da17b","#6b9a8a","#5e8e91","#b87d78","#cd9189","#9a7c86","#c9a98a","#8f9c6e","#b99a6a"],"neutres":["#f0e6d2","#d8c6a5","#b49b7b","#8b7660","#55667a","#6e6a50"],"eviter":["#0b0b0f","#ffffff","#ff0080","#0057ff","#00d1ff","#e2001a","#7b2ce0","#ffe600"],"raisonEviter":"Les couleurs électriques, le noir et le blanc pur prennent toute la place et vous donnent l’air fatigué.","metaux":{"aller":["Or mat","Laiton","Or rose"],"eviter":["Argent éclatant"]},"motifs":"Lin, imprimés fondus, tons terre, textures naturelles. Contraste faible.","noir":"Brun café, olive foncé ou bleu pétrole voilé."},{"id":"automne-chaud","famille":"automne","nom":"Automne Chaud","accroche":"Feuilles d’octobre : or, rouille, épices.","profil":{"T":0.85,"D":0.6,"C":-0.2,"K":0.4},"palette":["#cc6a24","#b5481f","#d98e1f","#c99a1e","#7b8a2e","#4f7b3c","#2e7c6e","#1f6e78","#c23b22","#a4532c","#e1a56b","#8c5a2b","#d5a64a","#7a8f4a"],"neutres":["#f3e3c0","#d9b77e","#b8864b","#7a5230","#4a3b28","#4f5b3a"],"eviter":["#0b0b0f","#e8d5f0","#ff69b4","#7b8fa6","#c9ccd6","#5b2c6f","#9fd3e8","#ffffff"],"raisonEviter":"Les teintes glacées, pastel froides et le noir pur contrastent mal avec votre sous-ton doré.","metaux":{"aller":["Or jaune","Bronze","Cuivre"],"eviter":["Argent","Platine"]},"motifs":"Cachemire, tartans chauds, imprimés ethniques, cuir et daim.","noir":"Brun chocolat, olive foncé ou vert forêt chaud."},{"id":"automne-profond","famille":"automne","nom":"Automne Profond","accroche":"Cuir, bois sombre et épices : riche et enveloppant.","profil":{"T":0.5,"D":0.88,"C":0.05,"K":0.5},"palette":["#8e2f1c","#b5541c","#c27c1c","#5b6623","#2f5b3a","#135e5c","#7d2430","#c4651e","#d6a04a","#7b4b2a","#a63a2b","#2a6f6a","#b8862e","#6a3a2a"],"neutres":["#f0e2c2","#cba874","#8b5e34","#5a2e1b","#2e2a24","#1f3a3d"],"eviter":["#f4c6d7","#d9e4f5","#e9e0f5","#c0c0c0","#ffffff","#9fd3e8","#f7e9f3","#cfd8e8"],"raisonEviter":"Les pastels et les couleurs glacées paraissent fades et vous laissent « avalé » par vos cheveux sombres.","metaux":{"aller":["Or jaune","Bronze","Cuivre"],"eviter":["Argent clair","Platine"]},"motifs":"Imprimés denses, cuir, velours, motifs orientaux sombres.","noir":"Le noir brun fonctionne ; mieux : chocolat, vert sapin profond."},{"id":"hiver-profond","famille":"hiver","nom":"Hiver Profond","accroche":"Nuit d’encre : profond, froid, dramatique.","profil":{"T":-0.5,"D":0.9,"C":0.1,"K":0.65},"palette":["#14224b","#5b1a3c","#7b1030","#0b5e4a","#1c4a8a","#4a2a7c","#b0122f","#0f6270","#b0185a","#3a2a6b","#0e7c66","#8a1c4a","#27408b","#6d1f5a"],"neutres":["#0b0b0f","#e8eef5","#ffffff","#c7d0db","#2f3e46","#4a4e5a"],"eviter":["#e07b39","#d2b48c","#c9a227","#a0522d","#f3c8a6","#8b8f5a","#e6d3a3","#d9a066"],"raisonEviter":"Les teintes dorées, orangées et pâles chaudes ne tiennent pas face à votre intensité et jaunissent le teint.","metaux":{"aller":["Argent","Platine","Or blanc"],"eviter":["Or jaune doré","Cuivre"]},"motifs":"Imprimés graphiques sombres, contrastes noir/blanc, grands aplats.","noir":"Le noir est votre ami : portez-le près du visage."},{"id":"hiver-froid","famille":"hiver","nom":"Hiver Froid","accroche":"Glace et rubis : net, froid, saturé.","profil":{"T":-0.85,"D":0.65,"C":0.3,"K":0.7},"palette":["#d1135c","#c8102e","#6a1b9a","#2a4fbf","#0077b6","#00806e","#8e24aa","#f4c2db","#cfe8f6","#d7f0e4","#1e3a8a","#e0115f","#3a6fd8","#009688"],"neutres":["#ffffff","#f8f4ff","#a0aec0","#4a5568","#0b0b0f","#1e2a4a"],"eviter":["#e9a54f","#d2691e","#c8a165","#8b7d3c","#f5deb3","#c9a227","#b8864b","#a9703a"],"raisonEviter":"Les teintes dorées, orangées et beige chaud s’opposent à votre sous-ton froid et vous donnent un teint grisâtre.","metaux":{"aller":["Argent","Platine","Or blanc"],"eviter":["Or jaune","Cuivre"]},"motifs":"Noir et blanc, rayures nettes, imprimés géométriques froids.","noir":"Noir et blanc optique : tout à fait à vous."},{"id":"hiver-vif","famille":"hiver","nom":"Hiver Vif","accroche":"Étincelle électrique : fluo froid, très contrasté.","profil":{"T":-0.35,"D":0.55,"C":0.85,"K":0.85},"palette":["#e4002b","#f2187f","#7b2ce0","#0a57e6","#00a3e0","#00a878","#12b8b0","#f7e400","#ff4da6","#1b1b3a","#2d9cdb","#d90fa6","#26c281","#6a35e8"],"neutres":["#ffffff","#0b0b0f","#1b1b3a","#8c9ab0","#e3f2fd","#4b4b66"],"eviter":["#a67b5b","#8f8a5b","#c4a57b","#b58a6a","#c9b79c","#d88c5a","#9e8b7a","#b0a08a"],"raisonEviter":"Les beiges, taupes et tons terreux estompent votre éclat naturel et donnent un teint terne.","metaux":{"aller":["Argent brillant","Platine","Or blanc"],"eviter":["Bronze mat","Or vieilli"]},"motifs":"Color-blocking, imprimés graphiques néon, contrastes francs noir/blanc/couleur.","noir":"Noir pur, très bien : accompagné d’une couleur vive en haut."}];
+const FAMS={printemps:{nom:'Printemps',c:'#e0a458'},ete:{nom:'Été',c:'#8e9bc4'},automne:{nom:'Automne',c:'#b5651d'},hiver:{nom:'Hiver',c:'#3a4a8a'}};
+SEASONS.forEach(s=>s.nom=s.nom.replace(/ (\S)/,m=>m.toLowerCase()));
+const byId=id=>SEASONS.find(s=>s.id===id);
+
+/* =====================================================================
+   Outils couleur
+   ===================================================================== */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function hex2rgb(h){h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16))}
+function rgb2hex(r,g,b){return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('')}
+const _lab=new Map();
+function lab(h){h=h.toLowerCase();if(_lab.has(h))return _lab.get(h);
+  const [r,g,b]=hex2rgb(h).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4});
+  const X=(r*.4124564+g*.3575761+b*.1804375)/.95047,Y=r*.2126729+g*.7151522+b*.072175,Z=(r*.0193339+g*.119192+b*.9503041)/1.08883;
+  const f=t=>t>216/24389?Math.cbrt(t):(24389/27*t+16)/116;
+  const o=[116*f(Y)-16,500*(f(X)-f(Y)),200*(f(Y)-f(Z))];_lab.set(h,o);return o}
+const Lof=h=>lab(h)[0], Cof=h=>{const[,a,b]=lab(h);return Math.hypot(a,b)};
+const dE=(a,b)=>{const x=lab(a),y=lab(b);return Math.hypot(x[0]-y[0],x[1]-y[1],x[2]-y[2])};
+function hsvHue(h){const [r,g,b]=hex2rgb(h).map(v=>v/255),mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;if(!d)return 0;
+  let H=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;return (H*60+360)%360}
+/* Roue des peintres (rouge-jaune-bleu) : celle qu'utilisent les stylistes. */
+const RGBK=[0,30,60,120,240,280,360], RYBK=[0,60,120,180,240,300,360];
+function interp(x,A,B){for(let i=1;i<A.length;i++)if(x<=A[i])return B[i-1]+(x-A[i-1])/(A[i]-A[i-1])*(B[i]-B[i-1]);return x}
+const ryb=h=>interp(hsvHue(h),RGBK,RYBK);
+function hsl2hex(h,s,l){const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,9-k(n),1));return rgb2hex(f(0)*255,f(8)*255,f(4)*255)}
+const rybColor=(y,s=.62,l=.5)=>hsl2hex(interp(y,RYBK,RGBK),s,l);
+function gap(a,b){const d=Math.abs(ryb(a)-ryb(b));return Math.min(d,360-d)}
+function mix(h,t){const [r,g,b]=hex2rgb(h),T=t>0?255:0,k=Math.abs(t);return rgb2hex(r+(T-r)*k,g+(T-g)*k,b+(T-b)*k)}
+const onCol=h=>Lof(h)>62?'#2c2723':'#ffffff';
+function isNeutral(h){const l=Lof(h),c=Cof(h),y=ryb(h);
+  if(c<16)return true; if(l<27&&c<38)return true;
+  if(y>=15&&y<=100&&c<42&&l>25&&l<76)return true;   // bruns, cognac, camel, sable
+  if(l>=76&&c<28)return true;                       // crèmes, écrus, beiges
+  if(y>100&&y<=170&&c<34&&l<56)return true;         // kakis, olives
+  return false}
+function rngOf(seed){let a=seed>>>0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const pickR=(r,a)=>a[Math.floor(r()*a.length)];
+
+/* Noms de couleurs (vocabulaire de la mode) : la plus proche l'emporte. */
+const NAMES=[["noir","#121212"],["noir brun","#211b17"],["anthracite","#34373c"],["gris ardoise","#4f5b66"],["gris moyen","#8a8d91"],["gris perle","#c9cbcf"],["blanc optique","#ffffff"],["blanc cassé","#f4f1ea"],["écru","#ece3cf"],["crème","#f2e6c9"],["ivoire","#f6f0dc"],["beige","#d9c3a0"],["sable","#cdb48a"],["camel","#b98a54"],["caramel","#b5753a"],["cognac","#9a5426"],["rouille","#a4451f"],["terracotta","#b85c3c"],["brique","#9c3b2a"],["chocolat","#4b2c1e"],["marron","#6b4329"],["taupe","#8b7b6e"],["kaki","#79744a"],["olive","#5b6129"],["olive foncé","#3f4421"],["vert sapin","#1f3d2b"],["vert forêt","#2f5b3a"],["vert bouteille","#0f4030"],["émeraude","#0b6e4f"],["vert jade","#2e8b6f"],["sauge","#8fa58a"],["vert d’eau","#9fd8b5"],["vert pomme","#7dbb42"],["pétrole","#135e5c"],["sarcelle","#1f7a78"],["turquoise","#2bb3b0"],["bleu canard","#0f5866"],["marine","#1b2440"],["bleu nuit","#14224b"],["bleu roi","#27408b"],["cobalt","#1c4fa0"],["bleu jean","#4a6a8f"],["bleu ciel","#a8c8f0"],["bleu poudre","#c9d7f0"],["bleu glacier","#dfe8f5"],["indigo","#2a2f6b"],["violet","#4a2a7c"],["aubergine","#4b1e3e"],["prune","#6d2a4f"],["mauve","#a88b9a"],["lavande","#c8b8ea"],["lilas","#d8c4e6"],["bordeaux","#6e1a2a"],["grenat","#7b1030"],["lie-de-vin","#5b1a3c"],["framboise","#b0185a"],["fuchsia","#d6338a"],["rose vif","#f6419b"],["vieux rose","#b88a8a"],["rose poudré","#e8c4c8"],["rose pâle","#f6d3df"],["saumon","#f28f6b"],["corail","#f26b5b"],["pêche","#f8c9a8"],["abricot","#f4a261"],["orange","#ee7b30"],["orange brûlé","#c4651e"],["moutarde","#c99a1e"],["ocre","#c27c1c"],["bronze doré","#b8862e"],["jaune soleil","#f9c74f"],["jaune citron","#f4f35b"],["beurre frais","#f4de8a"],["rouge vrai","#c8102e"],["rouge cerise","#b0122f"],["rouge tomate","#e8473f"],["cuivre","#a85a32"],["oxblood","#4e1b20"],["argent","#c0c0c0"],["jaune vif","#ffd400"]];
+const _nm=new Map();
+function nameOf(h){if(_nm.has(h))return _nm.get(h);let best=NAMES[0],bd=1e9;for(const n of NAMES){const d=dE(h,n[1]);if(d<bd){bd=d;best=n}}_nm.set(h,best[0]);return best[0]}
+
+/* Cuirs (chaussures, ceintures) */
+const LEATHER=[{hex:'#9a5426',nom:'cognac',t:1},{hex:'#4a2c1d',nom:'chocolat',t:0},{hex:'#4e1b20',nom:'bordeaux (oxblood)',t:0},{hex:'#161414',nom:'noir',t:-1},{hex:'#8b7b6e',nom:'taupe',t:0},{hex:'#c4a57a',nom:'sable',t:1},{hex:'#f4f1ea',nom:'blanc cassé',t:1,sn:1},{hex:'#ffffff',nom:'blanc optique',t:-1,sn:1}];
+const leatherOf=h=>LEATHER.find(l=>l.hex===h);
+const colName=h=>leatherOf(h)?.nom||nameOf(h);
+const DENIM='#1f2a44';
+
+/* =====================================================================
+   État (sélection mémorisée dans le navigateur)
+   ===================================================================== */
+const LS='art-assortir-v1';
+let st={};try{st=JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){}
+st.sel=(st.sel||[]).filter(byId); st.sexe=st.sexe||'homme'; st.done=st.done||[]; st.cap=st.cap||{};
+const save=()=>localStorage.setItem(LS,JSON.stringify(st));
+const SEL=()=>st.sel.map(byId);
+
+let _pal=null,_palKey='';
+function PAL(){const key=st.sel.join(',');if(_pal&&_palKey===key)return _pal;_palKey=key;
+  const ss=SEL(),cols=[];
+  ss.forEach(s=>[...s.neutres.map(h=>[h,1]),...s.palette.map(h=>[h,0])].forEach(([h,n])=>{
+    const ex=cols.find(c=>dE(c.hex,h)<11);if(ex){if(n)ex.srcN=1}else cols.push({hex:h,srcN:n})}));
+  cols.forEach(c=>{
+    c.seasons=ss.filter(s=>[...s.palette,...s.neutres].some(h=>dE(h,c.hex)<15)).map(s=>s.id);
+    c.warn=ss.filter(s=>!c.seasons.includes(s.id)&&s.eviter.some(h=>dE(h,c.hex)<20)).map(s=>s.id);
+    c.role=(c.srcN||isNeutral(c.hex))?'neutre':(Cof(c.hex)>50&&Lof(c.hex)>32?'accent':'principale');
+    c.nom=nameOf(c.hex); c.pont=ss.length>1&&c.seasons.length===ss.length;});
+  const ev=[];ss.forEach(s=>s.eviter.forEach(h=>{if(cols.every(c=>dE(c.hex,h)>18)&&!ev.some(e=>dE(e,h)<8))ev.push(h)}));
+  const T=ss.map(s=>s.profil.T),D=ss.map(s=>s.profil.D),Cc=ss.map(s=>s.profil.C),K=ss.map(s=>s.profil.K);
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  _pal={cols,ev,all:cols.map(c=>c.hex),ss,
+    prof:{T:avg(T),D:avg(D),C:avg(Cc),K:avg(K),Tmin:Math.min(...T),Tmax:Math.max(...T)},
+    warm:T.some(t=>t>.2),cold:T.some(t=>t<-.2)};
+  return _pal}
+function fit(h){const P=PAL();let d=1e9;for(const x of P.all)d=Math.min(d,dE(x,h));
+  const ev=d>10&&P.ev.some(e=>dE(e,h)<13);return {d,ev}}
+const seasonsOf=h=>SEL().filter(s=>[...s.palette,...s.neutres].some(x=>dE(x,h)<16)).map(s=>s.id);
+function leatherFit(h){const l=leatherOf(h),P=PAL();if(!l)return null;
+  if(l.t===1&&!P.warm)return l.sn?'Le blanc cassé est plus doux que vos couleurs froides : le blanc optique vous irait mieux.':`Le ${l.nom} est un cuir chaud : vos saisons froides préfèrent le noir, le bordeaux ou le chocolat.`;
+  if(l.t===-1&&!P.cold)return l.sn?'Le blanc optique est dur pour une palette chaude : préférez le blanc cassé.':'Le noir pur durcit les palettes chaudes : le chocolat ou le bordeaux font le même travail en plus doux.';
+  return null}
+const metalOf=o=>{const P=PAL();if(P.warm&&!P.cold)return '#c9a24a';if(P.cold&&!P.warm)return '#b9bdc6';
+  const sh=o&&o.shoes;return sh&&(sh.hex==='#161414'||sh.hex==='#ffffff')?'#b9bdc6':'#c9a24a'};
+
+/* =====================================================================
+   Pièces, matières, dessin à plat (flat-lay)
+   ===================================================================== */
+const MATS={
+ laine:{n:'laine froide',tx:'none',w:'all',sh:0,df:0}, flanelle:{n:'flanelle',tx:'flannel',w:'hiver',sh:0,df:0},
+ tweed:{n:'tweed',tx:'tweed',w:'hiver',sh:0,df:-1}, velours:{n:'velours côtelé',tx:'cord',w:'hiver',sh:0,df:-1},
+ velourslisse:{n:'velours lisse',tx:'sheen',w:'hiver',sh:1,df:0}, lin:{n:'lin',tx:'linen',w:'ete',sh:0,df:-1},
+ coton:{n:'coton',tx:'none',w:'all',sh:0,df:0}, oxford:{n:'coton oxford',tx:'oxford',w:'all',sh:0,df:0},
+ popeline:{n:'popeline',tx:'none',w:'all',sh:0,df:1}, maille:{n:'maille mérinos',tx:'knit',w:'all',sh:0,df:0},
+ cachemire:{n:'cachemire',tx:'flannel',w:'hiver',sh:0,df:0}, grosse:{n:'grosse maille',tx:'knit',w:'hiver',sh:0,df:-1},
+ soie:{n:'soie',tx:'gloss',w:'all',sh:1,df:1}, denim:{n:'denim',tx:'denim',w:'all',sh:0,df:-1},
+ cuir:{n:'cuir lisse',tx:'gloss',w:'all',sh:0,df:0}, daim:{n:'daim',tx:'suede',w:'all',sh:0,df:-1}, toile:{n:'toile',tx:'linen',w:'ete',sh:0,df:-1}
+};
+const SLOTS=['outer','top','bottom','shoes','belt','acc'];
+const SLOTN={outer:'Veste / manteau',top:'Haut',bottom:'Bas',shoes:'Chaussures',belt:'Ceinture',acc:'Accessoire'};
+const CAT={
+ homme:{
+  outer:[['none','Sans'],['blazer','Blazer',4,['laine','flanelle','tweed','velours','velourslisse','lin']],['manteau','Manteau',4,['laine','tweed','cachemire']],['blouson','Blouson',2,['daim','cuir','coton']],['surchemise','Surchemise',2,['velours','flanelle','coton','lin']]],
+  top:[['chemise','Chemise',3,['oxford','popeline','flanelle','lin']],['pull','Pull',3,['maille','cachemire','grosse']],['polo','Polo',2,['coton','maille']],['tshirt','T-shirt',1,['coton','lin']]],
+  bottom:[['pantalon','Pantalon',4,['laine','flanelle','lin']],['chino','Chino',3,['coton','velours','lin']],['jean','Jean',2,['denim']]],
+  shoes:[['derbies','Derbies',4,['cuir','daim']],['mocassins','Mocassins',3,['cuir','daim']],['boots','Boots',3,['daim','cuir']],['sneakers','Baskets',1,['cuir','toile']]],
+  belt:[['none','Sans'],['ceinture','Ceinture',3,['cuir','daim']]],
+  acc:[['none','Sans'],['cravate','Cravate',5,['soie','laine','maille']],['echarpe','Écharpe',2,['laine','cachemire']],['pochette','Pochette',4,['soie','lin']]]},
+ femme:{
+  outer:[['none','Sans'],['blazer','Blazer',4,['laine','flanelle','tweed','velours','velourslisse','lin']],['manteau','Manteau',4,['laine','tweed','cachemire']],['trench','Trench',3,['coton']],['blouson','Blouson',2,['daim','cuir','coton']]],
+  top:[['chemisier','Chemisier',3,['soie','popeline','lin']],['pull','Pull',3,['maille','cachemire','grosse']],['top','Top',2,['coton','soie','maille']],['robe','Robe',3,['laine','soie','maille','lin']]],
+  bottom:[['pantalon','Pantalon',4,['laine','flanelle','lin']],['jean','Jean',2,['denim']],['jupe','Jupe',3,['laine','soie','velours','denim']]],
+  shoes:[['escarpins','Escarpins',4,['cuir','daim']],['bottines','Bottines',3,['cuir','daim']],['mocassins','Mocassins',3,['cuir','daim']],['ballerines','Ballerines',2,['cuir','daim']],['sneakers','Baskets',1,['cuir','toile']]],
+  belt:[['none','Sans'],['ceinture','Ceinture',3,['cuir','daim']]],
+  acc:[['none','Sans'],['foulard','Foulard',3,['soie']],['echarpe','Écharpe',2,['laine','cachemire']],['sac','Sac',3,['cuir','daim']]]}
+};
+const NECK=['cravate','echarpe','foulard'];
+const LEATHER_SLOT=k=>k==='shoes'||k==='belt';
+function piece(k,id){return (CAT[st.sexe][k].find(p=>p[0]===id))||CAT[st.sexe][k][0]}
+const pNom=(k,id)=>piece(k,id)[1];
+
+function S(d,hex,tx){return `<path d="${d}" fill="${hex}" stroke="${mix(hex,-.38)}" stroke-width="1.1" stroke-linejoin="round"/>`+(tx&&tx!=='none'?`<path d="${d}" fill="url(#tx-${tx})" pointer-events="none"/>`:'')}
+const ln=(d,hex,w=1.1,o='')=>`<path d="${d}" fill="none" stroke="${mix(hex,-.4)}" stroke-width="${w}" ${o}/>`;
+const DRAW={
+ blazer(c,t,len=124){const b=len-2;return S(`M14 12 L2 24 L0 ${b-10} L13 ${b-10} Z`,c,t)+S(`M96 12 L108 24 L110 ${b-10} L97 ${b-10} Z`,c,t)+
+   S(`M28 6 L55 44 L82 6 L96 12 L98 ${b} L12 ${b} L14 12 Z`,c,t)+S('M28 6 L55 44 L45 54 L21 14 Z',mix(c,-.12),t)+S('M82 6 L55 44 L65 54 L89 14 Z',mix(c,-.12),t)+
+   ln(`M55 44 L55 ${b}`,c)+`<circle cx="52" cy="${len*.6}" r="2.6" fill="${mix(c,-.45)}"/><circle cx="52" cy="${len*.74}" r="2.6" fill="${mix(c,-.45)}"/>`+ln(`M20 ${len*.76} h22 M68 ${len*.76} h22 M70 40 h15`,c)},
+ manteau(c,t){return DRAW.blazer(c,t,158)},
+ trench(c,t){return DRAW.blazer(c,t,150)+ln('M14 70 H96',c,3)},
+ blouson(c,t){return S('M14 12 L2 24 L0 92 L13 92 Z',c,t)+S('M96 12 L108 24 L110 92 L97 92 Z',c,t)+S('M30 6 Q55 16 80 6 L96 12 L98 104 L12 104 L14 12 Z',c,t)+
+   S('M12 96 H98 V106 H12 Z',mix(c,-.15),t)+S('M30 6 Q55 18 80 6 L76 0 Q55 8 34 0 Z',mix(c,-.15),t)+ln('M55 14 V104',c,1.6)+ln('M22 52 h20 M68 52 h20',c)},
+ surchemise(c,t){return DRAW.chemise(c,t,1)+S('M24 34 h18 v14 h-18 Z',mix(c,-.06),t)+S('M62 34 h18 v14 h-18 Z',mix(c,-.06),t)},
+ chemise(c,t,big){const body='M26 8 L42 4 Q52 10 62 4 L78 8 L100 22 L104 96 L92 96 L86 34 L84 102 L20 102 L18 34 L12 96 L0 96 L4 22 Z';
+   return S(body,c,t)+S('M42 4 L52 14 L44 22 L36 7 Z',mix(c,.1),t)+S('M62 4 L52 14 L60 22 L68 7 Z',mix(c,.1),t)+ln('M52 14 V102',c)+
+   [30,48,66,84].map(y=>`<circle cx="52" cy="${y}" r="1.6" fill="${mix(c,-.35)}"/>`).join('')+ln('M0 88 H12 M92 88 H104',c)},
+ chemisier(c,t){return DRAW.chemise(c,t)},
+ pull(c,t){const body='M26 8 L42 4 Q52 14 62 4 L78 8 L100 22 L104 96 L92 96 L86 34 L84 102 L20 102 L18 34 L12 96 L0 96 L4 22 Z';
+   return S(body,c,t)+ln('M42 4 Q52 15 62 4',c,3)+S('M20 94 H84 V102 H20 Z',mix(c,-.1),t)+ln('M0 88 H12 M92 88 H104',c,2)},
+ tshirt(c,t){return S('M28 6 Q52 18 76 6 L100 22 L92 40 L84 34 L84 102 L20 102 L20 34 L12 40 L4 22 Z',c,t)+ln('M28 6 Q52 18 76 6',c,2)},
+ top(c,t){return S('M34 6 Q52 12 70 6 L78 10 L84 30 L84 100 L20 100 L20 30 L26 10 Z',c,t)+ln('M34 6 Q52 12 70 6',c,1.6)},
+ polo(c,t){return DRAW.tshirt(c,t)+S('M38 8 L52 18 L46 26 L34 10 Z',mix(c,-.06),t)+S('M66 8 L52 18 L58 26 L70 10 Z',mix(c,-.06),t)+ln('M52 18 V36',c)+`<circle cx="52" cy="26" r="1.5" fill="${mix(c,-.4)}"/><circle cx="52" cy="33" r="1.5" fill="${mix(c,-.4)}"/>`},
+ robe(c,t){return S('M36 4 Q52 14 68 4 L76 10 L72 50 L96 150 L8 150 L32 50 L28 10 Z',c,t)+ln('M32 50 Q52 56 72 50',c,1.6)},
+ pantalon(c,t){return S('M6 2 L58 2 L62 134 L38 134 L32 44 L26 134 L2 134 Z',c,t)+S('M6 2 H58 V10 H6 Z',mix(c,-.1),t)+ln('M18 14 L14 132 M46 14 L50 132',c,.8,'opacity=".6"')+ln('M32 10 V40',c)},
+ chino(c,t){return DRAW.pantalon(c,t)+ln('M8 12 L16 26 M56 12 L48 26',c)},
+ jean(c,t){return S('M6 2 L58 2 L62 134 L38 134 L32 44 L26 134 L2 134 Z',c,t)+S('M6 2 H58 V10 H6 Z',mix(c,-.1),t)+
+   `<path d="M8 12 Q18 24 26 12 M56 12 Q46 24 38 12 M4 40 L3 132 M60 40 L61 132" fill="none" stroke="#c99a1e" stroke-width=".9" stroke-dasharray="2 2"/>`+ln('M32 10 V40',c)},
+ jupe(c,t){return S('M20 2 L64 2 L80 80 L4 80 Z',c,t)+S('M20 2 H64 V9 H20 Z',mix(c,-.1),t)+ln('M42 12 L42 80 M30 14 L22 80 M54 14 L62 80',c,.7,'opacity=".5"')},
+ shoe(c,t,kind){const sole=kind==='sneakers'?'#f4f1ea':mix(c,-.45);let d;
+   if(kind==='boots'||kind==='bottines')d='M6 24 L8 0 L28 0 L30 8 L42 12 Q54 17 52 24 Z';
+   else if(kind==='escarpins')d='M4 8 Q20 18 40 13 L50 15 L50 21 L42 21 L40 19 L12 19 L10 30 L6 30 L5 19 Z';
+   else if(kind==='mocassins'||kind==='ballerines')d='M3 20 Q3 11 14 10 L36 9 Q48 9 52 18 Q53 23 48 24 L6 24 Q3 24 3 20 Z';
+   else d='M3 20 Q3 8 14 7 L26 6 Q34 2 40 8 L48 16 Q53 20 51 24 L6 24 Q3 24 3 20 Z';
+   let o=S(d,c,t);
+   if(kind!=='escarpins')o+=`<path d="M3 23 H52" stroke="${sole}" stroke-width="${kind==='sneakers'?5:2.6}"/>`;
+   if(kind==='derbies'||kind==='sneakers')o+=ln('M26 9 L30 15 M30 8 L34 14 M34 7 L38 13',c,1);
+   if(kind==='mocassins')o+=ln('M30 10 Q40 12 44 18',c,1);
+   return o},
+ ceinture(c,t,metal){return S('M0 2 H130 V12 H0 Z',c,t)+`<rect x="6" y="0" width="14" height="14" rx="2" fill="none" stroke="${metal}" stroke-width="2.4"/><path d="M13 7 H24" stroke="${metal}" stroke-width="2"/>`+[70,80,90].map(x=>`<circle cx="${x}" cy="7" r="1.3" fill="${mix(c,-.5)}"/>`).join('')},
+ cravate(c,t){return S('M8 2 L16 2 L18 10 L6 10 Z',mix(c,-.1),t)+S('M6 10 L18 10 L22 86 L12 98 L2 86 Z',c,t)},
+ echarpe(c,t){return S('M6 0 H34 V104 H6 Z',c,t)+ln('M6 18 H34 M6 86 H34',c,.8)+ln('M9 104 V112 M14 104 V112 M19 104 V112 M24 104 V112 M29 104 V112 M33 104 V112',c,1.4)},
+ pochette(c,t){return S('M2 2 H40 V40 H2 Z',c,t)+ln('M2 2 L40 40',c,.8)+ln('M5 5 H37 V37 H5 Z',mix(c,.4),1,'opacity=".7"')},
+ foulard(c,t){return S('M28 0 L56 28 L28 56 L0 28 Z',c,t)+ln('M28 7 L49 28 L28 49 L7 28 Z',mix(c,.5),1.2)},
+ sac(c,t){return S('M18 18 Q32 -4 46 18',c,'none').replace('fill="'+c+'"','fill="none"').replace('stroke-width="1.1"','stroke-width="3"')+S('M4 18 H60 V56 H4 Z',c,t)+S('M4 18 H60 V32 L32 38 L4 32 Z',mix(c,-.08),t)}
+};
+const BOX={outer:[8,10,1.25],manteau:[14,6,1.02],trench:[14,6,1.04],top:[156,16,1.15],robe:[160,6,1.0],bottom:[316,10,1.45],jupe:[318,24,1.2],belt:[154,150,1.0],shoes:[166,214,1.25],acc:[22,182,1],sac:[20,200,1.1],pochette:[34,200,1],foulard:[24,196,1.1]};
+function drawPiece(k,it,o){const id=it.p,M=MATS[it.m]||MATS.coton,c=it.hex;
+  let svg='';
+  if(k==='shoes')svg=DRAW.shoe(c,M.tx,id)+`<g transform="translate(54,8)">${DRAW.shoe(mix(c,-.06),M.tx,id)}</g>`;
+  else if(k==='belt')svg=DRAW.ceinture(c,M.tx,metalOf(o));
+  else svg=(DRAW[id]||DRAW.tshirt)(c,M.tx);
+  const b=BOX[id]||BOX[k];
+  return `<g transform="translate(${b[0]},${b[1]}) scale(${b[2]})">${svg}</g>`}
+function flatSVG(o){let s='';
+  const hideBottom=o.top&&o.top.p==='robe';
+  for(const k of ['bottom','outer','top','belt','shoes','acc']){const it=o[k];if(!it||it.p==='none')continue;if(k==='bottom'&&hideBottom)continue;if(k==='belt'&&hideBottom)continue;s+=drawPiece(k,it,o)}
+  if(!o.acc||o.acc.p==='none')s+=`<g transform="translate(40,212)"><circle cx="18" cy="18" r="16" fill="#fbfaf5" stroke="${metalOf(o)}" stroke-width="4"/><path d="M18 18 V8 M18 18 L25 22" stroke="#2c2723" stroke-width="1.6"/><rect x="12" y="-14" width="12" height="16" fill="${o.shoes?o.shoes.hex:'#4a2c1d'}"/><rect x="12" y="34" width="12" height="16" fill="${o.shoes?o.shoes.hex:'#4a2c1d'}"/></g>`;
+  return s}
+const itemsOf=o=>SLOTS.filter(k=>o[k]&&o[k].p!=='none'&&!((k==='bottom'||k==='belt')&&o.top&&o.top.p==='robe')).map(k=>({k,...o[k]}));
+function piecesList(o){return itemsOf(o).map(i=>`<li><i class="s" style="background:${i.hex}"></i><span><b>${pNom(i.k,i.p)}</b> ${colName(i.hex)} · <span class="small">${(MATS[i.m]||MATS.coton).n}</span></span></li>`).join('')+
+  (o.acc&&o.acc.p!=='none'?'':`<li><i class="s" style="background:${metalOf(o)}"></i><span><b>Montre</b> boîtier ${metalOf(o)==='#c9a24a'?'doré':'acier'}, bracelet cuir assorti aux chaussures</span></li>`)}
+function sentence(o){const it=itemsOf(o);return it.map(i=>`${pNom(i.k,i.p).toLowerCase()} ${i.k==='shoes'||i.k==='belt'?'':'en '}${i.k==='shoes'||i.k==='belt'?'en '+(MATS[i.m]||MATS.cuir).n:(MATS[i.m]||MATS.coton).n} ${colName(i.hex)}`).join(', ')}
+
+/* =====================================================================
+   Le juge : toutes les règles de la page, appliquées à une tenue
+   ===================================================================== */
+function harmonyOf(cols){
+  if(cols.length<2)return null;
+  const pairs=[];for(let i=0;i<cols.length;i++)for(let j=i+1;j<cols.length;j++)pairs.push({a:cols[i],b:cols[j],g:gap(cols[i],cols[j])});
+  const tense=pairs.find(p=>p.g>65&&p.g<95&&Cof(p.a)>35&&Cof(p.b)>35);
+  if(tense)return {ok:0,nom:'tension',t:`${cap(nameOf(tense.a))} et ${nameOf(tense.b)} ne sont ni voisins ni opposés sur la roue (≈ ${Math.round(tense.g)}°) : ils se font concurrence.`};
+  if(pairs.every(p=>p.g<=20))return {ok:1,nom:'ton sur ton',t:'Accord ton sur ton : une seule teinte, plusieurs intensités.'};
+  if(pairs.every(p=>p.g<=65))return {ok:1,nom:'analogue',t:'Accord analogue : des couleurs voisines sur la roue, harmonie douce.'};
+  if(pairs.some(p=>p.g>=145))return {ok:1,nom:'complémentaire',t:'Accord complémentaire : deux couleurs opposées qui se répondent.'};
+  if(pairs.every(p=>p.g>=95))return {ok:1,nom:'triade',t:'Accord en triade : trois teintes équilibrées sur la roue.'};
+  return {ok:1,nom:'équilibré',t:'Accord équilibré entre couleurs voisines et contrastées.'}}
+function judge(o){
+  const R=[],add=(lvl,t)=>R.push({lvl,t}),P=PAL();
+  const it=itemsOf(o).map(i=>({...i,P:piece(i.k,i.p),M:MATS[i.m]||MATS.coton}));
+  const cloth=it.filter(i=>!LEATHER_SLOT(i.k));
+  // 1. Palette, et d'abord près du visage
+  let allIn=true;
+  for(const i of cloth){const f=fit(i.hex),nm=nameOf(i.hex),face=i.k==='top'||(i.k==='acc'&&NECK.includes(i.p)),lb=pNom(i.k,i.p).toLowerCase();
+    if(f.ev){allIn=false;add(face?'fail':'warn',face?`${cap(lb)} ${nm} près du visage : c’est une de vos couleurs à éviter.`:`${cap(lb)} ${nm} : couleur à éviter, mais loin du visage ça passe mieux.`)}
+    else if(f.d>22){allIn=false;add(face?'fail':'warn',face?`${cap(lb)} ${nm} : hors de votre palette, et près du visage, là où ça se voit le plus.`:`${cap(lb)} ${nm} : hors palette, toléré loin du visage.`)}
+    else if(f.d>14&&face){allIn=false;add('warn',`${cap(lb)} ${nm} : proche de votre palette sans y être tout à fait.`)}}
+  if(allIn&&cloth.length)add('ok','Toutes les couleurs viennent de votre palette.');
+  // 2. Nombre de couleurs hors neutres
+  const viv=[];cloth.forEach(i=>{if(!isNeutral(i.hex)&&i.hex!==DENIM&&!viv.some(v=>dE(v,i.hex)<12))viv.push(i.hex)});
+  if(viv.length>3)add('fail',`${viv.length} couleurs hors neutres : au-delà de trois, l’œil ne sait plus où se poser.`);
+  else if(viv.length===3)add('warn','Trois couleurs hors neutres : c’est le maximum, il faut qu’elles s’accordent.');
+  else if(viv.length)add('ok',`${viv.length===1?'Une couleur':'Deux couleurs'} + des neutres : lisible.`);
+  else add('ok','Tout en neutres : sobre et sûr. Une couleur près du visage lui donnerait du relief.');
+  // 3. Harmonie
+  const h=harmonyOf(viv);if(h)add(h.ok?'ok':'warn',h.t);
+  // 4. Cuirs
+  const sh=it.find(i=>i.k==='shoes'),be=it.find(i=>i.k==='belt');
+  if(sh){const lf=leatherFit(sh.hex);if(lf)add('warn',lf)}
+  if(sh&&be){const d=dE(sh.hex,be.hex);
+    if(sh.p!=='sneakers'){if(d>20)add('fail',`Ceinture ${colName(be.hex)} et chaussures ${colName(sh.hex)} : les cuirs doivent s’accorder.`);else add('ok','Ceinture et chaussures assorties.')}
+    else if(d>20&&Lof(sh.hex)<85)add('warn','Avec des baskets colorées, une ceinture du même ton fait plus net.');}
+  // 5. Cohérence entre plusieurs saisons
+  if(P.ss.length>1){const sets=cloth.filter(i=>!isNeutral(i.hex)).map(i=>seasonsOf(i.hex));
+    if(sets.length>=2){const common=P.ss.filter(s=>sets.every(x=>x.includes(s.id)));
+      if(!common.length)add('warn','Ces couleurs viennent de saisons différentes de votre palette : l’ensemble peut sembler hésitant. Les couleurs « pont » (★) font la transition.');
+      else add('ok',`Tenue cohérente : toutes ses couleurs vont en ${common.map(s=>s.nom).join(', ')}.`)}}
+  // 6. Contraste haut / bas
+  const tp=it.find(i=>i.k==='top'&&i.p!=='robe'),bt=it.find(i=>i.k==='bottom');
+  if(tp&&bt){const dl=Math.abs(Lof(tp.hex)-Lof(bt.hex)),tg=18+P.prof.K*50,same=gap(tp.hex,bt.hex)<=20||(isNeutral(tp.hex)&&isNeutral(bt.hex));
+    if(dl<tg-26){if(same)add('ok','Haut et bas proches en clarté : effet ton sur ton, qui allonge.');else add('warn','Haut et bas presque de même clarté sans être de même couleur : la silhouette manque de relief.')}
+    else if(dl>tg+30)add('warn','Contraste haut / bas plus fort que votre contraste naturel : la tenue risque de vous « porter ».');
+    else add('ok','Contraste haut / bas à votre mesure.')}
+  // 7. Couleur vive sur une grande surface
+  const big=cloth.find(i=>(i.k==='outer'||i.k==='bottom')&&Cof(i.hex)>55&&!isNeutral(i.hex));
+  if(big)add('warn',`${cap(pNom(big.k,big.p).toLowerCase())} ${nameOf(big.hex)} : une couleur vive sur une grande surface, c’est audacieux. Elle se dose mieux en petit.`);
+  // 8. Formalité
+  const fs=it.map(i=>i.P[2]+(i.M.df||0)).filter(x=>!isNaN(x));
+  if(fs.length>2&&Math.max(...fs)-Math.min(...fs)>=4)add('warn','Grand écart de formalité (pièce très habillée avec une pièce très décontractée) : possible, mais ça doit se voir comme voulu.');
+  // 9. Matières : saison et brillance
+  const ws=new Set(cloth.map(i=>i.M.w));if(ws.has('ete')&&ws.has('hiver'))add('warn','Matières d’été (lin) et d’hiver (flanelle, tweed, velours…) ensemble : elles ne vivent pas à la même saison.');
+  const shiny=cloth.filter(i=>i.M.sh);if(shiny.length>1)add('warn','Plusieurs pièces brillantes : une seule suffit à attirer l’œil.');
+  const mats=cloth.map(i=>i.m);if(cloth.length>=3&&new Set(mats).size===1)add('warn','Toutes les pièces dans la même matière : variez les textures pour donner du relief.');
+  if(cloth.length>=3&&new Set(mats).size>=3)add('ok','Matières variées : la tenue a du relief.');
+  const nf=R.filter(r=>r.lvl==='fail').length,nw=R.filter(r=>r.lvl==='warn').length;
+  const score=Math.max(0,100-nf*28-nw*9);
+  const verdict=nf?(score<45?['Raté','err']:['À retravailler','err']):score>=88?['Impeccable','ok']:score>=70?['Ça marche','ok']:['Passable','warn'];
+  R.sort((a,b)=>({fail:0,warn:1,ok:2}[a.lvl]-{fail:0,warn:1,ok:2}[b.lvl]));
+  return {R,nf,nw,score,verdict,harm:h}}
+const LV={ok:['ok','Bien'],warn:['warn','Attention'],fail:['err','Faute']};
+const verdictHTML=j=>j.R.map(r=>`<li><span class="badge ${LV[r.lvl][0]}"><span class="dot"></span>${LV[r.lvl][1]}</span><span>${r.t}</span></li>`).join('');
+
+/* =====================================================================
+   Générateur de tenues (lookbook, jeu, cabine)
+   ===================================================================== */
+function pools(r,s){const P=PAL();
+  const src=s?[...s.neutres.map(h=>({hex:h,n:1})),...s.palette.map(h=>({hex:h,n:isNeutral(h)?1:0}))]:P.cols.map(c=>({hex:c.hex,n:c.role==='neutre'?1:0}));
+  const N=src.filter(c=>c.n).map(c=>c.hex),M=src.filter(c=>!c.n).map(c=>c.hex);
+  const leathers=LEATHER.filter(l=>!l.sn&&!leatherFit(l.hex)&&(!s||(l.t===0||(l.t===1&&s.profil.T>0)||(l.t===-1&&s.profil.T<0))));
+  return {dark:N.filter(h=>Lof(h)<38),mid:N.filter(h=>Lof(h)>=38&&Lof(h)<74),light:N.filter(h=>Lof(h)>=74),
+    main:M,mdark:M.filter(h=>Lof(h)<46&&Cof(h)<48),mlight:M.filter(h=>Lof(h)>=52),accent:M.filter(h=>Cof(h)>40),
+    leather:(leathers.length?leathers:LEATHER.filter(l=>!l.sn)).map(l=>l.hex),
+    sneak:LEATHER.filter(l=>l.sn&&!leatherFit(l.hex)).map(l=>l.hex)}}
+function pickColor(spec,pl,r,used){
+  if(spec==='denim')return DENIM;
+  const opts=spec.split('|').map(x=>pl[x]||[]).filter(a=>a.length);
+  if(!opts.length){const all=[...pl.mid,...pl.dark,...pl.light];return pickR(r,all.length?all:['#4a2c1d'])}
+  const pool=pickR(r,opts),fresh=pool.filter(h=>!used.some(u=>dE(u,h)<10));
+  return pickR(r,fresh.length?fresh:pool)}
+const OCC=[
+ {id:'bureau',nom:'Au bureau',ic:'ph-briefcase',
+  homme:{outer:['blazer','dark|mdark',['laine','flanelle']],top:['chemise','light|mlight',['popeline','oxford']],bottom:['pantalon','mid|dark',['laine','flanelle']],shoes:['derbies','leather',['cuir']],belt:['ceinture','=shoes',['cuir']],acc:['cravate','accent|main',['soie','laine']]},
+  femme:{outer:['blazer','dark|mdark',['laine','flanelle']],top:['chemisier','light|mlight',['soie','popeline']],bottom:['pantalon','mid|dark',['laine','flanelle']],shoes:['escarpins|mocassins','leather',['cuir']],belt:['ceinture','=shoes',['cuir']],acc:['foulard','accent|main',['soie']]},
+  why:'Le bureau aime le sombre et l’uni : un neutre foncé structure, la couleur se place près du visage.'},
+ {id:'weekend',nom:'Week-end',ic:'ph-coffee',
+  homme:{outer:['blouson|surchemise','mid|mdark',['daim','velours','coton']],top:['pull|polo|tshirt','main|light',['maille','coton']],bottom:['jean','denim',['denim']],shoes:['boots|sneakers','leather',['daim','cuir']],belt:['ceinture','=shoes',['cuir']],acc:['none','',[]]},
+  femme:{outer:['blouson|trench','mid|mdark',['daim','coton']],top:['pull|top','main|light',['maille','coton']],bottom:['jean','denim',['denim']],shoes:['bottines|sneakers|ballerines','leather',['daim','cuir']],belt:['ceinture','=shoes',['cuir']],acc:['sac','leather',['cuir','daim']]},
+  why:'Le jean brut joue le neutre : le haut peut porter votre couleur la plus franche.'},
+ {id:'soir',nom:'Dîner, soirée',ic:'ph-wine',
+  homme:{outer:['blazer','mdark|dark',['velourslisse','laine']],top:['chemise|pull','dark|light',['popeline','cachemire']],bottom:['pantalon','dark',['laine']],shoes:['mocassins|derbies','leather',['cuir']],belt:['ceinture','=shoes',['cuir']],acc:['pochette','accent|mlight',['soie']]},
+  femme:{outer:['blazer|none','dark|mdark',['velourslisse','laine']],top:['robe|chemisier','mdark|accent',['soie','maille']],bottom:['pantalon|jupe','dark',['laine','soie']],shoes:['escarpins','leather',['cuir','daim']],belt:['ceinture|none','=shoes',['cuir']],acc:['sac','leather|accent',['cuir','daim']]},
+  why:'Le soir, les couleurs profondes et une matière riche (velours, soie) remplacent les motifs.'},
+ {id:'ceremonie',nom:'Mariage, cérémonie',ic:'ph-heart',
+  homme:{outer:['blazer','dark|mdark',['laine']],top:['chemise','light',['popeline']],bottom:['pantalon','=outer',['laine']],shoes:['derbies','leather',['cuir']],belt:['ceinture','=shoes',['cuir']],acc:['cravate','accent|main',['soie']]},
+  femme:{outer:['none','',[]],top:['robe','main|mlight',['soie','laine']],bottom:['jupe','dark',['soie']],shoes:['escarpins','leather',['cuir','daim']],belt:['none','',[]],acc:['sac','leather|accent',['cuir','daim']]},
+  why:'Costume d’une seule couleur (veste = pantalon), chemise claire, et votre plus belle couleur en cravate ou en robe.'},
+ {id:'balade',nom:'Balade d’automne',ic:'ph-tree',
+  homme:{outer:['manteau','mid|dark',['tweed','laine']],top:['pull','main',['grosse','maille']],bottom:['chino','mid|dark|mdark',['velours','coton']],shoes:['boots','leather',['daim','cuir']],belt:['ceinture','=shoes',['cuir']],acc:['echarpe','accent|main',['laine','cachemire']]},
+  femme:{outer:['manteau','mid|dark',['tweed','laine']],top:['pull','main',['grosse','maille']],bottom:['jean|pantalon','denim',['denim']],shoes:['bottines','leather',['daim','cuir']],belt:['ceinture','=shoes',['cuir']],acc:['echarpe','accent|main',['laine','cachemire']]},
+  why:'Saison des textures : tweed, grosse maille, daim et velours enrichissent les couleurs profondes.'},
+ {id:'ete',nom:'Été en ville',ic:'ph-sun',
+  homme:{outer:['none','',[]],top:['chemise|polo','mlight|light',['lin','coton']],bottom:['chino','light|mid',['coton','lin']],shoes:['mocassins|sneakers','leather',['daim','cuir']],belt:['ceinture','=shoes',['daim','cuir']],acc:['none','',[]]},
+  femme:{outer:['none','',[]],top:['top|chemisier','mlight|main',['lin','coton']],bottom:['pantalon|jupe','light|mid',['lin']],shoes:['ballerines|sneakers','leather',['cuir']],belt:['ceinture','=shoes',['cuir']],acc:['sac','leather',['cuir']]},
+  why:'L’été, matières légères (lin, coton) et les couleurs les plus claires de votre palette, sans sortir de votre profondeur.'}
+];
+function genOutfit(seed,occId,good=true){
+  const r=rngOf(seed),P=PAL();
+  for(let tries=0;tries<60;tries++){
+    const occ=occId?OCC.find(o=>o.id===occId):pickR(r,OCC),tpl=occ[st.sexe],s=pickR(r,P.ss),pl=pools(r,s),o={},used=[];
+    for(const k of SLOTS){const [ps,spec,mats]=tpl[k];const p=pickR(r,ps.split('|'));
+      if(p==='none'){o[k]={p:'none'};continue}
+      let hex;
+      if(spec==='=shoes')hex=o.shoes.hex;else if(spec==='=outer')hex=o.outer.hex;
+      else if(LEATHER_SLOT(k)||spec==='leather')hex=(p==='sneakers'&&pl.sneak.length&&r()<.7)?pickR(r,pl.sneak):pickR(r,pl.leather);
+      else hex=pickColor(spec,pl,r,used);
+      const mm=mats.length?mats:piece(k,p)[3]||['coton'];
+      o[k]={p,hex,m:k==='bottom'&&spec==='=outer'?o.outer.m:pickR(r,mm)};
+      if(!LEATHER_SLOT(k))used.push(hex)}
+    if(o.belt&&o.belt.p!=='none'&&o.shoes.p==='sneakers')o.belt.hex=pickR(r,pl.leather);
+    if(o.top.p==='robe'){o.bottom={p:'none'};o.belt={p:'none'}}
+    o.occ=occ.id;o.season=s.id;
+    const j=judge(o);
+    if(good){if(!j.nf&&j.nw<=1&&!j.R.some(x=>x.lvl==='warn'&&x.t.includes('grande surface')))return o}
+    else{const b=spoil(o,r);if(b)return b}
+  }
+  return null}
+function spoil(o,r){const P=PAL(),faults=['evite','cuir','quatre','hors'].sort(()=>r()-.5);
+  for(const f of faults){const b=JSON.parse(JSON.stringify(o));
+    if(f==='evite'&&P.ev.length){b.top.hex=pickR(r,P.ev);b.fault='Une couleur à éviter près du visage.'}
+    else if(f==='cuir'&&b.belt&&b.belt.p!=='none'&&b.shoes.p!=='sneakers'){b.belt.hex=Lof(b.shoes.hex)<25?'#9a5426':'#161414';if(b.belt.hex===b.shoes.hex)continue;b.fault='Ceinture et chaussures dépareillées.'}
+    else if(f==='quatre'){const viv=PAL().cols.filter(c=>c.role!=='neutre').map(c=>c.hex);const pick=[];
+      for(const h of viv.sort(()=>r()-.5)){if(pick.every(x=>dE(x,h)>20))pick.push(h);if(pick.length===4)break}
+      if(pick.length<4)continue;
+      if(b.outer.p==='none')b.outer={p:CAT[st.sexe].outer[1][0],hex:'',m:'laine'};
+      if(b.acc.p==='none')b.acc={p:CAT[st.sexe].acc[2][0],hex:'',m:'laine'};
+      b.outer.hex=pick[0];b.top.hex=pick[1];if(b.bottom.p!=='none')b.bottom.hex=pick[2];else b.outer.hex=pick[2];b.acc.hex=pick[3];b.fault='Trop de couleurs à la fois.'}
+    else if(f==='hors'){const cands=NAMES.map(n=>n[1]).filter(h=>!isNeutral(h)&&fit(h).d>30);if(!cands.length)continue;b.top.hex=pickR(r,cands);b.fault='Un haut hors palette.'}
+    else continue;
+    if(judge(b).nf)return b}
+  return null}
+
+/* =====================================================================
+   Navigation
+   ===================================================================== */
+const STEPS=['Palettes','Ma palette','Basiques','Harmonies','Proportions','Matières','Règles','Cabine','Jeu','Lookbook'];
+let cur=0;
+function go(i){
+  if(i>0&&!st.sel.length){i=0;setTimeout(()=>{$('#selLbl').innerHTML='<b>Choisissez d’abord au moins une saison.</b>'},10)}
+  cur=i;$$('.step').forEach(s=>s.classList.toggle('active',+s.dataset.step===i));
+  if(i>0&&!st.done.includes(i-1)){st.done.push(i-1);save()}
+  renderRail();RENDER[i]&&RENDER[i]();window.scrollTo({top:0});
+  history.replaceState(null,'','#'+i)}
+function renderRail(){
+  $('#rail').innerHTML=STEPS.map((n,i)=>`<button class="chip ${i===cur?'active':''} ${st.done.includes(i)?'done':''}" data-go="${i}"><span class="n">${i}</span>${n}</button>`).join('');
+  $('#prog').style.width=(cur/(STEPS.length-1)*100)+'%';
+  $('#mypal').innerHTML=SEL().map(s=>`<i style="background:${s.palette[0]}" title="${s.nom}"></i><i style="background:${s.palette[5]}"></i>`).join('');
+  const a=$('.chip.active');a&&a.scrollIntoView({block:'nearest',inline:'center'})}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){go(+g.dataset.go)}});
+function navHTML(i){return `<div class="nav">${i>0?`<button class="btn" data-go="${i-1}"><i class="ph-light ph-arrow-left"></i>${STEPS[i-1]}</button>`:'<span></span>'}${i<STEPS.length-1?`<button class="btn btn--primary" data-go="${i+1}">${STEPS[i+1]}<i class="ph-light ph-arrow-right"></i></button>`:''}</div>`}
+$$('.step').forEach(s=>{const i=+s.dataset.step;if(i>0)s.insertAdjacentHTML('beforeend',navHTML(i))});
+
+/* Défis */
+const QUIZ={
+ 1:{q:'Le troisième axe des saisons, « doux ↔ vif », mesure…',o:['La température (chaud / froid)','La valeur (clair / foncé)','Le chroma : l’intensité, la pureté de la couleur'],a:2,w:'Oui : doux = couleur grisée, voilée ; vif = couleur pure, saturée. Les trois axes : température, valeur, chroma.'},
+ 2:{q:'Pour démarrer une garde-robe, combien de neutres de base ?',o:['Un seul, le noir','Trois : un foncé, un moyen, un clair','Six, pour varier'],a:1,w:'Trois neutres qui s’accordent suffisent à tout relier ; les couleurs viennent ensuite.'},
+ 3:{q:'Rouille et bleu pétrole, sur la roue des peintres, sont…',o:['Analogues','Complémentaires','Ton sur ton'],a:1,w:'Orange et bleu-vert sont presque opposés : un complémentaire assagi, très « automne ».'},
+ 4:{q:'Où placer votre couleur la plus vive pour un premier essai ?',o:['Sur le manteau','Sur une petite pièce près du visage','Sur le pantalon'],a:1,w:'Petite surface et près du visage : c’est là qu’elle illumine, sans envahir la silhouette (le 10 % du 60 / 30 / 10).'},
+ 5:{q:'Une tenue toute en marron paraît plate. Que changer d’abord ?',o:['Ajouter une quatrième couleur vive','Varier les matières : daim, maille, flanelle','Passer au noir'],a:1,w:'Le ton sur ton vit par les textures : la lumière accroche chaque matière différemment.'}};
+function renderQuiz(n){const el=$(`[data-quiz="${n}"]`),q=QUIZ[n];if(!el||!q)return;
+  el.innerHTML=`<div class="kicker">Défi</div><h3>${q.q}</h3><div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div><div class="fb"></div>`;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;el.querySelectorAll('.opt').forEach(x=>x.classList.remove('good','bad'));b.classList.add(i===q.a?'good':'bad');
+    el.querySelector('.fb').textContent=(i===q.a?'Bravo. ':'Pas tout à fait. ')+q.w})}
+Object.keys(QUIZ).forEach(renderQuiz);
+
+/* =====================================================================
+   0. Accueil
+   ===================================================================== */
+const RENDER={};
+RENDER[0]=function(){
+  const g=(a)=>`linear-gradient(90deg,${a.join(',')})`;
+  $('#axes3').innerHTML=[
+    ['Axe 1','Température','Chaud ↔ froid : le sous-ton doré ou rosé. Chaud = rouille, moutarde, olive. Froid = framboise, bleu roi, émeraude.',g(['#c4651e','#d6a04a','#9a9084','#5b7db1','#27408b']),['Chaud','Froid']],
+    ['Axe 2','Valeur','Clair ↔ profond : la quantité de lumière. Profond = chocolat, bordeaux, sapin, marine. Clair = pêche, bleu poudre.',g(['#f8e6d0','#cba874','#8b5e34','#4a2e1e','#1f1611']),['Clair','Profond']],
+    ['Axe 3','Chroma','Doux ↔ vif : l’intensité. Doux = grisé, fumé, poudré. Vif = pur, saturé, presque fluo. C’est le mot qu’on oublie !',g(['#9c8e8a','#a8857a','#b87055','#d6582c','#ff5a1f']),['Doux','Vif']]
+  ].map(([k,t,d,b,e])=>`<div class="card"><div class="kicker">${k}</div><h3>${t}</h3><div class="g" style="background:${b}"></div><div class="tl"><span>${e[0]}</span><span>${e[1]}</span></div><p class="small" style="margin:10px 0 0">${d}</p></div>`).join('');
+  $('#fams').innerHTML=Object.entries(FAMS).map(([f,F])=>`<div class="fam"><h4><i style="background:${F.c}"></i>${F.nom}</h4>${SEASONS.filter(s=>s.famille===f).map(s=>`
+    <button class="sea ${st.sel.includes(s.id)?'on':''}" data-sea="${s.id}" aria-pressed="${st.sel.includes(s.id)}"><div class="t">${s.nom}<span class="box">${st.sel.includes(s.id)?'✓':''}</span></div><div class="a">${s.accroche}</div><div class="strip">${s.palette.slice(0,10).map(h=>`<i style="background:${h}"></i>`).join('')}</div></button>`).join('')}</div>`).join('');
+  $$('.sea').forEach(b=>b.onclick=()=>{const id=b.dataset.sea;const i=st.sel.indexOf(id);if(i>=0)st.sel.splice(i,1);else if(st.sel.length<4)st.sel.push(id);save();RENDER[0]();renderRail()});
+  $('#selLbl').innerHTML=st.sel.length?`<b>${SEL().map(s=>s.nom).join(' · ')}</b><br><span style="color:var(--on-indigo-muted)">${PAL().cols.length} couleurs dans votre palette combinée</span>`:'Aucune saison choisie.';
+  $$('#sexe button').forEach(b=>{b.classList.toggle('on',b.dataset.v===st.sexe);b.onclick=()=>{st.sexe=b.dataset.v;save();cab=null;RENDER[0]()}});
+  $('#start').disabled=!st.sel.length;$('#start').onclick=()=>go(1);
+  const desc=['','Rôles, axes, à éviter','Capsule et neutres','La roue des couleurs','60 / 30 / 10 et contraste','Textures et motifs','Principes et mythes','Composer et se faire juger','Assorti ou raté ?','Tenues par occasion'];
+  $('#parcours').innerHTML=desc.slice(1).map((d,i)=>`<button class="btn" style="justify-content:flex-start" data-go="${i+1}"><span class="tag num">${i+1}</span>${STEPS[i+1]} · <span class="small">${d}</span></button>`).join('')};
+
+/* =====================================================================
+   1. Ma palette
+   ===================================================================== */
+function swHTML(c,on){return `<button class="sw ${on?'on':''}" data-hex="${c.hex}"><span class="c" style="background:${c.hex}">${c.pont?`<b style="color:${onCol(c.hex)}">★</b>`:''}</span><span class="n">${cap(c.nom)}</span></button>`}
+RENDER[1]=function(){const P=PAL(),ss=P.ss;
+  const bar=(k,lo,hi,grad,ends)=>`<div class="axe"><div class="small"><b>${k}</b></div><div class="bar" style="background:${grad}">${ss.map(s=>{const v=s.profil[k==='Température'?'T':k==='Valeur'?'D':'C'];const x=k==='Valeur'?v:(k==='Température'?(1-v)/2:(v+1)/2);return `<div class="mk" style="left:${x*100}%;--o:${ss.indexOf(s)*13}px"><span>${s.nom}</span></div>`}).join('')}</div><div class="ends"><span>${ends[0]}</span><span>${ends[1]}</span></div></div>`;
+  $('#myAxes').innerHTML=bar('Température',0,1,'linear-gradient(90deg,#c4651e,#d6a04a,#b8b0a4,#5b7db1,#27408b)',['Chaud','Froid'])+bar('Valeur',0,1,'linear-gradient(90deg,#f8e6d0,#cba874,#8b5e34,#3a2418)',['Clair','Profond'])+bar('Chroma',0,1,'linear-gradient(90deg,#9c8e8a,#b87055,#ff5a1f)',['Doux','Vif']);
+  const p=P.prof,t=[];
+  const allD=p.D>.7,allL=p.D<.3;
+  t.push(allD?'<b>Valeur : profonde</b>. C’est votre point commun : les couleurs sombres et riches vous vont, les pastels vous effacent.':allL?'<b>Valeur : claire</b>. Les couleurs lumineuses vous vont ; le très foncé vous écrase.':'<b>Valeur : moyenne</b>, ni très claire ni très sombre.');
+  t.push(P.warm&&P.cold?'<b>Température : du chaud au froid</b>. Vous êtes flexible ; la règle est de rester cohérent <i>dans une même tenue</i> (tout chaud ou tout froid, avec des couleurs « pont » pour passer de l’un à l’autre).':P.warm?'<b>Température : chaude</b>. Or, rouille, olive, crème plutôt qu’argent, rose froid, blanc optique.':P.cold?'<b>Température : froide</b>. Argent, bleus, rouges bleutés, blanc optique plutôt que doré et orangé.':'<b>Température : neutre</b>. Ni très chaud ni très froid.');
+  t.push(ss.every(s=>s.profil.C<-.4)?'<b>Chroma : doux</b>. Couleurs grisées, fumées ; le vif crie.':ss.every(s=>s.profil.C>.5)?'<b>Chroma : vif</b>. Couleurs pures et franches ; le grisé vous éteint.':'<b>Chroma : intermédiaire</b>. Ni poudré, ni fluo : des couleurs riches, plutôt saturées mais jamais criardes.');
+  $('#axesTxt').innerHTML=t.map(x=>`<p>${x}</p>`).join('');
+  const grp=r=>P.cols.filter(c=>c.role===r).sort((a,b)=>r==='neutre'?Lof(a.hex)-Lof(b.hex):ryb(a.hex)-ryb(b.hex));
+  $('#roles').innerHTML=`<h3>Votre palette combinée</h3><p class="small">${P.cols.length} couleurs issues de ${ss.map(s=>s.nom).join(', ')}.${ss.length>1?' <b>★ = couleur « pont »</b>, présente dans toutes vos saisons : la valeur la plus sûre.':''}</p>`+
+    [['neutre','Neutres','≈ 60 % de la tenue : pantalons, manteaux, vestes, chaussures'],['principale','Couleurs principales','≈ 30 % : pulls, chemises, robes'],['accent','Accents','≈ 10 % : cravate, écharpe, foulard, pochette, chaussettes']].map(([r,n,d])=>{const g=grp(r);return g.length?`<div class="role" style="margin-top:18px"><h4>${n} <span>${d}</span></h4><div>${g.map(c=>swHTML(c)).join('')}</div></div>`:''}).join('');
+  $$('#roles .sw').forEach(b=>b.onclick=()=>{$$('#roles .sw').forEach(x=>x.classList.remove('on'));b.classList.add('on');detail(b.dataset.hex)});
+  $('#avoid').innerHTML=`<h3>À éviter</h3><p class="small">Couleurs qu’aucune de vos saisons ne porte bien, surtout près du visage.</p><div>${P.ev.map(h=>`<span class="sw"><span class="c" style="background:${h}"></span><span class="n">${cap(nameOf(h))}</span></span>`).join('')}</div>`+ss.map(s=>`<p class="small"><b>${s.nom}</b> : ${s.raisonEviter}</p>`).join('');
+  $('#noirMetal').innerHTML=`<h3>Le noir, le blanc, les métaux</h3>`+ss.map(s=>`<p class="small"><b>${s.nom}</b> · ${s.noir} Métaux : ${s.metaux.aller.join(', ').toLowerCase()} (éviter : ${s.metaux.eviter.join(', ').toLowerCase()}).</p>`).join('')+
+    (P.warm&&P.cold?'<div class="alert info">Vos saisons ne sont pas d’accord sur le métal : choisissez-le avec la tenue. Tenue chaude (cognac, rouille, olive) → or ou bronze ; tenue froide (noir, émeraude, bleu roi) → argent.</div>':'');
+  const pts=P.cols.filter(c=>c.pont);
+  $('#ret1').innerHTML=[`Vos neutres (${grp('neutre').slice(0,4).map(c=>c.nom).join(', ')}…) font 60 % du travail : ce sont eux qu’on achète en premier.`,
+    pts.length?`Vos couleurs « pont » (${pts.slice(0,5).map(c=>c.nom).join(', ')}) marchent quelle que soit la saison du jour.`:'Restez dans une même famille de couleurs pour une tenue : l’œil y lit une intention.',
+    'Ce qui touche le visage (col, écharpe, cravate, haut) doit venir de la palette ; le bas et les chaussures tolèrent plus de liberté.',
+    'Vos trois axes : température (chaud/froid), valeur (clair/profond), chroma (doux/vif).'].map(x=>`<li>${x}</li>`).join('')};
+function detail(h){const P=PAL(),c=P.cols.find(x=>x.hex===h);
+  const where={neutre:'Pantalon, manteau, veste, pull de base : se combine avec toutes vos autres couleurs.',principale:'Pull, chemise, robe, surchemise : la couleur qui donne le ton à la tenue.',accent:'En petite touche près du visage : cravate, écharpe, foulard, pochette, bonnet. Sur de grandes surfaces, elle domine.'}[c.role];
+  const friends=P.cols.filter(x=>x.hex!==h&&x.role!=='neutre'&&!isNeutral(h)&&(gap(x.hex,h)>=145||gap(x.hex,h)<=50)).slice(0,6);
+  $('#swDetail').innerHTML=`<div style="display:flex;gap:16px;align-items:center;margin-bottom:12px"><div style="width:64px;height:64px;border-radius:6px;background:${h}"></div><div><h3 style="margin:0">${cap(c.nom)}</h3><span class="tag">${{neutre:'Neutre',principale:'Couleur principale',accent:'Accent'}[c.role]}</span> ${c.pont?'<span class="badge ok"><span class="dot"></span>Couleur pont</span>':''}</div></div>
+   <p class="small"><b>Saisons :</b> ${c.seasons.map(id=>byId(id).nom).join(', ')}.${c.warn.length?` <b>À éviter en ${c.warn.map(id=>byId(id).nom).join(', ')}</b> : à réserver aux tenues de vos autres saisons.`:''}</p>
+   <p class="small"><b>Où la porter :</b> ${where}</p>
+   ${isNeutral(h)?'<p class="small"><b>Avec :</b> tout le reste de votre palette.</p>':friends.length?`<p class="small"><b>Avec :</b></p><div class="dots">${friends.map(f=>`<span class="dot-btn" title="${f.nom}" style="background:${f.hex}"></span>`).join('')}</div>`:''}`}
+
+/* =====================================================================
+   2. Basiques / capsule
+   ===================================================================== */
+function capChoices(){const P=PAL(),N=P.cols.filter(c=>c.role==='neutre').map(c=>c.hex),M=P.cols.filter(c=>c.role!=='neutre').map(c=>c.hex);
+  const dark=N.filter(h=>Lof(h)<36),mid=N.filter(h=>Lof(h)>=36&&Lof(h)<74),light=N.filter(h=>Lof(h)>=74);
+  return {N1:dark.length?dark:N.slice(0,2),N2:mid.length?mid:N,N3:light.length?light:['#f4f1ea'],C1:M,C2:M,LE:LEATHER.filter(l=>!l.sn&&!leatherFit(l.hex)).map(l=>l.hex)}}
+const CAPS={
+ homme:[['outer','manteau','laine','N2','Manteau en laine','Se voit tout l’hiver : un neutre moyen va avec tout.'],['outer','blazer','flanelle','N1','Blazer en flanelle','Votre « marine » : sur jean comme sur pantalon de laine.'],
+  ['top','chemise','oxford','N3','Chemise oxford','La chemise de base, avec ou sans veste.'],['top','chemise','popeline','C2','Chemise en popeline','Couleur près du visage, sous le blazer.'],['top','pull','maille','C1','Pull col rond mérinos','Votre couleur fétiche, sur chemise ou seul.'],['top','pull','cachemire','N2','Pull col roulé','Remplace la chemise et la cravate le soir.'],['top','tshirt','coton','N3','T-shirt','Sous une surchemise ou un blazer.'],['top','tshirt','coton','N1','T-shirt foncé','Le basique du week-end.'],
+  ['bottom','jean','denim','DENIM','Jean brut','Indigo foncé, sans délavage : un neutre.'],['bottom','chino','coton','N2','Chino','Plus habillé que le jean, moins que la laine.'],['bottom','pantalon','flanelle','N1','Pantalon de flanelle','Avec le blazer, sans faire costume.'],
+  ['shoes','derbies','cuir','LE','Derbies en cuir','La paire habillée.'],['shoes','boots','daim','LE','Boots en daim','Avec jean et chino.'],['shoes','sneakers','cuir','SN','Baskets en cuir','Minimalistes, sans logo.'],['belt','ceinture','cuir','LE','Ceinture','Même cuir que les chaussures.'],['acc','echarpe','laine','C2','Écharpe','L’accent près du visage.']],
+ femme:[['outer','manteau','laine','N2','Manteau en laine','Se voit tout l’hiver : un neutre moyen va avec tout.'],['outer','blazer','flanelle','N1','Blazer','Sur jean comme sur pantalon.'],
+  ['top','chemisier','soie','N3','Chemisier','Le haut de base, avec ou sans veste.'],['top','chemisier','popeline','C2','Chemise de couleur','Couleur près du visage.'],['top','pull','maille','C1','Pull fin','Votre couleur fétiche.'],['top','pull','cachemire','N2','Col roulé','Sous le blazer ou le manteau.'],['top','top','coton','N3','Top','Sous une veste.'],['top','top','coton','N1','Top foncé','Basique du soir.'],
+  ['bottom','jean','denim','DENIM','Jean brut','Indigo foncé : un neutre.'],['bottom','pantalon','laine','N1','Pantalon droit','Le pantalon de travail.'],['bottom','jupe','laine','N2','Jupe midi','Avec bottines ou escarpins.'],
+  ['shoes','bottines','cuir','LE','Bottines en cuir','La paire de tous les jours.'],['shoes','escarpins','daim','LE','Escarpins en daim','La paire habillée.'],['shoes','sneakers','cuir','SN','Baskets en cuir','Minimalistes.'],['belt','ceinture','cuir','LE','Ceinture','Même cuir que les chaussures.'],['acc','foulard','soie','C2','Foulard','L’accent près du visage.']]};
+function capItems(){const ch=capChoices(),sel={};
+  for(const k of ['N1','N2','N3','C1','C2','LE']){const v=st.cap[k+st.sel.join()];sel[k]=ch[k].includes(v)?v:ch[k][k==='C2'?Math.min(1,ch[k].length-1):0]}
+  const P=PAL();sel.SN=P.cold&&!P.warm?'#ffffff':'#f4f1ea';sel.DENIM=DENIM;
+  return {ch,sel,items:CAPS[st.sexe].map(([k,p,m,role,nom,why])=>({k,p,m,hex:sel[role],nom,why,role}))}}
+RENDER[2]=function(){const {ch,sel,items}=capItems();
+  const lab={N1:'Neutre foncé (votre « noir »)',N2:'Neutre moyen',N3:'Neutre clair (votre « blanc »)',C1:'Couleur fétiche 1',C2:'Couleur fétiche 2',LE:'Cuir (chaussures, ceinture)'};
+  $('#capPick').innerHTML=Object.keys(lab).map(k=>`<div class="slot"><div class="lb">${lab[k]}</div><div class="dots">${ch[k].map(h=>`<button class="dot-btn ${sel[k]===h?'on':''}" data-k="${k}" data-h="${h}" title="${colName(h)}" style="background:${h}"></button>`).join('')}</div><div class="meta" style="margin-top:6px">${cap(colName(sel[k]))}</div></div>`).join('');
+  $$('#capPick .dot-btn').forEach(b=>b.onclick=()=>{st.cap[b.dataset.k+st.sel.join()]=b.dataset.h;save();RENDER[2]()});
+  $('#capsule').innerHTML=items.map(i=>{const o={[i.k]:{p:i.p,hex:i.hex,m:i.m}};const b=BOX[i.p]||BOX[i.k];
+    const vb=i.k==='shoes'?'0 0 110 36':i.k==='belt'?'-4 -4 140 22':i.p==='manteau'?'-4 -4 120 168':i.k==='outer'?'-4 -4 120 132':i.k==='bottom'?(i.p==='jupe'?'-6 -4 96 90':'-30 -4 124 142'):i.k==='acc'?'-30 -6 100 124':'-4 -4 112 110';
+    return `<div class="cap"><svg viewBox="${vb}">${i.k==='shoes'?DRAW.shoe(i.hex,MATS[i.m].tx,i.p)+`<g transform="translate(54,8)">${DRAW.shoe(mix(i.hex,-.06),MATS[i.m].tx,i.p)}</g>`:i.k==='belt'?DRAW.ceinture(i.hex,MATS[i.m].tx,metalOf()):DRAW[i.p](i.hex,MATS[i.m].tx)}</svg><h4>${i.nom}</h4><p><b>${cap(colName(i.hex))}</b> · ${MATS[i.m].n}<br>${i.why}</p></div>`}).join('');
+  // Comptage des tenues valables
+  const by=k=>items.filter(i=>i.k===k),belt=by('belt')[0];
+  let n=0,tot=0;
+  for(const ou of [{p:'none'},...by('outer')])for(const tp of by('top'))for(const bo of by('bottom'))for(const sh of by('shoes'))for(const acc of [{p:'none'},...by('acc')]){
+    tot++;const o={outer:ou,top:tp,bottom:bo,shoes:sh,belt:belt||{p:'none'},acc};const j=judge(o);if(!j.nf&&j.score>=70)n++}
+  $('#capN').textContent=n+' tenues';
+  $('#capTxt').innerHTML=`réussies selon le juge, sur ${tot} combinaisons possibles, avec seulement <b>${items.length} pièces</b> (veste ou non, haut, bas, chaussures, avec ou sans l’accessoire).${n/tot>.9?' Presque tout va avec tout : c’est exactement ce qu’on attend d’une capsule.':''}`;
+  $('#capWhy').innerHTML=`<p>Le secret : vos neutres (${['N1','N2','N3'].map(k=>colName(sel[k])).join(', ')}) s’accordent entre eux, et vos deux couleurs (${colName(sel.C1)}, ${colName(sel.C2)}) vont avec chacun d’eux. Changez une couleur pour une autre qui s’accorde mal : le compteur baisse.</p>`};
+
+/* =====================================================================
+   3. Harmonies
+   ===================================================================== */
+let hBase=null,hType='complementaire';
+const HT={tonsurton:['Ton sur ton',(a,b)=>gap(a,b)<=20&&Math.abs(Lof(a)-Lof(b))>=10,'Même teinte, clartés différentes. Le plus élégant : il allonge la silhouette.'],
+  analogue:['Analogue',(a,b)=>gap(a,b)>20&&gap(a,b)<=65,'Couleurs voisines sur la roue : douces et naturelles ensemble.'],
+  complementaire:['Complémentaire',(a,b)=>gap(a,b)>=145,'Couleurs opposées : elles se font vibrer. Gardez-en une foncée ou en petite touche.'],
+  triade:['Triade',(a,b)=>gap(a,b)>=95&&gap(a,b)<=145,'À environ 120° : riche, à manier avec une dominante et des neutres.'],
+  neutre:['Neutres + 1',(a,b)=>isNeutral(b),'La valeur sûre : la couleur ressort, les neutres la mettent en valeur.']};
+RENDER[3]=function(){const P=PAL(),viv=P.cols.filter(c=>c.role!=='neutre');
+  if(!hBase||!P.all.includes(hBase))hBase=(viv.find(c=>c.pont)||viv[0]||P.cols[0]).hex;
+  $('#hBase').innerHTML=viv.map(c=>`<button class="dot-btn ${c.hex===hBase?'on':''}" data-h="${c.hex}" title="${c.nom}" style="background:${c.hex}"></button>`).join('');
+  $$('#hBase .dot-btn').forEach(b=>b.onclick=()=>{hBase=b.dataset.h;RENDER[3]()});
+  $('#hType').innerHTML=Object.entries(HT).map(([k,v])=>`<button class="${k===hType?'on':''}" data-t="${k}">${v[0]}</button>`).join('');
+  $$('#hType button').forEach(b=>b.onclick=()=>{hType=b.dataset.t;RENDER[3]()});
+  $('#hBaseName').textContent=cap(nameOf(hBase));
+  const m=P.cols.filter(c=>c.hex!==hBase&&HT[hType][1](hBase,c.hex)&&(hType==='neutre'||c.role!=='neutre'||hType==='tonsurton'));
+  $('#hDesc').innerHTML=HT[hType][2]+(m.length?` Dans votre palette, avec ${nameOf(hBase)} :`:` <b>Aucune couleur de votre palette</b> ne forme cet accord avec ${nameOf(hBase)} : essayez une autre base.`);
+  $('#hMatch').innerHTML=m.map(c=>`<span class="dot-btn" title="${c.nom}" style="background:${c.hex}"></span>`).join('');
+  // Roue
+  const cx=160,cy=160;let w='';
+  for(let a=0;a<360;a+=5){const r1=148,r2=136,t1=(a-90)*Math.PI/180,t2=(a+5-90)*Math.PI/180;
+    w+=`<path d="M${cx+r2*Math.cos(t1)} ${cy+r2*Math.sin(t1)} L${cx+r1*Math.cos(t1)} ${cy+r1*Math.sin(t1)} A${r1} ${r1} 0 0 1 ${cx+r1*Math.cos(t2)} ${cy+r1*Math.sin(t2)} L${cx+r2*Math.cos(t2)} ${cy+r2*Math.sin(t2)} A${r2} ${r2} 0 0 0 ${cx+r2*Math.cos(t1)} ${cy+r2*Math.sin(t1)} Z" fill="${rybColor(a)}"/>`}
+  [['Rouge',0],['Orange',60],['Jaune',120],['Vert',180],['Bleu',240],['Violet',300]].forEach(([n,a])=>{const t=(a-90)*Math.PI/180;w+=`<text x="${cx+159*Math.cos(t)}" y="${cy+159*Math.sin(t)+3}" font-size="8.5" text-anchor="middle" fill="#9a9084" font-family="Sora">${n}</text>`});
+  w+=`<circle cx="${cx}" cy="${cy}" r="130" fill="none" stroke="#e2dccf"/><circle cx="${cx}" cy="${cy}" r="40" fill="none" stroke="#e2dccf" stroke-dasharray="3 3"/>`;
+  const pos=h=>{const t=(ryb(h)-90)*Math.PI/180,r=isNeutral(h)?Math.min(34,Cof(h)):Math.min(122,40+Cof(h)*1.15);return [cx+r*Math.cos(t),cy+r*Math.sin(t)]};
+  const [bx,by]=pos(hBase);
+  m.forEach(c=>{const [x,y]=pos(c.hex);w+=`<line x1="${bx}" y1="${by}" x2="${x}" y2="${y}" stroke="#2c2a54" stroke-width="1.2" opacity=".5"/>`});
+  P.cols.forEach(c=>{const [x,y]=pos(c.hex),on=c.hex===hBase,mt=m.includes(c);w+=`<circle cx="${x}" cy="${y}" r="${on?11:mt?8:6}" fill="${c.hex}" stroke="${on||mt?'#2c2a54':'#fff'}" stroke-width="${on?3:mt?2:1.2}" data-h="${c.hex}" style="cursor:pointer"><title>${c.nom}</title></circle>`});
+  $('#wheel').innerHTML=w;
+  $$('#wheel circle[data-h]').forEach(c=>c.onclick=()=>{if(!isNeutral(c.dataset.h)){hBase=c.dataset.h;RENDER[3]()}});
+  // Tenue d'exemple
+  const pl=pools(null,null),r=rngOf(hBase.charCodeAt(2)*7+hType.length),sx=st.sexe;
+  const second=m.length?pickR(r,m).hex:null;
+  const leather=pickR(r,pl.leather);
+  const nd=pickR(r,pl.dark.length?pl.dark:pl.mid),nm=pickR(r,pl.mid.length?pl.mid:pl.dark),nl=pickR(r,pl.light.length?pl.light:pl.mid);
+  const T=sx==='homme'?{o:'blazer',t:'pull',b:'chino',s:'derbies',a:'echarpe'}:{o:'blazer',t:'pull',b:'pantalon',s:'bottines',a:'foulard'};
+  let o;
+  if(hType==='neutre'||!second)o={outer:{p:T.o,hex:nd,m:'flanelle'},top:{p:T.t,hex:hBase,m:'maille'},bottom:{p:T.b,hex:nm,m:'coton'},shoes:{p:T.s,hex:leather,m:'cuir'},belt:{p:'ceinture',hex:leather,m:'cuir'},acc:{p:'none'}};
+  else if(hType==='tonsurton'){const [a,b]=[hBase,second].sort((x,y)=>Lof(x)-Lof(y));o={outer:{p:T.o,hex:a,m:'velours'},top:{p:T.t,hex:b,m:'maille'},bottom:{p:T.b,hex:nd,m:'flanelle'},shoes:{p:T.s,hex:leather,m:'daim'},belt:{p:'ceinture',hex:leather,m:'daim'},acc:{p:'none'}}}
+  else o={outer:{p:T.o,hex:nd,m:'tweed'},top:{p:T.t,hex:hBase,m:'maille'},bottom:{p:T.b,hex:nm,m:'coton'},shoes:{p:T.s,hex:leather,m:'cuir'},belt:{p:'ceinture',hex:leather,m:'cuir'},acc:{p:T.a,hex:second,m:sx==='homme'?'laine':'soie'}};
+  const j=judge(o);
+  $('#hLook').innerHTML=`<div><svg class="flat" viewBox="0 0 440 300">${flatSVG(o)}</svg></div><div><div class="kicker">Exemple · ${HT[hType][0]}</div><ul class="pieces">${piecesList(o)}</ul><div class="score" style="margin-top:14px"><span class="badge ${j.verdict[1]}"><span class="dot"></span>${j.verdict[0]}</span></div><ul class="verdict">${verdictHTML(j)}</ul><button class="btn btn--secondary btn--sm" id="hToCab" style="margin-top:10px"><i class="ph-light ph-coat-hanger"></i>Modifier dans la cabine</button></div>`;
+  $('#hToCab').onclick=()=>{cab=JSON.parse(JSON.stringify(o));go(7)}};
+
+/* =====================================================================
+   4. Proportions & contraste
+   ===================================================================== */
+let prop={pos:'acc'};
+RENDER[4]=function(){const P=PAL(),pl=pools(null,null),viv=P.cols.filter(c=>c.role!=='neutre').map(c=>c.hex);
+  if(!prop.n||!P.all.includes(prop.n))prop.n=(pl.dark[0]||pl.mid[0]);
+  if(!prop.s||!P.all.includes(prop.s))prop.s=(pl.light[0]||pl.mid[0]);
+  if(!prop.a||!P.all.includes(prop.a))prop.a=(pl.accent[0]||viv[0]);
+  const sx=st.sexe,acc=sx==='homme'?'cravate':'foulard',top=sx==='homme'?'pull':'pull',bot='pantalon',sh=pl.leather[0];
+  const map={acc:{outer:prop.n,top:prop.s,bottom:prop.n,acc:prop.a},top:{outer:prop.n,top:prop.a,bottom:prop.n,acc:prop.s},bottom:{outer:prop.n,top:prop.s,bottom:prop.a,acc:'none'},outer:{outer:prop.a,top:prop.s,bottom:prop.n,acc:'none'}}[prop.pos];
+  const o={outer:{p:'blazer',hex:map.outer,m:'laine'},top:{p:top,hex:map.top,m:'maille'},bottom:{p:bot,hex:map.bottom,m:'flanelle'},shoes:{p:sx==='homme'?'derbies':'bottines',hex:sh,m:'cuir'},belt:{p:'ceinture',hex:sh,m:'cuir'},acc:map.acc==='none'?{p:'none'}:{p:acc,hex:map.acc,m:'soie'}};
+  const W={outer:36,top:22,bottom:30,acc:4,shoes:4,belt:4};const tot={};
+  itemsOf(o).forEach(i=>{tot[i.hex]=(tot[i.hex]||0)+W[i.k]});const sum=Object.values(tot).reduce((a,b)=>a+b,0);
+  const rows=Object.entries(tot).sort((a,b)=>b[1]-a[1]);
+  const aPct=Math.round((tot[prop.a]||0)/sum*100);
+  const verdict=aPct<=10?['ok','L’accent est dosé : il ponctue sans envahir.']:aPct<=25?['warn','L’accent prend la place de la couleur secondaire : la tenue devient « colorée », c’est un choix.']:['err','L’accent couvre une grande surface : il devient la couleur dominante, et la tenue « crie » si la couleur est vive.'];
+  const pick=(k,arr,label)=>`<div class="slot"><div class="lb">${label}</div><div class="dots">${arr.map(h=>`<button class="dot-btn ${prop[k]===h?'on':''}" data-k="${k}" data-h="${h}" title="${nameOf(h)}" style="background:${h}"></button>`).join('')}</div></div>`;
+  $('#propLook').innerHTML=`<div><svg class="flat" viewBox="0 0 440 300">${flatSVG(o)}</svg>
+    <div style="display:flex;height:22px;border-radius:4px;overflow:hidden;margin-top:12px">${rows.map(([h,v])=>`<div style="flex:${v};background:${h}"></div>`).join('')}</div>
+    <div class="tl" style="margin-top:6px">${rows.map(([h,v])=>`<span>${nameOf(h)} ${Math.round(v/sum*100)} %</span>`).join('')}</div></div>
+    <div><h3>La règle 60 / 30 / 10</h3><p class="small">Choisissez un neutre dominant, une couleur secondaire et un accent, puis déplacez l’accent.</p>
+    ${pick('n',[...pl.dark,...pl.mid],'Dominante (neutre)')}${pick('s',[...pl.light,...viv.filter(h=>Cof(h)<=45)],'Secondaire')}${pick('a',pl.accent.length?pl.accent:viv,'Accent')}
+    <div class="slot"><div class="lb">Où mettre l’accent ?</div><div class="seg" id="propPos">${[['acc',sx==='homme'?'Cravate':'Foulard'],['top','Pull'],['bottom','Pantalon'],['outer','Veste']].map(([k,n])=>`<button class="${prop.pos===k?'on':''}" data-p="${k}">${n}</button>`).join('')}</div></div>
+    <p style="margin-top:12px"><span class="badge ${verdict[0]}"><span class="dot"></span>Accent ≈ ${aPct} %</span></p><p class="small">${verdict[1]}</p></div>`;
+  $$('#propLook .dot-btn').forEach(b=>b.onclick=()=>{prop[b.dataset.k]=b.dataset.h;RENDER[4]()});
+  $$('#propPos button').forEach(b=>b.onclick=()=>{prop.pos=b.dataset.p;RENDER[4]()});
+  // Contraste
+  const K=P.prof.K,tg=18+K*50,lo=Math.max(0,tg-26),hi=Math.min(80,tg+30);
+  $('#contrIntro').innerHTML=`Votre contraste naturel (entre peau, cheveux et yeux) est <b>${K>.6?'fort':K>.4?'moyen':'faible'}</b> d’après vos saisons. Une tenue dont le haut et le bas ont un écart de clarté du même ordre paraît naturelle ; un écart bien plus fort « vous porte », un écart bien plus faible peut sembler terne (sauf ton sur ton voulu).`;
+  $('#contrBar').style.background=`linear-gradient(90deg,var(--border) 0%,var(--border) ${lo/80*100}%,#c9dcc4 ${lo/80*100}%,#c9dcc4 ${hi/80*100}%,var(--border) ${hi/80*100}%)`;
+  const all=P.all.filter(h=>!isNeutral(h)||true);
+  const upd=()=>{const v=+$('#contr').value;let best=null,bd=1e9;
+    for(const a of all)for(const b of all){if(a===b)continue;if(Lof(b)>Lof(a))continue;const d=Math.abs(Lof(a)-Lof(b)-v)+(isNeutral(b)?0:6);if(d<bd){bd=d;best=[a,b]}}
+    const [t,bt]=best;const real=Math.round(Lof(t)-Lof(bt));
+    $('#contrFig').innerHTML=`<rect x="0" y="0" width="200" height="220" rx="6" fill="#f1eee4"/><circle cx="100" cy="28" r="16" fill="#c99a76"/><path d="M58 52 Q100 40 142 52 L150 120 L50 120 Z" fill="${t}"/><path d="M54 120 H146 L140 210 H104 L100 140 L96 210 H60 Z" fill="${bt}"/>`;
+    const z=real<lo?'Écart faible : silhouette continue, élégante si les deux pièces sont de la même famille de couleur.':real>hi?'Écart fort : graphique, très net ; il demande un visage contrasté pour ne pas l’écraser.':'Dans votre zone : le contraste de la tenue ressemble au vôtre.';
+    $('#contrTxt').innerHTML=`<b>${cap(nameOf(t))}</b> en haut, <b>${nameOf(bt)}</b> en bas : écart de clarté ≈ ${real}. ${z}`};
+  $('#contr').oninput=upd;upd()};
+
+/* =====================================================================
+   5. Matières & motifs
+   ===================================================================== */
+let matBase=null,motif={veste:'uni',chemise:'rayfine',cravate:'pois'};
+const MOTIFS={uni:['Uni',0,'uni'],rayfine:['Rayure fine',1,'ray'],raylarge:['Rayure large',3,'ray'],vichy:['Vichy (petits carreaux)',1,'car'],tartan:['Carreaux larges, tartan',3,'car'],pdp:['Pied-de-poule',2,'pdp'],chevrons:['Chevrons',2,'chev'],pois:['Petits pois',1,'pois'],cachemire:['Cachemire (paisley)',2,'pais']};
+function motifSVG(id,c1,c2,uid){const s=MOTIFS[id][1];let p='';
+  const sz={1:8,2:14,3:26}[s]||10;
+  if(id==='uni')return `<svg viewBox="0 0 120 120"><rect width="120" height="120" fill="${c1}"/></svg>`;
+  if(id==='rayfine'||id==='raylarge')p=`<rect width="${sz}" height="${sz}" fill="${c1}"/><rect width="${Math.max(1.5,sz/5)}" height="${sz}" fill="${c2}"/>`;
+  if(id==='vichy'||id==='tartan')p=`<rect width="${sz}" height="${sz}" fill="${c1}"/><rect width="${sz/2}" height="${sz}" fill="${c2}" opacity=".45"/><rect width="${sz}" height="${sz/2}" fill="${c2}" opacity=".45"/>${id==='tartan'?`<rect x="${sz*.75}" width="1.5" height="${sz}" fill="${mix(c2,.5)}"/>`:''}`;
+  if(id==='pdp')p=`<rect width="${sz}" height="${sz}" fill="${c1}"/><path d="M0 0 H${sz/2} L${sz} ${sz/2} V${sz} L${sz/2} ${sz/2} H0 Z" fill="${c2}"/>`;
+  if(id==='chevrons')p=`<rect width="${sz}" height="${sz}" fill="${c1}"/><path d="M0 ${sz/2} L${sz/2} 0 L${sz} ${sz/2}" stroke="${c2}" stroke-width="${sz/5}" fill="none"/>`;
+  if(id==='pois')p=`<rect width="${sz}" height="${sz}" fill="${c1}"/><circle cx="${sz/2}" cy="${sz/2}" r="${sz/6}" fill="${c2}"/>`;
+  if(id==='cachemire')p=`<rect width="${sz}" height="${sz}" fill="${c1}"/><path d="M${sz*.3} ${sz*.8} Q${sz*.1} ${sz*.3} ${sz*.5} ${sz*.2} Q${sz*.8} ${sz*.3} ${sz*.6} ${sz*.5} Q${sz*.45} ${sz*.6} ${sz*.3} ${sz*.8} Z" fill="${c2}"/>`;
+  return `<svg viewBox="0 0 120 120"><defs><pattern id="${uid}" width="${sz}" height="${sz}" patternUnits="userSpaceOnUse">${p}</pattern></defs><rect width="120" height="120" fill="url(#${uid})"/></svg>`}
+RENDER[5]=function(){const P=PAL(),viv=P.cols.map(c=>c.hex);
+  if(!matBase||!P.all.includes(matBase))matBase=(P.cols.find(c=>c.pont&&c.role!=='neutre')||P.cols.find(c=>c.role!=='neutre')||P.cols[0]).hex;
+  $('#matBase').innerHTML=P.cols.map(c=>`<button class="dot-btn ${c.hex===matBase?'on':''}" data-h="${c.hex}" title="${c.nom}" style="background:${c.hex}"></button>`).join('');
+  $$('#matBase .dot-btn').forEach(b=>b.onclick=()=>{matBase=b.dataset.h;RENDER[5]()});
+  const MT=[['velours','Velours côtelé','Mat et profond : la couleur paraît plus sombre et plus chaude.'],['velourslisse','Velours lisse','Reflets changeants : riche, habillé, parfait le soir.'],['tweed','Tweed','Fils mêlés : la couleur se nuance, très décontracté chic.'],['soie','Soie, satin','Brillant : plus froid, plus habillé. Une seule pièce suffit.'],['lin','Lin','Sec et lumineux : la couleur s’éclaircit. L’été.'],['daim','Daim','Velouté et mat : adoucit et réchauffe.'],['grosse','Grosse maille','Relief et ombres : la couleur paraît plus profonde.'],['denim','Sergé / denim','Diagonales : décontracté par nature.']];
+  $('#matGrid').innerHTML=MT.map(([m,n,d])=>`<figure><svg viewBox="0 0 120 110"><rect width="120" height="110" fill="${matBase}"/><rect width="120" height="110" fill="url(#tx-${MATS[m].tx})" transform="scale(1)"/></svg><figcaption><b>${n}</b>${d}</figcaption></figure>`).join('');
+  const fams=new Set(P.ss.map(s=>s.famille));
+  const rows=[['automne','Automne','Mat, texturé, naturel : tweed, flanelle, velours côtelé, daim, cuir patiné, grosse maille, laine bouillie, lin épais.','Le très brillant, le satin froid, le synthétique lisse.'],
+    ['hiver','Hiver','Lisse, net, avec du lustre : laine froide, popeline, soie, satin, velours lisse, cuir lisse ciré, cachemire fin.','Les matières rustiques trop chinées qui brouillent le contraste.'],
+    ['printemps','Printemps','Léger et frais : coton, piqué, lin, toile, cuir clair, maille fine.','Le lourd et le sombre (tweed épais, velours foncé).'],
+    ['ete','Été','Fluide et velouté : jersey, cachemire léger, lin lavé, chambray, soie mate.','Le brillant dur et le très structuré.']];
+  $('#matTable').innerHTML=`<thead><tr><th>Famille</th><th>Matières qui vous ressemblent</th><th>Moins flatteur</th></tr></thead><tbody>${rows.map(r=>`<tr class="${fams.has(r[0])?'hl':''}"><td><b>${r[1]}</b>${fams.has(r[0])?' <span class="badge ok"><span class="dot"></span>vous</span>':''}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}</tbody>`;
+  // Motifs
+  const sl={veste:'Veste',chemise:st.sexe==='homme'?'Chemise':'Chemisier',cravate:st.sexe==='homme'?'Cravate':'Foulard'};
+  $('#motifPick').innerHTML=Object.keys(sl).map(k=>`<div class="slot"><div class="lb">${sl[k]}</div><div class="seg sm">${Object.entries(MOTIFS).map(([id,m])=>`<button class="${motif[k]===id?'on':''}" data-k="${k}" data-m="${id}">${m[0]}</button>`).join('')}</div></div>`).join('');
+  $$('#motifPick button').forEach(b=>b.onclick=()=>{motif[b.dataset.k]=b.dataset.m;RENDER[5]()});
+  const pl=pools(null,null),col={veste:[pl.dark[0]||pl.mid[0],pl.mid[0]||pl.light[0]],chemise:[pl.light[0]||'#f4f1ea',pl.mdark[0]||pl.main[0]],cravate:[pl.accent[0]||pl.main[0],pl.light[0]||'#f4f1ea']};
+  $('#motifView').innerHTML=Object.keys(sl).map(k=>`<div>${motifSVG(motif[k],col[k][0],col[k][1],'mo-'+k)}<div class="meta" style="margin-top:4px">${sl[k]} · ${MOTIFS[motif[k]][0]}</div></div>`).join('');
+  const act=Object.keys(sl).filter(k=>motif[k]!=='uni').map(k=>({k,m:MOTIFS[motif[k]]}));const V=[];
+  if(!act.length)V.push(['ok','Tout uni : sûr et élégant. Un motif sur une pièce ajouterait de l’intérêt.']);
+  else if(act.length===1)V.push(['ok','Un seul motif, entouré d’unis : la manière la plus simple de porter un motif.']);
+  else{for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){const a=act[i],b=act[j];
+      if(a.m[1]===b.m[1]&&a.m[2]===b.m[2])V.push(['err',`${sl[a.k]} et ${sl[b.k].toLowerCase()} : même motif à la même échelle, ça « vibre ».`]);
+      else if(a.m[1]===b.m[1])V.push(['warn',`${sl[a.k]} et ${sl[b.k].toLowerCase()} : motifs différents mais de même taille, ils se font concurrence.`]);
+      else V.push(['ok',`${sl[a.k]} et ${sl[b.k].toLowerCase()} : tailles différentes (${a.m[0].toLowerCase()} / ${b.m[0].toLowerCase()}), ils cohabitent.`])}
+    if(act.length===3)V.push([V.some(v=>v[0]!=='ok')?'warn':'ok','Trois motifs : niveau expert. Ça tient si les trois tailles sont distinctes et qu’une couleur les relie.'])}
+  $('#motifVerdict').innerHTML=V.map(([l,t])=>`<li><span class="badge ${l}"><span class="dot"></span>${{ok:'Bien',warn:'Attention',err:'Faute'}[l]}</span><span>${t}</span></li>`).join('');
+  $('#motifSeason').innerHTML=P.ss.map(s=>`<b>${s.nom}</b> : ${s.motifs}`).join('<br>')};
+
+/* =====================================================================
+   6. Règles & mythes
+   ===================================================================== */
+const RULES=[
+ ['ph-sneaker-move','Les cuirs s’accordent','Ceinture et chaussures du même cuir, de la même teinte et du même fini (lisse avec lisse, daim avec daim). Idéalement aussi le bracelet de montre et le sac. Exception : avec des baskets, la règle se relâche.'],
+ ['ph-watch','Les métaux aussi','Boucle de ceinture, montre, boutons de manchette, bijoux, monture de lunettes : un seul métal par tenue. Or ou bronze avec les palettes chaudes, argent avec les froides ; si vous êtes « entre deux », choisissez selon les couleurs de la tenue.'],
+ ['ph-palette','Trois couleurs maximum','Hors neutres (marine, gris, marron, beige, blanc, jean brut), pas plus de trois couleurs. Deux, c’est souvent plus élégant.'],
+ ['ph-user-focus','Votre meilleure couleur près du visage','Col, chemise, pull, écharpe, cravate, foulard : c’est là que la palette compte. Une couleur moins flatteuse se porte plus facilement en bas ou aux pieds.'],
+ ['ph-stack','Le foncé ancre, le clair éclaire','Bas plus foncé que le haut : silhouette stable et classique. L’inverse (haut foncé, bas clair) est plus moderne et estival. Les deux marchent ; c’est le contraste qui doit vous ressembler.'],
+ ['ph-tie','Formalité : sombre, lisse, uni','Plus une tenue est sombre, lisse, unie et structurée, plus elle est habillée. Plus elle est claire, texturée, à motifs et souple, plus elle est décontractée. On garde toutes les pièces à peu près au même niveau.'],
+ ['ph-sock','Les chaussettes prolongent','Chaussettes de la couleur du pantalon (ou des chaussures) : la jambe paraît plus longue. En décontracté, une chaussette colorée peut faire l’accent. Jamais de chaussettes de sport blanches avec des chaussures de ville.'],
+ ['ph-shirt-folded','Cravate plus foncée que la chemise, pochette en écho','La cravate est plus foncée que la chemise. La pochette reprend une couleur de la tenue (ou de la cravate) sans être sa copie exacte, et reste en soie, lin ou coton, pas dans le même tissu que la cravate.'],
+ ['ph-sun-horizon','Les matières suivent la météo','Lin, coton, toile, seersucker quand il fait chaud ; flanelle, tweed, velours, cachemire quand il fait froid. Une laine froide légère traverse toute l’année.'],
+ ['ph-star','Une seule pièce « vedette »','Une couleur vive, un motif fort, une matière brillante ou une coupe originale : une par tenue. Le reste l’accompagne.'],
+ ['ph-ruler','La coupe avant la couleur','Une épaule au bon endroit, une longueur de manche juste, un pantalon qui tombe bien : sans ça, aucune couleur ne sauvera la tenue. Un retoucheur vaut mieux qu’un vêtement de plus.'],
+ ['ph-drop-half','Le blanc optique et l’écru ne sont pas interchangeables','Blanc optique : palettes froides et contrastées (les Hivers). Écru, crème, blanc cassé : palettes chaudes et douces (Automnes, Printemps). Même règle pour le noir : noir pur pour les Hivers, chocolat, marine ou noir brun pour les autres.'],
+ ['ph-bounding-box','Jean : un neutre, avec des règles','Le jean brut foncé va avec tout, y compris un blazer. Denim sur denim : possible avec deux lavages bien différents (chemise claire, jean foncé). Plus il est délavé, plus il est décontracté.'],
+ ['ph-squares-four','Les motifs se mélangent par la taille','Deux motifs ensemble : des tailles différentes et une couleur en commun. Un motif fort se porte avec des unis.']
+];
+const MYTHS=[
+ ['On ne porte jamais de noir avec du marine.',0,'Mythe. Le noir et le marine ensemble sont très chics si l’écart est assumé (marine bien bleu, noir franc), surtout pour les palettes d’Hiver. Ce qui ne va pas, c’est un marine si foncé qu’on dirait un noir raté.'],
+ ['Pas de marron en ville.',0,'Mythe ancien (Angleterre, début du XXᵉ siècle). Des chaussures marron foncé avec un costume marine ou gris sont aujourd’hui un classique ; le noir reste plus formel pour le soir et les cérémonies.'],
+ ['Ceinture et chaussures doivent être assorties.',1,'Règle utile : même teinte et même fini, dès qu’on porte des chaussures de ville. Avec des baskets, on se relâche.'],
+ ['Le rouge et le rose ne vont pas ensemble.',0,'Mythe : ce sont des couleurs analogues. Bordeaux et vieux rose, grenat et framboise s’accordent très bien si les valeurs diffèrent.'],
+ ['Le noir va à tout le monde.',0,'Mythe. Le noir pur durcit les palettes chaudes et douces (Automnes, Printemps, Étés doux) : il creuse les traits. Il va surtout aux Hivers. Les autres ont « leur » noir : chocolat, marine, anthracite, vert sapin.'],
+ ['Pas plus de trois couleurs dans une tenue.',1,'Bonne règle (hors neutres). Au-delà, il faut beaucoup de métier pour que l’ensemble reste lisible.'],
+ ['Les couleurs foncées amincissent.',1,'Vrai : le foncé absorbe la lumière, cache les ombres et les volumes, et recule visuellement. Le clair et le brillant avancent.'],
+ ['Les rayures horizontales font grossir.',0,'Plutôt un mythe : des expériences de perception (illusion de Helmholtz, reprise par Thompson et Mikellidou en 2011) montrent qu’un carré à rayures horizontales paraît plus étroit et plus haut. La largeur des rayures compte davantage que leur sens.'],
+ ['Il ne faut pas porter de blanc en hiver.',0,'Mythe (une vieille règle américaine). Un pull écru, un manteau crème ou un pantalon blanc cassé en laine sont très beaux l’hiver ; c’est la matière qui doit être de saison, pas la couleur.'],
+ ['Le bleu et le vert ne doivent jamais être vus ensemble.',0,'Mythe : ce sont des couleurs voisines (analogues). Marine et vert sapin, pétrole et émeraude forment des accords profonds et faciles.'],
+ ['Des baskets avec un costume, c’est une faute.',0,'Plus aujourd’hui, avec des baskets en cuir minimalistes, propres, blanches ou de la couleur du costume, et un costume plutôt décontracté. Pas pour une cérémonie.'],
+ ['La cravate et la pochette doivent être dans le même tissu.',0,'Mythe : le jeu assorti trop parfait fait « coffret cadeau ». La pochette fait écho à une couleur sans copier la cravate.'],
+ ['La couleur la plus flatteuse se porte près du visage.',1,'Vrai : c’est là que l’œil se pose et que la couleur se reflète sur la peau. C’est tout le principe de la colorimétrie.'],
+ ['Chaussures plus claires que le pantalon, c’est toujours une erreur.',0,'Plutôt un mythe aujourd’hui : la règle classique est des chaussures plus foncées en tenue habillée, mais des derbies cognac sous un pantalon gris anthracite, ou des baskets blanches sous un jean brut, sont des classiques.']
+];
+let myth={i:0,score:0,order:null,answered:false};
+RENDER[6]=function(){
+  $('#rules').innerHTML=RULES.map(([ic,t,d],i)=>`<details class="rule" ${i<2?'open':''}><summary><i class="ph-light ${ic}"></i>${t}</summary><div class="bd"><p>${d}</p></div></details>`).join('');
+  if(!myth.order){myth.order=MYTHS.map((_,i)=>i).sort(()=>Math.random()-.5)}renderMyth()};
+function renderMyth(){const el=$('#myth');
+  if(myth.i>=MYTHS.length){el.innerHTML=`<div class="kicker">Règle ou mythe ?</div><h3>Score : ${myth.score} / ${MYTHS.length}</h3><p>${myth.score>=12?'Vous connaissez les règles, et quand les casser.':myth.score>=8?'Bonne base ; relisez les principes au-dessus.':'Les vieilles règles ont la vie dure : relisez les explications.'}</p><button class="btn btn--accent" id="mythAgain">Rejouer</button>`;$('#mythAgain').onclick=()=>{myth={i:0,score:0,order:null};RENDER[6]()};return}
+  const m=MYTHS[myth.order[myth.i]];
+  el.innerHTML=`<div class="kicker">Règle ou mythe ? · ${myth.i+1} / ${MYTHS.length} · score ${myth.score}</div><h3>« ${m[0]} »</h3><div class="opts"><button class="opt" data-v="1">Règle utile</button><button class="opt" data-v="0">Mythe</button></div><div class="fb"></div>`;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(myth.answered)return;myth.answered=true;const ok=+b.dataset.v===m[1];if(ok)myth.score++;
+    b.classList.add(ok?'good':'bad');el.querySelector('.fb').innerHTML=`${ok?'Bien vu. ':'Raté. '}${m[2]}<div style="margin-top:12px"><button class="btn btn--accent btn--sm" id="mythNext">Suivant</button></div>`;
+    $('#mythNext').onclick=()=>{myth.i++;myth.answered=false;renderMyth()}})}
+
+/* =====================================================================
+   7. Cabine
+   ===================================================================== */
+let cab=null;
+const EXTRA=['#f6d3df','#ffd400','#9fd3e8','#c0c0c0','#ff5a36','#e8d5e8','#7dbb42','#ffffff'];
+function cabDefault(){const pl=pools(null,null),c=CAT[st.sexe];
+  return {outer:{p:c.outer[1][0],hex:pl.dark[0]||pl.mid[0],m:c.outer[1][3][0]},top:{p:c.top[0][0],hex:pl.light[0]||pl.main[0],m:c.top[0][3][0]},bottom:{p:c.bottom[0][0],hex:pl.mid[0]||pl.dark[0],m:c.bottom[0][3][0]},shoes:{p:c.shoes[0][0],hex:pl.leather[0],m:'cuir'},belt:{p:'ceinture',hex:pl.leather[0],m:'cuir'},acc:{p:'none'}}}
+function cabValid(){if(!cab)return false;for(const k of SLOTS){if(!cab[k])return false;if(!CAT[st.sexe][k].some(p=>p[0]===cab[k].p))return false}return true}
+RENDER[7]=function(){if(!cabValid())cab=cabDefault();renderCab()};
+function renderCab(){const P=PAL(),c=CAT[st.sexe];
+  const palCols=[...P.cols].sort((a,b)=>(a.role==='neutre')-(b.role==='neutre')||ryb(a.hex)-ryb(b.hex)).map(x=>x.hex);
+  $('#cabSlots').innerHTML=SLOTS.map(k=>{const it=cab[k],pc=c[k],cur=pc.find(p=>p[0]===it.p)||pc[0];
+    const hidden=(k==='bottom'||k==='belt')&&cab.top.p==='robe';
+    let h=`<div class="slot" ${hidden?'style="opacity:.4"':''}><div class="lb">${SLOTN[k]}${hidden?' · inutile avec une robe':''}</div><div class="seg sm">${pc.map(p=>`<button class="${p[0]===it.p?'on':''}" data-k="${k}" data-p="${p[0]}">${p[1]}</button>`).join('')}</div>`;
+    if(it.p!=='none'){
+      const cols=LEATHER_SLOT(k)?(k==='shoes'&&it.p==='sneakers'?LEATHER.map(l=>l.hex):LEATHER.filter(l=>!l.sn).map(l=>l.hex)):it.p==='sac'?[...LEATHER.filter(l=>!l.sn).map(l=>l.hex),...palCols]:palCols;
+      h+=`<div class="row">${cols.map(x=>`<button class="dot-btn ${x===it.hex?'on':''}" data-k="${k}" data-h="${x}" title="${colName(x)}" style="background:${x}"></button>`).join('')}</div>`;
+      if(!LEATHER_SLOT(k))h+=`<div class="row"><span class="meta">Hors palette :</span>${EXTRA.map(x=>`<button class="dot-btn ${x===it.hex?'on':''}" data-k="${k}" data-h="${x}" title="${nameOf(x)}" style="background:${x}"></button>`).join('')}<input type="color" data-k="${k}" value="${it.hex}" title="Couleur libre"></div>`;
+      h+=`<div class="row"><span class="meta">Matière :</span><div class="seg sm">${(cur[3]||[]).map(m=>`<button class="${m===it.m?'on':''}" data-k="${k}" data-m="${m}">${MATS[m].n}</button>`).join('')}</div></div>`}
+    return h+'</div>'}).join('');
+  $$('#cabSlots button[data-p]').forEach(b=>b.onclick=()=>{const k=b.dataset.k,p=b.dataset.p,pc=piece(k,p);const prev=cab[k];
+    cab[k]={p,hex:prev.hex||(LEATHER_SLOT(k)?pools().leather[0]:PAL().all[0]),m:(pc[3]||[])[0]};
+    if(k==='shoes'&&p!=='sneakers'&&leatherOf(cab[k].hex)?.sn)cab[k].hex=pools().leather[0];
+    if(LEATHER_SLOT(k)&&!leatherOf(cab[k].hex))cab[k].hex=pools().leather[0];
+    renderCab()});
+  $$('#cabSlots button[data-h]').forEach(b=>b.onclick=()=>{cab[b.dataset.k].hex=b.dataset.h;renderCab()});
+  $$('#cabSlots button[data-m]').forEach(b=>b.onclick=()=>{cab[b.dataset.k].m=b.dataset.m;renderCab()});
+  $$('#cabSlots input[type=color]').forEach(inp=>inp.onchange=()=>{cab[inp.dataset.k].hex=inp.value;renderCab()});
+  $('#cabFlat').innerHTML=flatSVG(cab);
+  const j=judge(cab);$('#cabScore').textContent=j.score;$('#cabVerdict').className='badge '+j.verdict[1];$('#cabVerdict').innerHTML=`<span class="dot"></span>${j.verdict[0]}`;
+  $('#cabJudge').innerHTML=verdictHTML(j)+`<li class="small" style="color:var(--text-3)">${cap(sentence(cab))}.</li>`}
+$('#cabRand').onclick=()=>{const o=genOutfit(Date.now()&0xffffff,null,true);if(o){cab=o;renderCab()}};
+$('#cabReset').onclick=()=>{cab=cabDefault();renderCab()};
+
+/* =====================================================================
+   8. Jeu : assorti ou raté ?
+   ===================================================================== */
+let game=null;
+function newGame(){const seed=Date.now()&0xffffff,r=rngOf(seed),rounds=[];
+  for(let i=0;i<10;i++){const good=r()<.5;let o=genOutfit(seed+i*101,null,good);if(!o)o=genOutfit(seed+i*101+7,null,true);if(o){o.good=!judge(o).nf;rounds.push(o)}}
+  game={rounds,i:0,score:0,ans:null}}
+RENDER[8]=function(){if(!game||game.sexe!==st.sexe||game.key!==st.sel.join()){newGame();game.sexe=st.sexe;game.key=st.sel.join()}renderGame()};
+function renderGame(){const el=$('#game'),g=game;
+  if(g.i>=g.rounds.length){el.innerHTML=`<div class="kicker">Résultat</div><div class="kpi num">${g.score} / ${g.rounds.length}</div><p class="lede" style="margin:12px auto">${g.score>=9?'Œil de styliste.':g.score>=7?'Très bon œil : vous repérez l’essentiel.':g.score>=5?'Pas mal ; la cabine et les règles vous aideront à affiner.':'Relisez les étapes 1 à 6, puis rejouez : le juge vous expliquera chaque faute.'}</p><button class="btn btn--accent" id="again">Nouvelle partie</button>`;$('#again').onclick=()=>{newGame();game.sexe=st.sexe;game.key=st.sel.join();renderGame()};return}
+  const o=g.rounds[g.i],j=judge(o);
+  el.innerHTML=`<div class="kicker">Tenue ${g.i+1} / ${g.rounds.length} · score ${g.score}</div><h3>${OCC.find(x=>x.id===o.occ).nom}</h3><svg class="flat" viewBox="0 0 440 300">${flatSVG(o)}</svg>
+    <ul class="pieces" style="max-width:560px;margin:14px auto 0;text-align:left">${piecesList(o)}</ul>
+    <div class="big"><button class="btn btn--primary" data-a="1"><i class="ph-light ph-check"></i>Ça marche</button><button class="btn btn--secondary" data-a="0"><i class="ph-light ph-x"></i>Raté</button></div><div id="gameFb" style="max-width:620px;margin:0 auto;text-align:left"></div>`;
+  el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{if(g.ans!==null)return;g.ans=+b.dataset.a;const ok=(g.ans===1)===o.good;if(ok)g.score++;
+    $('#gameFb').innerHTML=`<p><span class="badge ${ok?'ok':'err'}"><span class="dot"></span>${ok?'Bien vu':'Raté'}</span> Cette tenue ${o.good?'<b>fonctionne</b>':'<b>cache une faute</b>'}. Le juge :</p><ul class="verdict">${verdictHTML(j)}</ul><div style="text-align:center;margin-top:14px"><button class="btn btn--accent" id="gNext">Tenue suivante</button></div>`;
+    $('#gNext').onclick=()=>{g.i++;g.ans=null;renderGame();window.scrollTo({top:0})}})}
+
+/* =====================================================================
+   9. Lookbook
+   ===================================================================== */
+let occCur='bureau',occSeed={};
+RENDER[9]=function(){
+  $('#occTabs').innerHTML=OCC.map(o=>`<button class="${o.id===occCur?'on':''}" data-o="${o.id}"><i class="ph-light ${o.ic}"></i> ${o.nom}</button>`).join('');
+  $$('#occTabs button').forEach(b=>b.onclick=()=>{occCur=b.dataset.o;RENDER[9]()});
+  const occ=OCC.find(o=>o.id===occCur),base=occSeed[occCur]||1;
+  const looks=[];for(let i=0;i<2;i++){const o=genOutfit(base*977+i*31+st.sel.length,occCur,true);if(o)looks.push(o)}
+  $('#lookbook').innerHTML=`<p class="small" style="margin-bottom:18px">${occ.why}</p>`+looks.map((o,i)=>{const j=judge(o);
+    return `<div class="card look occ"><div><svg class="flat" viewBox="0 0 440 300">${flatSVG(o)}</svg></div><div><div class="kicker">Idée ${i+1} · palette ${byId(o.season).nom}${j.harm?' · accord '+j.harm.nom:''}</div><ul class="pieces">${piecesList(o)}</ul>
+     <p class="small" style="margin-top:12px"><b>En une phrase :</b> ${cap(sentence(o))}.</p>
+     <p class="small"><b>Pourquoi ça marche :</b> ${j.R.filter(r=>r.lvl==='ok').map(r=>r.t).join(' ')}</p>
+     ${j.nw?`<p class="small"><b>À surveiller :</b> ${j.R.filter(r=>r.lvl==='warn').map(r=>r.t).join(' ')}</p>`:''}
+     <button class="btn btn--secondary btn--sm" data-cab="${i}"><i class="ph-light ph-coat-hanger"></i>Modifier dans la cabine</button></div></div>`}).join('')+
+    `<button class="btn btn--primary" id="moreLooks"><i class="ph-light ph-shuffle"></i>D’autres idées</button>`;
+  $('#moreLooks').onclick=()=>{occSeed[occCur]=(occSeed[occCur]||1)+1;RENDER[9]()};
+  $$('[data-cab]').forEach(b=>b.onclick=()=>{cab=JSON.parse(JSON.stringify(looks[+b.dataset.cab]));go(7)})};
+
+/* Démarrage */
+const h0=parseInt(location.hash.slice(1));go(isNaN(h0)?0:Math.min(9,Math.max(0,h0)));
+</script>
+</body>
+</html>

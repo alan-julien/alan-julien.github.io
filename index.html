@@ -42,7 +42,9 @@ const PAGES = [
   {titre:"Les bonnes adresses — Paris shopping", tag:"Carte · Shopping", url:"https://alan-julien.github.io/paris-shopping/",
    desc:"Carte interactive des meilleurs coins shopping de Paris."},
   {titre:"La science des couleurs", tag:"Tutoriel · Couleurs", url:"https://alan-julien.github.io/science-des-couleurs/",
-   desc:"Tutoriel interactif en 9 étapes : lumière, perception, teinte/valeur/chroma, les 12 saisons de la colorimétrie et les réglages d'une photo, avec curseurs et défis."}
+   desc:"Tutoriel interactif en 9 étapes : lumière, perception, teinte/valeur/chroma, les 12 saisons de la colorimétrie et les réglages d'une photo, avec curseurs et défis."},
+  {titre:"L’art d’assortir", tag:"Atelier · Vêtements", url:"https://alan-julien.github.io/art-d-assortir/",
+   desc:"Apprendre à assortir ses vêtements avec sa palette de saisons : neutres et capsule, roue des harmonies, 60/30/10, matières et motifs, règles et mythes, cabine d’essayage jugée, jeu et lookbook par occasion."}
 ];
 document.getElementById('liste').innerHTML = PAGES.map(p => `
   <a class="card" href="${p.url}">
